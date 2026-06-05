@@ -17,8 +17,8 @@ Replace the Jira + Clockify combo with one self-hosted tool where:
 
 | Layer | Choice |
 |-------|--------|
-| Frontend | React 18 + Vite (`apps/web`) |
-| Backend | NestJS 10 (`apps/api`) |
+| Frontend | React 18 + Vite — reactive (TanStack Query + Zustand), decoupled reusable components (`apps/web`) |
+| Backend | NestJS 10 — **Hexagonal** (ports & adapters), SOLID, RESTful (`apps/api`) |
 | Shared | TypeScript types + cost helpers (`packages/shared`) |
 | ORM / migrations | Prisma 5 (Postgres) |
 | Database | **Remote** Postgres (via `DATABASE_URL`) — not bundled |
@@ -45,6 +45,11 @@ Screens are designed in Figma (page "ACM-TRACKER · Variations").
 - **v2:** MCP server (agents report work/time/tokens), AI cost (tokens × model price), model pricing table.
 - **later:** documents (files + pages + links), reports & analytics, Cognito auth + invitations.
 
+## Engineering standards
+
+This repo enforces a strict quality contract — read [`CLAUDE.md`](CLAUDE.md), [`apps/api/CLAUDE.md`](apps/api/CLAUDE.md), [`apps/web/CLAUDE.md`](apps/web/CLAUDE.md). Backend is hexagonal (ports & adapters, SOLID); frontend is reactive with decoupled reusable components. SOLID, RESTful, zero-comment, reuse-before-create, small focused units. Specialized agents in `.claude/agents/` (backend-architect, frontend-architect, db-schema-guardian, code-reviewer) and skills in `.claude/skills/` keep implementation consistent and non-improvised.
+
 ## Docs
 
 - [Implementation plans](docs/plans/)
+- [Design mockups](docs/design/)

@@ -11,3 +11,6 @@ uploads/
 coverage/
 .vite/
 *.tsbuildinfo
+
+# Claude Code project config (agents, skills, local settings) — kept local
+.claude/

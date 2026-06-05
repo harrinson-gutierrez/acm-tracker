@@ -191,7 +191,7 @@ git commit -m "chore: monorepo skeleton with pnpm workspace"
 - Create: `packages/shared/src/types.ts`
 - Create: `packages/shared/src/index.ts`
 
-- [ ] **Step 1: Create `packages/shared/package.json`**
+- [x] **Step 1: Create `packages/shared/package.json`**
 
 ```json
 {
@@ -210,7 +210,7 @@ git commit -m "chore: monorepo skeleton with pnpm workspace"
 }
 ```
 
-- [ ] **Step 2: Create `packages/shared/tsconfig.json`**
+- [x] **Step 2: Create `packages/shared/tsconfig.json`**
 
 ```json
 {
@@ -227,7 +227,7 @@ git commit -m "chore: monorepo skeleton with pnpm workspace"
 }
 ```
 
-- [ ] **Step 3: Create `packages/shared/src/types.ts`**
+- [x] **Step 3: Create `packages/shared/src/types.ts`**
 
 ```typescript
 export type EntryOrigin = "manual" | "mcp"; // mcp reserved for phase 2
@@ -276,14 +276,14 @@ export interface TimeEntry {
 }
 ```
 
-- [ ] **Step 4: Create `packages/shared/src/index.ts`**
+- [x] **Step 4: Create `packages/shared/src/index.ts`**
 
 ```typescript
 export * from "./types.js";
 export * from "./cost.js";
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (committed together with Task 3)
 
 ```bash
 git add packages/shared
@@ -298,7 +298,7 @@ git commit -m "feat(shared): domain types contract"
 - Test: `packages/shared/src/cost.test.ts`
 - Create: `packages/shared/src/cost.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 import { describe, it, expect } from "vitest";
@@ -334,12 +334,12 @@ describe("sumCost", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm --filter @acm/shared test`
 Expected: FAIL — "Cannot find module './cost.js'"
 
-- [ ] **Step 3: Write minimal implementation `packages/shared/src/cost.ts`**
+- [x] **Step 3: Write minimal implementation `packages/shared/src/cost.ts`**
 
 ```typescript
 import type { TimeEntry } from "./types.js";
@@ -371,12 +371,12 @@ export function sumCost(entries: TimeEntry[]): CostSummary {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm --filter @acm/shared test`
 Expected: PASS — all 4 tests green
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/shared/src/cost.ts packages/shared/src/cost.test.ts

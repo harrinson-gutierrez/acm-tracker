@@ -118,7 +118,7 @@ acm-tracker/
 - Create: `acm-tracker/.gitignore`
 - Create: `acm-tracker/.env.example`
 
-- [ ] **Step 1: Create the workspace root `package.json`**
+- [x] **Step 1: Create the workspace root `package.json`**
 
 ```json
 {
@@ -137,7 +137,7 @@ acm-tracker/
 }
 ```
 
-- [ ] **Step 2: Create `pnpm-workspace.yaml`**
+- [x] **Step 2: Create `pnpm-workspace.yaml`**
 
 ```yaml
 packages:
@@ -145,7 +145,7 @@ packages:
   - "packages/*"
 ```
 
-- [ ] **Step 3: Create `.gitignore`**
+- [x] **Step 3: Create `.gitignore`** (created with a superset: also ignores build/, coverage/, .vite/, *.tsbuildinfo, .claude/settings.local.json)
 
 ```
 node_modules/
@@ -158,7 +158,7 @@ apps/api/prisma/*.db
 uploads/
 ```
 
-- [ ] **Step 4: Create `.env.example`**
+- [x] **Step 4: Create `.env.example`**
 
 ```
 # Remote Postgres — fill with your server's connection string
@@ -174,7 +174,7 @@ OWNER_EMAIL="owner@acm.local"
 OWNER_RATE_PER_HOUR=45
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** (repo already initialized in an earlier step; committed as part of the foundation)
 
 ```bash
 cd acm-tracker && git init && git add -A

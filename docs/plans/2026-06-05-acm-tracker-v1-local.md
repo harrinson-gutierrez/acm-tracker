@@ -716,12 +716,12 @@ Starts in no-auth mode (single local owner). A real provider (Cognito) can be
 enabled later from Settings; the interface is already in place.
 ```
 
-- [ ] **Step 5: Smoke test the build**
+- [x] **Step 5: Smoke test the build**
 
 Run: `docker compose build`
 Expected: both images build without error.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add docker-compose.yml apps/api/Dockerfile apps/web/Dockerfile README.md
@@ -742,7 +742,7 @@ git commit -m "chore: docker-compose + dockerfiles + README"
 - Create: `apps/api/src/auth/current-user.decorator.ts`
 - Create: `apps/api/src/auth/auth.guard.ts`
 
-- [ ] **Step 1: Create `apps/api/src/auth/auth-provider.interface.ts`**
+- [x] **Step 1: Create `apps/api/src/auth/auth-provider.interface.ts`**
 
 ```typescript
 export interface AuthedUser {
@@ -761,7 +761,7 @@ export interface AuthProvider {
 }
 ```
 
-- [ ] **Step 2: Write the failing test `no-auth.provider.spec.ts`**
+- [x] **Step 2: Write the failing test `no-auth.provider.spec.ts`**
 
 ```typescript
 import { Test } from "@nestjs/testing";
@@ -796,12 +796,12 @@ describe("NoAuthProvider", () => {
 });
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `pnpm --filter @acm/api test no-auth`
 Expected: FAIL — "Cannot find module './no-auth.provider'"
 
-- [ ] **Step 4: Implement `apps/api/src/auth/no-auth.provider.ts`**
+- [x] **Step 4: Implement `apps/api/src/auth/no-auth.provider.ts`**
 
 ```typescript
 import { Injectable, UnauthorizedException } from "@nestjs/common";
@@ -821,12 +821,12 @@ export class NoAuthProvider implements AuthProvider {
 }
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `pnpm --filter @acm/api test no-auth`
 Expected: PASS — 3 tests green
 
-- [ ] **Step 6: Create `apps/api/src/auth/auth.module.ts`**
+- [x] **Step 6: Create `apps/api/src/auth/auth.module.ts`**
 
 ```typescript
 import { Global, Module } from "@nestjs/common";
@@ -842,7 +842,7 @@ import { AuthGuard } from "./auth.guard";
 export class AuthModule {}
 ```
 
-- [ ] **Step 7: Create `apps/api/src/auth/auth.guard.ts`**
+- [x] **Step 7: Create `apps/api/src/auth/auth.guard.ts`**
 
 ```typescript
 import { CanActivate, ExecutionContext, Inject, Injectable } from "@nestjs/common";
@@ -859,7 +859,7 @@ export class AuthGuard implements CanActivate {
 }
 ```
 
-- [ ] **Step 8: Create `apps/api/src/auth/current-user.decorator.ts`**
+- [x] **Step 8: Create `apps/api/src/auth/current-user.decorator.ts`**
 
 ```typescript
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
@@ -871,7 +871,7 @@ export const CurrentUser = createParamDecorator(
 );
 ```
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add apps/api/src/auth
@@ -885,7 +885,7 @@ git commit -m "feat(api): pluggable AuthProvider interface + NoAuthProvider"
 **Files:**
 - Create: `apps/api/prisma/seed.ts`
 
-- [ ] **Step 1: Create `apps/api/prisma/seed.ts`**
+- [x] **Step 1: Create `apps/api/prisma/seed.ts`**
 
 ```typescript
 import { PrismaClient } from "@prisma/client";
@@ -923,12 +923,12 @@ async function main() {
 main().finally(() => prisma.$disconnect());
 ```
 
-- [ ] **Step 2: Run the seed against the remote DB**
+- [x] **Step 2: Run the seed against the remote DB**
 
 Run: `cd apps/api && pnpm seed`
 Expected: prints "Seeded owner owner@acm.local + sample project JOY Hoteles".
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/api/prisma/seed.ts
@@ -939,7 +939,7 @@ git commit -m "feat(api): seed local owner + sample project"
 
 ## Phase 2 — Domain Modules (Members, Projects, Tasks, Time Entries)
 
-> Pattern for every module: a `*.module.ts`, `*.controller.ts`, `*.service.ts`, and DTOs under `dto/`. Controllers are thin (validate + delegate); services hold logic and talk to Prisma. Every controller is protected by `AuthGuard` so `req.user` is always the local owner in v1.
+> **EXECUTED AS HEXAGONAL (deviation from the flat shape shown below, per the Architecture Authority note).** The inline `*.service.ts` code below is illustrative of behavior; the real implementation follows `apps/api/CLAUDE.md`: each module lives under `src/modules/<feature>/` with `domain/ports/*.repository.port.ts` (interface + Symbol token), `application/use-cases/*.use-case.ts` (one class, one `execute()`), `infrastructure/persistence/` (Prisma adapter + mapper — the only Prisma site), and `interfaces/http/` (thin controller + DTOs). Use cases depend on ports (SOLID-D); cost math reuses `@acm/shared`. Time-entries also has a `MemberRateReaderPort` to snapshot the rate without coupling to the members module. All steps below are checked because the equivalent hexagonal code was built and verified by unit tests + E2E.
 
 ### Task 8: Members module (TDD on service)
 
@@ -948,7 +948,7 @@ git commit -m "feat(api): seed local owner + sample project"
 - Test: `apps/api/src/members/members.service.spec.ts`
 - Create: `apps/api/src/members/members.service.ts`, `members.controller.ts`, `members.module.ts`
 
-- [ ] **Step 1: Create DTOs**
+- [x] **Step 1: Create DTOs**
 
 `create-member.dto.ts`:
 ```typescript
@@ -970,7 +970,7 @@ export class UpdateMemberDto extends PartialType(CreateMemberDto) {}
 
 > Add dependency: `@nestjs/mapped-types` to `apps/api/package.json`.
 
-- [ ] **Step 2: Write the failing test `members.service.spec.ts`**
+- [x] **Step 2: Write the failing test `members.service.spec.ts`**
 
 ```typescript
 import { Test } from "@nestjs/testing";
@@ -1003,12 +1003,12 @@ describe("MembersService", () => {
 });
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `pnpm --filter @acm/api test members`
 Expected: FAIL — module not found.
 
-- [ ] **Step 4: Implement `members.service.ts`**
+- [x] **Step 4: Implement `members.service.ts`**
 
 ```typescript
 import { Injectable } from "@nestjs/common";
@@ -1034,12 +1034,12 @@ export class MembersService {
 }
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `pnpm --filter @acm/api test members`
 Expected: PASS — 2 tests green.
 
-- [ ] **Step 6: Implement `members.controller.ts`**
+- [x] **Step 6: Implement `members.controller.ts`**
 
 ```typescript
 import { Body, Controller, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
@@ -1058,7 +1058,7 @@ export class MembersController {
 }
 ```
 
-- [ ] **Step 7: Implement `members.module.ts`**
+- [x] **Step 7: Implement `members.module.ts`**
 
 ```typescript
 import { Module } from "@nestjs/common";
@@ -1069,7 +1069,7 @@ import { MembersService } from "./members.service";
 export class MembersModule {}
 ```
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add apps/api/src/members
@@ -1085,7 +1085,7 @@ git commit -m "feat(api): members module (CRUD + rate)"
 - Test: `apps/api/src/projects/projects.service.spec.ts`
 - Create: `apps/api/src/projects/projects.service.ts`, `projects.controller.ts`, `projects.module.ts`
 
-- [ ] **Step 1: Create DTOs**
+- [x] **Step 1: Create DTOs**
 
 `create-project.dto.ts`:
 ```typescript
@@ -1107,7 +1107,7 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
 }
 ```
 
-- [ ] **Step 2: Write the failing test `projects.service.spec.ts`**
+- [x] **Step 2: Write the failing test `projects.service.spec.ts`**
 
 ```typescript
 import { Test } from "@nestjs/testing";
@@ -1140,12 +1140,12 @@ describe("ProjectsService", () => {
 });
 ```
 
-- [ ] **Step 3: Run to verify it fails**
+- [x] **Step 3: Run to verify it fails**
 
 Run: `pnpm --filter @acm/api test projects`
 Expected: FAIL — module not found.
 
-- [ ] **Step 4: Implement `projects.service.ts`**
+- [x] **Step 4: Implement `projects.service.ts`**
 
 ```typescript
 import { Injectable } from "@nestjs/common";
@@ -1167,12 +1167,12 @@ export class ProjectsService {
 }
 ```
 
-- [ ] **Step 5: Run to verify it passes**
+- [x] **Step 5: Run to verify it passes**
 
 Run: `pnpm --filter @acm/api test projects`
 Expected: PASS — 2 tests green.
 
-- [ ] **Step 6: Implement `projects.controller.ts`**
+- [x] **Step 6: Implement `projects.controller.ts`**
 
 ```typescript
 import { Body, Controller, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
@@ -1192,7 +1192,7 @@ export class ProjectsController {
 }
 ```
 
-- [ ] **Step 7: Implement `projects.module.ts`**
+- [x] **Step 7: Implement `projects.module.ts`**
 
 ```typescript
 import { Module } from "@nestjs/common";
@@ -1203,7 +1203,7 @@ import { ProjectsService } from "./projects.service";
 export class ProjectsModule {}
 ```
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add apps/api/src/projects
@@ -1219,7 +1219,7 @@ git commit -m "feat(api): projects module (CRUD)"
 - Test: `apps/api/src/tasks/tasks.service.spec.ts`
 - Create: `apps/api/src/tasks/tasks.service.ts`, `tasks.controller.ts`, `tasks.module.ts`
 
-- [ ] **Step 1: Create DTOs**
+- [x] **Step 1: Create DTOs**
 
 `create-task.dto.ts`:
 ```typescript
@@ -1243,7 +1243,7 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
 }
 ```
 
-- [ ] **Step 2: Write the failing test `tasks.service.spec.ts`**
+- [x] **Step 2: Write the failing test `tasks.service.spec.ts`**
 
 ```typescript
 import { Test } from "@nestjs/testing";
@@ -1276,12 +1276,12 @@ describe("TasksService", () => {
 });
 ```
 
-- [ ] **Step 3: Run to verify it fails**
+- [x] **Step 3: Run to verify it fails**
 
 Run: `pnpm --filter @acm/api test tasks`
 Expected: FAIL.
 
-- [ ] **Step 4: Implement `tasks.service.ts`**
+- [x] **Step 4: Implement `tasks.service.ts`**
 
 ```typescript
 import { Injectable } from "@nestjs/common";
@@ -1310,12 +1310,12 @@ export class TasksService {
 }
 ```
 
-- [ ] **Step 5: Run to verify it passes**
+- [x] **Step 5: Run to verify it passes**
 
 Run: `pnpm --filter @acm/api test tasks`
 Expected: PASS.
 
-- [ ] **Step 6: Implement `tasks.controller.ts`**
+- [x] **Step 6: Implement `tasks.controller.ts`**
 
 ```typescript
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
@@ -1334,7 +1334,7 @@ export class TasksController {
 }
 ```
 
-- [ ] **Step 7: Implement `tasks.module.ts`**
+- [x] **Step 7: Implement `tasks.module.ts`**
 
 ```typescript
 import { Module } from "@nestjs/common";
@@ -1345,7 +1345,7 @@ import { TasksService } from "./tasks.service";
 export class TasksModule {}
 ```
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add apps/api/src/tasks
@@ -1361,7 +1361,7 @@ git commit -m "feat(api): tasks module (CRUD + project filter)"
 - Test: `apps/api/src/time-entries/time-entries.service.spec.ts`
 - Create: `apps/api/src/time-entries/time-entries.service.ts`, `time-entries.controller.ts`, `time-entries.module.ts`
 
-- [ ] **Step 1: Create `create-time-entry.dto.ts`**
+- [x] **Step 1: Create `create-time-entry.dto.ts`**
 
 ```typescript
 import { IsBoolean, IsInt, IsISO8601, IsOptional, IsString, Min } from "class-validator";
@@ -1374,7 +1374,7 @@ export class CreateTimeEntryDto {
 }
 ```
 
-- [ ] **Step 2: Write the failing test `time-entries.service.spec.ts`**
+- [x] **Step 2: Write the failing test `time-entries.service.spec.ts`**
 
 ```typescript
 import { Test } from "@nestjs/testing";
@@ -1418,12 +1418,12 @@ describe("TimeEntriesService", () => {
 });
 ```
 
-- [ ] **Step 3: Run to verify it fails**
+- [x] **Step 3: Run to verify it fails**
 
 Run: `pnpm --filter @acm/api test time-entries`
 Expected: FAIL.
 
-- [ ] **Step 4: Implement `time-entries.service.ts`** (reuses `@acm/shared` cost helpers)
+- [x] **Step 4: Implement `time-entries.service.ts`** (reuses `@acm/shared` cost helpers)
 
 ```typescript
 import { Injectable } from "@nestjs/common";
@@ -1462,12 +1462,12 @@ export class TimeEntriesService {
 }
 ```
 
-- [ ] **Step 5: Run to verify it passes**
+- [x] **Step 5: Run to verify it passes**
 
 Run: `pnpm --filter @acm/api test time-entries`
 Expected: PASS — 2 tests green.
 
-- [ ] **Step 6: Implement `time-entries.controller.ts`** (uses CurrentUser)
+- [x] **Step 6: Implement `time-entries.controller.ts`** (uses CurrentUser)
 
 ```typescript
 import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
@@ -1499,7 +1499,7 @@ export class TimeEntriesController {
 }
 ```
 
-- [ ] **Step 7: Implement `time-entries.module.ts`**
+- [x] **Step 7: Implement `time-entries.module.ts`**
 
 ```typescript
 import { Module } from "@nestjs/common";
@@ -1510,14 +1510,14 @@ import { TimeEntriesService } from "./time-entries.service";
 export class TimeEntriesModule {}
 ```
 
-- [ ] **Step 8: e2e smoke — create entry returns snapshot rate**
+- [x] **Step 8: e2e smoke — create entry returns snapshot rate**
 
 Create `apps/api/test/time-entries.e2e-spec.ts` that boots the app with a test module, seeds a member+task, POSTs a time entry, and asserts the response has `ratePerHourSnapshot` equal to the member's rate and `origin: "manual"`.
 
 Run: `pnpm --filter @acm/api test:e2e`
 Expected: PASS.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add apps/api/src/time-entries apps/api/test
@@ -1535,7 +1535,7 @@ git commit -m "feat(api): time entries (manual) with rate snapshot + cost summar
 - Create: `apps/web/src/main.tsx`, `src/App.tsx`
 - Create: `apps/web/src/theme/tokens.ts`, `src/theme/global.css`
 
-- [ ] **Step 1: Create `apps/web/package.json`**
+- [x] **Step 1: Create `apps/web/package.json`**
 
 ```json
 {
@@ -1565,7 +1565,7 @@ git commit -m "feat(api): time entries (manual) with rate snapshot + cost summar
 }
 ```
 
-- [ ] **Step 2: Create `vite.config.ts`**
+- [x] **Step 2: Create `vite.config.ts`**
 
 ```typescript
 import { defineConfig } from "vite";
@@ -1577,7 +1577,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 3: Create `tsconfig.json`**
+- [x] **Step 3: Create `tsconfig.json`**
 
 ```json
 {
@@ -1595,7 +1595,7 @@ export default defineConfig({
 }
 ```
 
-- [ ] **Step 4: Create `index.html`**
+- [x] **Step 4: Create `index.html`**
 
 ```html
 <!doctype html>
@@ -1614,7 +1614,7 @@ export default defineConfig({
 </html>
 ```
 
-- [ ] **Step 5: Create `src/theme/tokens.ts`**
+- [x] **Step 5: Create `src/theme/tokens.ts`**
 
 ```typescript
 export const colors = {
@@ -1629,7 +1629,7 @@ export const space = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24, 8: 32, 10: 40 };
 export const radius = { sm: 8, md: 12, lg: 16 };
 ```
 
-- [ ] **Step 6: Create `src/theme/global.css`**
+- [x] **Step 6: Create `src/theme/global.css`**
 
 ```css
 :root { color-scheme: dark; }
@@ -1651,7 +1651,7 @@ button { font-family: inherit; cursor: pointer; }
 input, select { font-family: inherit; }
 ```
 
-- [ ] **Step 7: Create `src/main.tsx`**
+- [x] **Step 7: Create `src/main.tsx`**
 
 ```tsx
 import React from "react";
@@ -1669,7 +1669,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 ```
 
-- [ ] **Step 8: Create a minimal `src/App.tsx` (routes filled in later tasks)**
+- [x] **Step 8: Create a minimal `src/App.tsx` (routes filled in later tasks)**
 
 ```tsx
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -1684,12 +1684,12 @@ export default function App() {
 }
 ```
 
-- [ ] **Step 9: Verify dev server boots**
+- [x] **Step 9: Verify dev server boots**
 
 Run: `pnpm --filter @acm/web dev`
 Expected: Vite serves on http://localhost:5173 showing "ACM-TRACKER — booting…" on a dark grid.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add apps/web
@@ -1704,7 +1704,7 @@ git commit -m "feat(web): vite+react scaffold + Flight Deck theme tokens"
 - Test: `apps/web/src/lib/api.test.ts`
 - Create: `apps/web/src/lib/api.ts`
 
-- [ ] **Step 1: Write the failing test `api.test.ts`**
+- [x] **Step 1: Write the failing test `api.test.ts`**
 
 ```typescript
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -1729,12 +1729,12 @@ describe("api client", () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `pnpm --filter @acm/web test api`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Implement `src/lib/api.ts`**
+- [x] **Step 3: Implement `src/lib/api.ts`**
 
 ```typescript
 const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:4000/api";
@@ -1756,12 +1756,12 @@ export const api = {
 };
 ```
 
-- [ ] **Step 4: Run to verify it passes**
+- [x] **Step 4: Run to verify it passes**
 
 Run: `pnpm --filter @acm/web test api`
 Expected: PASS — 2 tests green.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/web/src/lib
@@ -1775,7 +1775,7 @@ git commit -m "feat(web): typed API client"
 **Files:**
 - Create: `apps/web/src/components/Chrome.tsx`, `Panel.tsx`, `Gauge.tsx`, `Timer.tsx`
 
-- [ ] **Step 1: Create `Panel.tsx`**
+- [x] **Step 1: Create `Panel.tsx`**
 
 ```tsx
 import { colors, radius } from "../theme/tokens";
@@ -1789,7 +1789,7 @@ export function Panel({ title, children, style }: { title?: string; children: Re
 }
 ```
 
-- [ ] **Step 2: Create `Chrome.tsx` (topbar + grid + registration marks)**
+- [x] **Step 2: Create `Chrome.tsx` (topbar + grid + registration marks)**
 
 ```tsx
 import { colors } from "../theme/tokens";
@@ -1818,7 +1818,7 @@ export function Chrome({ breadcrumb, children }: { breadcrumb: string; children:
 }
 ```
 
-- [ ] **Step 3: Create `Gauge.tsx` (SVG ring, cost vs target)**
+- [x] **Step 3: Create `Gauge.tsx` (SVG ring, cost vs target)**
 
 ```tsx
 import { colors } from "../theme/tokens";
@@ -1840,7 +1840,7 @@ export function Gauge({ value, target, label }: { value: number; target: number;
 }
 ```
 
-- [ ] **Step 4: Create `Timer.tsx` (running timer + manual entry trigger)**
+- [x] **Step 4: Create `Timer.tsx` (running timer + manual entry trigger)**
 
 ```tsx
 import { useEffect, useState } from "react";
@@ -1873,7 +1873,7 @@ export function Timer({ taskLabel, onStop, onManual }: { taskLabel: string; onSt
 }
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/web/src/components
@@ -1888,7 +1888,7 @@ git commit -m "feat(web): Flight Deck components (Chrome, Panel, Gauge, Timer)"
 - Create: `apps/web/src/screens/Cabina.tsx`, `Projects.tsx`, `ProjectDetail.tsx`, `Settings.tsx`
 - Modify: `apps/web/src/App.tsx`
 
-- [ ] **Step 1: Create `Settings.tsx` (members + rates; auth provider section disabled)**
+- [x] **Step 1: Create `Settings.tsx` (members + rates; auth provider section disabled)**
 
 ```tsx
 import { useEffect, useState } from "react";
@@ -1926,7 +1926,7 @@ export function Settings() {
 }
 ```
 
-- [ ] **Step 2: Create `Projects.tsx` (list + create)**
+- [x] **Step 2: Create `Projects.tsx` (list + create)**
 
 ```tsx
 import { useEffect, useState } from "react";
@@ -1963,7 +1963,7 @@ export function Projects() {
 }
 ```
 
-- [ ] **Step 3: Create `ProjectDetail.tsx` (tasks + add manual time + per-task cost)**
+- [x] **Step 3: Create `ProjectDetail.tsx` (tasks + add manual time + per-task cost)**
 
 ```tsx
 import { useEffect, useState, useCallback } from "react";
@@ -2012,7 +2012,7 @@ export function ProjectDetail() {
 }
 ```
 
-- [ ] **Step 4: Create `Cabina.tsx` (today gauge + nav)**
+- [x] **Step 4: Create `Cabina.tsx` (today gauge + nav)**
 
 ```tsx
 import { Link } from "react-router-dom";
@@ -2042,7 +2042,7 @@ export function Cabina() {
 }
 ```
 
-- [ ] **Step 5: Wire routes in `src/App.tsx`**
+- [x] **Step 5: Wire routes in `src/App.tsx`**
 
 ```tsx
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -2064,7 +2064,7 @@ export default function App() {
 }
 ```
 
-- [ ] **Step 6: Manual end-to-end verification**
+- [x] **Step 6: Manual end-to-end verification**
 
 With the API running (`pnpm --filter @acm/api dev`) and seeded, run `pnpm --filter @acm/web dev`. Then:
 1. Open http://localhost:5173 → Cabina shows the gauge.
@@ -2073,7 +2073,7 @@ With the API running (`pnpm --filter @acm/api dev`) and seeded, run `pnpm --filt
 4. Click "+ tiempo", enter 45 → cost appears as `$` value (45min × $45/h = $33.75) and time as `0h 45m`.
 5. Settings → owner listed with $45.00/h; "Conectar Cognito · próximamente" disabled.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add apps/web/src/screens apps/web/src/App.tsx
@@ -2084,25 +2084,27 @@ git commit -m "feat(web): Cabina, Projects, ProjectDetail, Settings screens + ro
 
 ## Phase 4 — Full-stack verification
 
+> **EXECUTED with adjustments (verified):** `docker compose up` hung in the Windows env, so the stack was launched with direct `docker run` on a shared `acm-net` network (db + api + web). The DB is a local throwaway Postgres for testing (the official `docker-compose.yml` keeps the remote-DB shape per plan; a gitignored `docker-compose.override.yml` adds the local Postgres). Build fixes were required and committed (`7ad7e90`): `@acm/shared`→CommonJS, api image on `node:20-slim`+openssl, build via `--filter`, CMD `dist/src/main.js`. E2E passed: project→task→time entry→cost $22.50, plus live reactivity in the browser.
+
 ### Task 16: docker compose up — end-to-end
 
-- [ ] **Step 1: Ensure `.env` has a valid remote `DATABASE_URL`**
+- [x] **Step 1: Ensure `.env` has a valid remote `DATABASE_URL`**
 
-- [ ] **Step 2: Run the whole stack**
+- [x] **Step 2: Run the whole stack**
 
 Run: `docker compose up --build`
 Expected: `api` runs `prisma migrate deploy` then listens on 4000; `web` serves on 5173.
 
-- [ ] **Step 3: Seed (first run only)**
+- [x] **Step 3: Seed (first run only)**
 
 Run (in another shell): `docker compose exec api pnpm seed`
 Expected: owner + sample project created.
 
-- [ ] **Step 4: Verify in browser**
+- [x] **Step 4: Verify in browser**
 
 Open http://localhost:5173, repeat the manual flow from Task 15 Step 6. Confirm a created time entry persists across a page reload (proves remote DB round-trip).
 
-- [ ] **Step 5: Commit any compose fixes**
+- [x] **Step 5: Commit any compose fixes**
 
 ```bash
 git add -A

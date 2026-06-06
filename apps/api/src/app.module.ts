@@ -7,6 +7,7 @@ import { TasksModule } from "./modules/tasks/tasks.module";
 import { TimeEntriesModule } from "./modules/time-entries/time-entries.module";
 import { ModelPricingModule } from "./modules/model-pricing/model-pricing.module";
 import { ReportingModule } from "./modules/reporting/reporting.module";
+import { DocumentsModule } from "./modules/documents/documents.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ReportingModule } from "./modules/reporting/reporting.module";
     TimeEntriesModule,
     ModelPricingModule,
     ReportingModule,
+    DocumentsModule,
   ],
 })
 export class AppModule {}

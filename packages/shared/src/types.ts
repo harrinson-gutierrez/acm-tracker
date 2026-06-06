@@ -78,3 +78,16 @@ export interface WeeklyCost {
   human: number;
   ai: number;
 }
+
+export type DocumentKind = "page" | "file" | "link";
+
+export interface DocumentItem {
+  id: string;
+  projectId: string | null;
+  kind: DocumentKind;
+  title: string;
+  phase: string | null;
+  url: string | null;
+  createdBy: string | null;
+  createdAt: string;
+}

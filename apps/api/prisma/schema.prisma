@@ -77,3 +77,16 @@ model ModelPrice {
 
   @@unique([provider, model])
 }
+
+model Document {
+  id        String   @id @default(cuid())
+  projectId String?
+  kind      String   @default("link")
+  title     String
+  phase     String?
+  url       String?
+  createdBy String?
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+}

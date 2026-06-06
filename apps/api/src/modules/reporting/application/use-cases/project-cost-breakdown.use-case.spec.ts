@@ -1,6 +1,11 @@
 import { ProjectCostBreakdownUseCase } from "./project-cost-breakdown.use-case";
 import type { PersonCost, WeeklyCost } from "@acm/shared";
-import { CostAggregationPort, ProjectCostRow } from "../../domain/ports/cost-aggregation.port";
+import {
+  CostAggregationPort,
+  ProjectCostRow,
+  TeamTodayRow,
+  TodaySummary,
+} from "../../domain/ports/cost-aggregation.port";
 
 class FakeAgg implements CostAggregationPort {
   constructor(private readonly row: ProjectCostRow) {}
@@ -11,6 +16,12 @@ class FakeAgg implements CostAggregationPort {
     return [];
   }
   async weeklyHumanCost(): Promise<WeeklyCost[]> {
+    return [];
+  }
+  async todaySummary(): Promise<TodaySummary> {
+    return { trackedMinutes: 0, billableMinutes: 0, cost: 0 };
+  }
+  async teamToday(): Promise<TeamTodayRow[]> {
     return [];
   }
 }

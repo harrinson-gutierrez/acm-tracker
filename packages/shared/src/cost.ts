@@ -1,4 +1,4 @@
-import type { TimeEntry } from "./types.js";
+import type { TimeEntry } from "./types";
 
 const round2 = (n: number): number => Math.round(n * 100) / 100;
 

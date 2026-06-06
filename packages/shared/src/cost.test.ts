@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { computeEntryCost, sumCost } from "./cost.js";
-import type { TimeEntry } from "./types.js";
+import { computeEntryCost, sumCost } from "./cost";
+import type { TimeEntry } from "./types";
 
 const entry = (minutes: number, rate: number, billable = true): TimeEntry => ({
   id: "e", taskId: "t", memberId: "m", origin: "manual",

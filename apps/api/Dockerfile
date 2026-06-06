@@ -1,13 +1,10 @@
-FROM node:20-alpine
+FROM node:20-slim
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 RUN npm i -g pnpm@9
 WORKDIR /repo
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
-COPY packages/shared/package.json packages/shared/
-COPY apps/api/package.json apps/api/
+COPY . .
 RUN pnpm install --frozen-lockfile=false
-COPY packages/shared packages/shared
-COPY apps/api apps/api
+RUN pnpm --filter @acm/shared build && pnpm --filter @acm/api exec prisma generate && pnpm --filter @acm/api build
 WORKDIR /repo/apps/api
-RUN pnpm prisma generate && pnpm build
 EXPOSE 4000
-CMD ["sh", "-c", "pnpm prisma migrate deploy && node dist/main.js"]
+CMD ["sh", "-c", "pnpm exec prisma migrate deploy && node dist/src/main.js"]

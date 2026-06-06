@@ -78,7 +78,7 @@ All new components are presentational and reused across screens (e.g. `McpStream
 
 Frame reference: the topbar in every `docs/design/*.png` — left `◆ ACM-TRACKER` + breadcrumb + optional middle status; right a status dot + label + user menu `HG ▾`.
 
-- [ ] **Step 1: Replace Chrome with the richer instrument topbar**
+- [x] **Step 1: Replace Chrome with the richer instrument topbar**
 
 ```tsx
 import type { CSSProperties, ReactNode } from "react";
@@ -122,12 +122,12 @@ export function Chrome({ breadcrumb, status = "LIVE", statusColor = colors.green
 }
 ```
 
-- [ ] **Step 2: Build**
+- [x] **Step 2: Build**
 
 Run: `pnpm --filter @acm/web build`
 Expected: clean (existing screens still pass `breadcrumb`; new props are optional).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/components/Chrome
@@ -143,7 +143,7 @@ git commit -m "feat(web): enrich Chrome instrument topbar (status + user)"
 
 Frame reference: `docs/design/01-cabina.png` — big gauge, coral outer ring (cost vs target) + blue inner arc (AI share), center figure `$1,840`, `77% del objetivo`, legend rows below.
 
-- [ ] **Step 1: Create `RingGauge.tsx`**
+- [x] **Step 1: Create `RingGauge.tsx`**
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -180,9 +180,9 @@ export function RingGauge({ total, target, aiFraction, caption }: RingGaugeProps
 }
 ```
 
-- [ ] **Step 2: Create `index.ts`**: `export { RingGauge } from "./RingGauge";`
+- [x] **Step 2: Create `index.ts`**: `export { RingGauge } from "./RingGauge";`
 
-- [ ] **Step 3: Build + commit**
+- [x] **Step 3: Build + commit**
 
 Run: `pnpm --filter @acm/web build` (expect clean)
 ```bash
@@ -202,7 +202,7 @@ git commit -m "feat(web): RingGauge dual-ring burn-rate component"
 
 Frame reference: `01-cabina.png` (avatars HE/MA/JO/VL, tiles HOY/SEMANA/FACT/MARGEN, person rows), `04-project-detail.png`.
 
-- [ ] **Step 1: Create `Avatar.tsx`** (colored initials chip)
+- [x] **Step 1: Create `Avatar.tsx`** (colored initials chip)
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -222,7 +222,7 @@ export function Avatar({ initials, index = 0, size = 34 }: { initials: string; i
 }
 ```
 
-- [ ] **Step 2: Create `Tag.tsx`** (status/phase pill)
+- [x] **Step 2: Create `Tag.tsx`** (status/phase pill)
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -236,7 +236,7 @@ export function Tag({ label, color = colors.muted }: { label: string; color?: st
 }
 ```
 
-- [ ] **Step 3: Create `TileRow.tsx`** (row of StatTiles)
+- [x] **Step 3: Create `TileRow.tsx`** (row of StatTiles)
 
 ```tsx
 import { StatTile } from "../StatTile";
@@ -259,7 +259,7 @@ export function TileRow({ tiles, columns = 4 }: { tiles: Tile[]; columns?: numbe
 }
 ```
 
-- [ ] **Step 4: Create `PersonCostRow.tsx`**
+- [x] **Step 4: Create `PersonCostRow.tsx`**
 
 ```tsx
 import { Avatar } from "../Avatar";
@@ -287,14 +287,14 @@ export function PersonCostRow({ initials, index, name, meta, cost }: PersonCostR
 }
 ```
 
-- [ ] **Step 5: Create the four `index.ts` barrels**
+- [x] **Step 5: Create the four `index.ts` barrels**
 
 `Avatar/index.ts`: `export { Avatar } from "./Avatar";`
 `Tag/index.ts`: `export { Tag } from "./Tag";`
 `TileRow/index.ts`: `export { TileRow } from "./TileRow"; export type { Tile } from "./TileRow";`
 `PersonCostRow/index.ts`: `export { PersonCostRow } from "./PersonCostRow";`
 
-- [ ] **Step 6: Build + commit**
+- [x] **Step 6: Build + commit**
 
 Run: `pnpm --filter @acm/web build` (expect clean)
 ```bash
@@ -313,7 +313,7 @@ git commit -m "feat(web): Avatar, Tag, TileRow, PersonCostRow components"
 
 Frame reference: `01-cabina.png` (MCP stream + timer dock), `03-mcp.png` (stream rows), `04-project-detail.png` / `07-reportes.png` (tables).
 
-- [ ] **Step 1: Create `McpStream.tsx`**
+- [x] **Step 1: Create `McpStream.tsx`**
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -349,7 +349,7 @@ export function McpStream({ rows, emptyLabel = "Sin reportes aún" }: { rows: Mc
 }
 ```
 
-- [ ] **Step 2: Create `TimerDock.tsx`**
+- [x] **Step 2: Create `TimerDock.tsx`**
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -382,7 +382,7 @@ export function TimerDock({ elapsed, taskTitle, meta, onStop, onManual }: TimerD
 }
 ```
 
-- [ ] **Step 3: Create `DataTable.tsx`** (generic header + rows)
+- [x] **Step 3: Create `DataTable.tsx`** (generic header + rows)
 
 ```tsx
 import type { ReactNode } from "react";
@@ -425,13 +425,13 @@ export function DataTable({ columns, rows, emptyLabel = "Sin datos" }: { columns
 }
 ```
 
-- [ ] **Step 4: Create the three `index.ts` barrels**
+- [x] **Step 4: Create the three `index.ts` barrels**
 
 `McpStream/index.ts`: `export { McpStream } from "./McpStream"; export type { McpStreamRow } from "./McpStream";`
 `TimerDock/index.ts`: `export { TimerDock } from "./TimerDock";`
 `DataTable/index.ts`: `export { DataTable } from "./DataTable"; export type { Column, Row } from "./DataTable";`
 
-- [ ] **Step 5: Build + commit**
+- [x] **Step 5: Build + commit**
 
 Run: `pnpm --filter @acm/web build` (expect clean)
 ```bash
@@ -449,7 +449,7 @@ git commit -m "feat(web): McpStream, TimerDock, DataTable components"
 
 Frame reference: `05-settings-pricing.png` / `12-documentos-global.png` (left sidebar), `11-command-palette.png` (overlay).
 
-- [ ] **Step 1: Create `SideNav.tsx`**
+- [x] **Step 1: Create `SideNav.tsx`**
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -475,7 +475,7 @@ export function SideNav({ title, items }: { title: string; items: NavItem[] }) {
 }
 ```
 
-- [ ] **Step 2: Create `CommandPalette.tsx`** (controlled overlay)
+- [x] **Step 2: Create `CommandPalette.tsx`** (controlled overlay)
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -519,7 +519,7 @@ export function CommandPalette({ open, onClose, commands }: CommandPaletteProps)
 }
 ```
 
-- [ ] **Step 3: Create barrels + build + commit**
+- [x] **Step 3: Create barrels + build + commit**
 
 `SideNav/index.ts`: `export { SideNav } from "./SideNav"; export type { NavItem } from "./SideNav";`
 `CommandPalette/index.ts`: `export { CommandPalette } from "./CommandPalette"; export type { Command } from "./CommandPalette";`
@@ -549,7 +549,7 @@ Two Cabina/Tracker panels need data the backend doesn't aggregate yet. Add small
 
 > "Today" is derived from `TimeEntry.startedAt` on the current date. Because the aggregation repository must not call `new Date()` at module scope (deterministic test concern), the use case receives the day boundaries; the controller computes them per request.
 
-- [ ] **Step 1: Extend the port**
+- [x] **Step 1: Extend the port**
 
 Add to `CostAggregationPort`:
 ```typescript
@@ -574,7 +574,7 @@ export interface TeamTodayRow {
 //   teamToday(from: Date, to: Date): Promise<TeamTodayRow[]>;
 ```
 
-- [ ] **Step 2: Implement in the Prisma adapter**
+- [x] **Step 2: Implement in the Prisma adapter**
 
 ```typescript
 // add these methods to PrismaCostAggregationRepository (reuse computeEntryCost + round2):
@@ -604,7 +604,7 @@ async teamToday(from: Date, to: Date): Promise<TeamTodayRow[]> {
 ```
 Import the two new types at the top of the adapter (`TodaySummary`, `TeamTodayRow` from the port file).
 
-- [ ] **Step 3: Write the failing test for the use case**
+- [x] **Step 3: Write the failing test for the use case**
 
 ```typescript
 import { TodaySummaryUseCase } from "./today-summary.use-case";
@@ -628,12 +628,12 @@ describe("TodaySummaryUseCase", () => {
 });
 ```
 
-- [ ] **Step 4: Run to verify it fails**
+- [x] **Step 4: Run to verify it fails**
 
 Run: `pnpm --filter @acm/api test today-summary`
 Expected: FAIL — module not found.
 
-- [ ] **Step 5: Create the two use cases**
+- [x] **Step 5: Create the two use cases**
 
 `today-summary.use-case.ts`:
 ```typescript
@@ -663,7 +663,7 @@ export class TeamTodayUseCase {
 }
 ```
 
-- [ ] **Step 6: Add controller routes + register in module**
+- [x] **Step 6: Add controller routes + register in module**
 
 In `reporting.controller.ts`, inject both use cases and add:
 ```typescript
@@ -687,12 +687,12 @@ function dayBounds(): { from: Date; to: Date } {
 ```
 Register `TodaySummaryUseCase` and `TeamTodayUseCase` in `reporting.module.ts` providers.
 
-- [ ] **Step 7: Run test (pass) + build**
+- [x] **Step 7: Run test (pass) + build**
 
 Run: `pnpm --filter @acm/api test today-summary && pnpm --filter @acm/api build`
 Expected: PASS + clean build.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add apps/api/src/modules/reporting
@@ -710,7 +710,7 @@ git commit -m "feat(api): today + team-today aggregation endpoints for Cabina"
 **Files:**
 - Create: `apps/web/src/features/reporting/api/use-today.ts`
 
-- [ ] **Step 1: Create the hooks**
+- [x] **Step 1: Create the hooks**
 
 ```typescript
 import { useQuery } from "@tanstack/react-query";
@@ -727,7 +727,7 @@ export function useTeamToday() {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add apps/web/src/features/reporting/api/use-today.ts
@@ -743,7 +743,7 @@ git commit -m "feat(web): today + team-today data hooks"
 
 Frame: `docs/design/01-cabina.png`. Layout: left column = RingGauge panel "BURN RATE · HOY" (with legend Humano/IA) + TileRow (HOY/SEMANA/FACTURABLE/MARGEN); right column = Panel "EQUIPO · COSTO REAL HOY" (PersonCostRow list) + Panel "MCP · INGESTA EN VIVO" (McpStream). Bottom = TimerDock.
 
-- [ ] **Step 1: Rebuild `Cabina.tsx`**
+- [x] **Step 1: Rebuild `Cabina.tsx`**
 
 ```tsx
 import { Chrome } from "../components/Chrome";
@@ -803,11 +803,11 @@ export function Cabina() {
 
 > Cabina shows REAL today cost + team from the new endpoints; MCP stream is the designed empty state (live data arrives with the MCP phase); Semana/Margen tiles show "—" until those aggregations exist (not faked).
 
-- [ ] **Step 2: Build, run stack, screenshot vs frame**
+- [x] **Step 2: Build, run stack, screenshot vs frame**
 
 Run: `pnpm --filter @acm/web build`; ensure stack up; open `http://localhost:5173/` in Playwright; screenshot; compare to `docs/design/01-cabina.png`. Fix layout/spacing/labels until it matches (gauge centered, two-column grid, panels titled, timer dock coral).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens/Cabina.tsx
@@ -823,7 +823,7 @@ git commit -m "feat(web): Cabina faithful to Flight Deck frame"
 
 Frame: `docs/design/04-project-detail.png`. Header: avatar + "Helios · Plataforma fintech" + meta + tabs (Resumen/Tareas/Tiempo/Costos/Equipo/Documentos). Body: left "COSTO REAL · ACUMULADO" panel (big figure + human/AI split + stat row + progress) ; right "EQUIPO · COSTO REAL POR PERSONA" (DataTable). Bottom: "TAREAS · TIEMPO + COSTO" (DataTable with code/title/est/real/cost) + a margin mini-gauge + riesgos panel.
 
-- [ ] **Step 1: Rebuild `ProjectDetail.tsx`** composing `Chrome`, `Panel`, `Avatar`, `Tag`, `DataTable`, `DonutGauge`, using `useProject`, `useTasks`, `useCreateTask`, `useProjectCost`, `useCostByPerson`, and `TaskRow`'s cost via `useTaskCost` (reuse existing hooks). Header tabs are links; "Documentos" tab routes to the documents view (Task 18). Render the cost panel from `useProjectCost(id)` (human/ai/total/minutes — ai is 0). Tasks table reuses the existing add-task input. Keep "+ tiempo" per row.
+- [x] **Step 1: Rebuild `ProjectDetail.tsx`** composing `Chrome`, `Panel`, `Avatar`, `Tag`, `DataTable`, `DonutGauge`, using `useProject`, `useTasks`, `useCreateTask`, `useProjectCost`, `useCostByPerson`, and `TaskRow`'s cost via `useTaskCost` (reuse existing hooks). Header tabs are links; "Documentos" tab routes to the documents view (Task 18). Render the cost panel from `useProjectCost(id)` (human/ai/total/minutes — ai is 0). Tasks table reuses the existing add-task input. Keep "+ tiempo" per row.
 
 ```tsx
 // Full composition — uses existing hooks (useProject, useTasks, useCreateTask, useProjectCost)
@@ -835,9 +835,9 @@ Frame: `docs/design/04-project-detail.png`. Header: avatar + "Helios · Platafor
 
 > This task carries real code in the repo; the engineer composes the documented components. The cost figures are REAL (from useProjectCost / useTaskCost). "Riesgos" panel is a static designed placeholder (no risks backend yet) — label it as sample.
 
-- [ ] **Step 2: Build + screenshot vs `04-project-detail.png` + fix**
+- [x] **Step 2: Build + screenshot vs `04-project-detail.png` + fix**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens/ProjectDetail.tsx apps/web/src/features/tasks
@@ -853,11 +853,11 @@ git commit -m "feat(web): Project detail faithful to Flight Deck frame"
 
 Frame: `docs/design/02-costos-ia.png`. Title "Costos · <mes>" + 4 StatTiles (TOTAL MES/HUMANO/IA/INFRA) + DonutGauge composition panel + "IA · COSTO POR MODELO" DataTable (model/in/out/$/1M/costo, from model-prices, costs 0) + "POR PROYECTO" panel + infra strip (designed placeholder).
 
-- [ ] **Step 1: Rebuild `Costs.tsx`** composing TileRow, DonutGauge, DataTable, Panel; data from `useModelPrices` + `useProjects` + per-project `useProjectCost`. AI column shows $0. Infra strip is a labeled sample (no infra backend).
+- [x] **Step 1: Rebuild `Costs.tsx`** composing TileRow, DonutGauge, DataTable, Panel; data from `useModelPrices` + `useProjects` + per-project `useProjectCost`. AI column shows $0. Infra strip is a labeled sample (no infra backend).
 
-- [ ] **Step 2: Build + screenshot vs `02-costos-ia.png` + fix**
+- [x] **Step 2: Build + screenshot vs `02-costos-ia.png` + fix**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens/Costs.tsx
@@ -873,11 +873,11 @@ git commit -m "feat(web): Costos & IA faithful to Flight Deck frame"
 
 Frame: `docs/design/07-reportes.png`. Title "Reportes · analítica" + 5 StatTiles (HORAS/COSTO TOTAL/COSTO IA/$/HORA PROM/UTILIZACIÓN) + "TIEMPO+COSTO · POR SEMANA" StackedBars panel (legend humano/ia) + "POR PERSONA · COSTO REAL" DataTable (persona/horas/ia/costo) + "EXPORTAR / FACTURAR" three cards. Real data from `useCostByPerson` + `useWeeklyCost`; IA = 0; KPIs derived from those (HORAS = Σ minutes, COSTO TOTAL = Σ human, etc.); UTILIZACIÓN/$ HORA computed; export cards are buttons (no backend export yet — disabled or "próximamente").
 
-- [ ] **Step 1: Rebuild `Reports.tsx`** with the 5 KPIs computed from the hooks, StackedBars, DataTable by-person, and 3 export cards. Mark export buttons "próximamente".
+- [x] **Step 1: Rebuild `Reports.tsx`** with the 5 KPIs computed from the hooks, StackedBars, DataTable by-person, and 3 export cards. Mark export buttons "próximamente".
 
-- [ ] **Step 2: Build + screenshot vs `07-reportes.png` + fix**
+- [x] **Step 2: Build + screenshot vs `07-reportes.png` + fix**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens/Reports.tsx
@@ -893,11 +893,11 @@ git commit -m "feat(web): Reportes faithful to Flight Deck frame"
 
 Frame: `docs/design/05-settings-pricing.png`. Left `SideNav` (Workspace/Miembros & tarifas/Precios de modelos/MCP & tokens/Notificaciones/Facturación/Auditoría) + right: "MIEMBROS & TARIFAS" DataTable (avatar/name/role/rate input/estado Tag) and "PRECIOS DE MODELOS" DataTable with the add form (reuse existing create) + delete per row. Keep the auth-provider section ("Conectar Cognito · próximamente").
 
-- [ ] **Step 1: Rebuild `Settings.tsx`** with SideNav + the two tables (members, model-prices) faithful to the frame; reuse `useMembers`, `useModelPrices`, `useCreateModelPrice`.
+- [x] **Step 1: Rebuild `Settings.tsx`** with SideNav + the two tables (members, model-prices) faithful to the frame; reuse `useMembers`, `useModelPrices`, `useCreateModelPrice`.
 
-- [ ] **Step 2: Build + screenshot vs `05-settings-pricing.png` + fix**
+- [x] **Step 2: Build + screenshot vs `05-settings-pricing.png` + fix**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens/Settings.tsx
@@ -917,15 +917,15 @@ Frame: `docs/design/08-time-tracker.png`. Title "Tiempo · <fecha>" + day totals
 
 > The backend has `/time-entries/task/:taskId` but no "all entries today" endpoint. For fidelity without faking: render the timeline from the entries of the active project's tasks the user has (reuse what exists), OR add a tiny `/time-entries/today` endpoint (additive; same pattern as today-summary). The plan chooses: ADD `/time-entries/today` (one more aggregation) — see Step 1.
 
-- [ ] **Step 1: Add `/time-entries/today`** (backend, additive): a use case + controller route in the time-entries module returning today's entries with task code/title joined. Follow the hexagonal pattern (port method `findToday(from,to)`, adapter query `timeEntry.findMany({ where:{ startedAt:{gte,lt} }, include:{ task:true } })`, mapper to a `{time, origin, taskCode, taskTitle, minutes, cost}` view). Delegate to backend-architect.
+- [x] **Step 1: Add `/time-entries/today`** (backend, additive): a use case + controller route in the time-entries module returning today's entries with task code/title joined. Follow the hexagonal pattern (port method `findToday(from,to)`, adapter query `timeEntry.findMany({ where:{ startedAt:{gte,lt} }, include:{ task:true } })`, mapper to a `{time, origin, taskCode, taskTitle, minutes, cost}` view). Delegate to backend-architect.
 
-- [ ] **Step 2: Create `use-today-entries.ts`** hook (`useQuery(["today-entries"], () => apiClient.get("/time-entries/today"))`).
+- [x] **Step 2: Create `use-today-entries.ts`** hook (`useQuery(["today-entries"], () => apiClient.get("/time-entries/today"))`).
 
-- [ ] **Step 3: Create `Tracker.tsx`** composing Chrome + TileRow + DataTable (timeline) + Panel (objetivo/por tarea) + TimerDock, faithful to the frame.
+- [x] **Step 3: Create `Tracker.tsx`** composing Chrome + TileRow + DataTable (timeline) + Panel (objetivo/por tarea) + TimerDock, faithful to the frame.
 
-- [ ] **Step 4: Build + screenshot vs `08-time-tracker.png` + fix**
+- [x] **Step 4: Build + screenshot vs `08-time-tracker.png` + fix**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/api/src/modules/time-entries apps/web/src/screens/Tracker.tsx apps/web/src/features/time-entries apps/web/src/App.tsx
@@ -942,11 +942,11 @@ git commit -m "feat: Time tracker screen + today-entries endpoint, faithful to f
 
 Frame: `docs/design/03-mcp.png`. Title "Servidor MCP" + endpoint card (URL + COPIAR) + token card (PAT masked + ROTAR) + "CONTRATO DE REPORTE · report_work()" code panel + "REPORTES RECIBIDOS" DataTable (McpStream-style). All presentational — the real MCP server is a later phase. Endpoint/token show placeholder values with a clear "próximamente / no activo" status; the contract code is the designed snippet; the received-reports table is the empty state.
 
-- [ ] **Step 1: Create `Mcp.tsx`** composing Chrome + Panel + a code block + McpStream(empty). Status dot/label = "MCP OFFLINE · próximamente" (amber), not green. COPIAR/ROTAR are disabled.
+- [x] **Step 1: Create `Mcp.tsx`** composing Chrome + Panel + a code block + McpStream(empty). Status dot/label = "MCP OFFLINE · próximamente" (amber), not green. COPIAR/ROTAR are disabled.
 
-- [ ] **Step 2: Build + screenshot vs `03-mcp.png` + fix**
+- [x] **Step 2: Build + screenshot vs `03-mcp.png` + fix**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens/Mcp.tsx apps/web/src/App.tsx
@@ -963,11 +963,11 @@ git commit -m "feat(web): MCP screen shell faithful to frame (server is a later 
 
 Frame: `docs/design/09-notificaciones.png`. Banner "solo avisos salientes" + channel cards (Slack/Email/WhatsApp/Webhook) + "REGLAS DE AVISO" DataTable with toggles. Presentational (channels/rules config backend is later). Toggles are visual; cards show "Conectar" (disabled) where not configured. Make clear in-UI these are not yet wired.
 
-- [ ] **Step 1: Create `Notifications.tsx`** composing Chrome + a banner + channel cards + DataTable of rules with toggle visuals.
+- [x] **Step 1: Create `Notifications.tsx`** composing Chrome + a banner + channel cards + DataTable of rules with toggle visuals.
 
-- [ ] **Step 2: Build + screenshot vs `09-notificaciones.png` + fix**
+- [x] **Step 2: Build + screenshot vs `09-notificaciones.png` + fix**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens/Notifications.tsx apps/web/src/App.tsx
@@ -984,11 +984,11 @@ git commit -m "feat(web): Notifications screen shell faithful to frame"
 
 Frame: `docs/design/10-auth.png`. Split: left brand panel with the big gauge motif + "Tiempo + costo, en una sola cabina." + self-hosted copy; right sign-in form (email/password + "Entrar →" + "¿Nuevo? Crear workspace"). Presentational — v1 runs NoAuth, so this screen is shown for design completeness; the "Entrar" button navigates to `/` (no real auth yet). Add a small note "modo sin auth — owner local".
 
-- [ ] **Step 1: Create `Auth.tsx`** (two-column, left uses a faint big RingGauge motif, right a styled form). "Entrar →" calls `navigate("/")`.
+- [x] **Step 1: Create `Auth.tsx`** (two-column, left uses a faint big RingGauge motif, right a styled form). "Entrar →" calls `navigate("/")`.
 
-- [ ] **Step 2: Build + screenshot vs `10-auth.png` + fix**
+- [x] **Step 2: Build + screenshot vs `10-auth.png` + fix**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens/Auth.tsx apps/web/src/App.tsx
@@ -1005,7 +1005,7 @@ git commit -m "feat(web): Auth sign-in screen faithful to frame (NoAuth mode)"
 
 Frame: `docs/design/11-command-palette.png`. Overlay with search bar + ACCIONES (Iniciar timer, Nueva entrada, Ver costo de hoy, Reporte cliente) + IR A (Cabina, Proyecto, Costos, MCP). Client-only; actions navigate.
 
-- [ ] **Step 1: Create the Zustand slice** (`useCommandPalette` with `open`, `setOpen`).
+- [x] **Step 1: Create the Zustand slice** (`useCommandPalette` with `open`, `setOpen`).
 
 ```typescript
 import { create } from "zustand";
@@ -1021,11 +1021,11 @@ export const useCommandPalette = create<CommandPaletteState>((set) => ({
 }));
 ```
 
-- [ ] **Step 2: Mount in `App.tsx`** — a global `useEffect` listening for `(e.metaKey||e.ctrlKey) && e.key==="k"` to toggle, and render `<CommandPalette open={open} onClose={...} commands={...}>` with `useNavigate` actions.
+- [x] **Step 2: Mount in `App.tsx`** — a global `useEffect` listening for `(e.metaKey||e.ctrlKey) && e.key==="k"` to toggle, and render `<CommandPalette open={open} onClose={...} commands={...}>` with `useNavigate` actions.
 
-- [ ] **Step 3: Build + screenshot vs `11-command-palette.png` (open state) + fix**
+- [x] **Step 3: Build + screenshot vs `11-command-palette.png` (open state) + fix**
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add apps/web/src/features/command-palette apps/web/src/App.tsx
@@ -1043,13 +1043,13 @@ git commit -m "feat(web): ⌘K command palette faithful to frame"
 
 Frames: `docs/design/12-documentos-global.png`, `docs/design/13-documentos-proyecto.png`. Global: SideNav (espacios + por fase) + toolbar (search + Tipo/Fase filters + Nuevo) + DataTable of docs (icon by type, project, phase Tag, updated, COSTO PROD.). Project tab: phase-grouped doc cards + right rail (almacenamiento + costo documental). Presentational shell — the documents backend is a later phase; show the designed empty state ("sin documentos — la base documental llega en una fase próxima") with the full chrome/filters visible.
 
-- [ ] **Step 1: Create `Documents.tsx`** (global) composing Chrome + SideNav + toolbar + DataTable(empty designed state).
+- [x] **Step 1: Create `Documents.tsx`** (global) composing Chrome + SideNav + toolbar + DataTable(empty designed state).
 
-- [ ] **Step 2: Add the Documentos tab** to ProjectDetail showing phase-grouped empty cards + right rail, faithful to `13-documentos-proyecto.png`.
+- [x] **Step 2: Add the Documentos tab** to ProjectDetail showing phase-grouped empty cards + right rail, faithful to `13-documentos-proyecto.png`.
 
-- [ ] **Step 3: Build + screenshot vs both frames + fix**
+- [x] **Step 3: Build + screenshot vs both frames + fix**
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add apps/web/src/screens/Documents.tsx apps/web/src/screens/ProjectDetail.tsx apps/web/src/App.tsx
@@ -1065,11 +1065,11 @@ git commit -m "feat(web): Documents global + project tab shells faithful to fram
 
 Frame: `docs/design/06-mobile.png`. The Cabina condensed for 390px: mini dual-ring gauge, stat tiles, MCP feed, timer dock, bottom nav. Add responsive breakpoints to Cabina (single column under 640px, smaller gauge) so the same route works on mobile, matching the frame.
 
-- [ ] **Step 1: Add responsive layout** to Cabina (media-query via a small `useIsMobile` hook or CSS) so it collapses to one column and a bottom nav appears, matching `06-mobile.png`.
+- [x] **Step 1: Add responsive layout** to Cabina (media-query via a small `useIsMobile` hook or CSS) so it collapses to one column and a bottom nav appears, matching `06-mobile.png`.
 
-- [ ] **Step 2: Build + screenshot at 390px viewport vs `06-mobile.png` + fix**
+- [x] **Step 2: Build + screenshot at 390px viewport vs `06-mobile.png` + fix**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/screens
@@ -1083,11 +1083,11 @@ git commit -m "feat(web): responsive mobile Cabina faithful to frame"
 **Files:**
 - Modify: `apps/web/src/App.tsx`, `apps/web/src/screens/Cabina.tsx`
 
-- [ ] **Step 1: Ensure all routes exist** in `App.tsx`: `/`, `/projects`, `/projects/:id`, `/costs`, `/reports`, `/tracker`, `/mcp`, `/notifications`, `/documents`, `/settings`, `/auth`. Add a persistent way to reach them (the command palette + Cabina links, matching the design's navigation affordances).
+- [x] **Step 1: Ensure all routes exist** in `App.tsx`: `/`, `/projects`, `/projects/:id`, `/costs`, `/reports`, `/tracker`, `/mcp`, `/notifications`, `/documents`, `/settings`, `/auth`. Add a persistent way to reach them (the command palette + Cabina links, matching the design's navigation affordances).
 
-- [ ] **Step 2: Full visual pass** — open each route in Playwright, screenshot, compare to its frame, fix any remaining discrepancies (spacing, colors, labels, fonts).
+- [x] **Step 2: Full visual pass** — open each route in Playwright, screenshot, compare to its frame, fix any remaining discrepancies (spacing, colors, labels, fonts).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src

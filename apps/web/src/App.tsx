@@ -7,6 +7,7 @@ import { Costs } from "./screens/Costs";
 import { Reports } from "./screens/Reports";
 import { Tracker } from "./screens/Tracker";
 import { Documents } from "./screens/Documents";
+import { Notifications } from "./screens/Notifications";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
       <Route path="/reports" element={<Reports />} />
       <Route path="/tracker" element={<Tracker />} />
       <Route path="/documents" element={<Documents />} />
+      <Route path="/notifications" element={<Notifications />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

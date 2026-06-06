@@ -90,3 +90,12 @@ model Document {
 
   @@index([projectId])
 }
+
+model NotificationRule {
+  id        String   @id @default(cuid())
+  event     String
+  condition String
+  channel   String
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

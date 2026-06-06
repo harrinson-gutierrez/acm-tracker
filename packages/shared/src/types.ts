@@ -79,6 +79,15 @@ export interface WeeklyCost {
   ai: number;
 }
 
+export interface NotificationRule {
+  id: string;
+  event: string;
+  condition: string;
+  channel: string;
+  enabled: boolean;
+  createdAt: string;
+}
+
 export type DocumentKind = "page" | "file" | "link";
 
 export interface DocumentItem {

@@ -625,7 +625,7 @@ git commit -m "feat(api): nest scaffold + prisma schema + initial migration"
 **Files:**
 - Create: `docker-compose.yml`, `apps/api/Dockerfile`, `apps/web/Dockerfile`, `README.md`
 
-- [ ] **Step 1: Create `apps/api/Dockerfile`**
+- [x] **Step 1: Create `apps/api/Dockerfile`**
 
 ```dockerfile
 FROM node:20-alpine
@@ -643,7 +643,7 @@ EXPOSE 4000
 CMD ["sh", "-c", "pnpm prisma migrate deploy && node dist/main.js"]
 ```
 
-- [ ] **Step 2: Create `apps/web/Dockerfile`**
+- [x] **Step 2: Create `apps/web/Dockerfile`**
 
 ```dockerfile
 FROM node:20-alpine
@@ -660,7 +660,7 @@ EXPOSE 5173
 CMD ["pnpm", "dev", "--host", "0.0.0.0"]
 ```
 
-- [ ] **Step 3: Create `docker-compose.yml`** (no `db` service — DB is remote)
+- [x] **Step 3: Create `docker-compose.yml`** (no `db` service — DB is remote. A gitignored `docker-compose.override.yml` adds a local Postgres for testing only.)
 
 ```yaml
 services:
@@ -688,7 +688,7 @@ services:
       - api
 ```
 
-- [ ] **Step 4: Create `README.md`**
+- [x] **Step 4: Create `README.md`** (already created during repo init)
 
 ```markdown
 # ACM-TRACKER

@@ -22,7 +22,7 @@ export function RingGauge({ total, target, aiFraction, caption }: RingGaugeProps
       <circle cx={130} cy={130} r={rInner} fill="none" stroke={colors.blue} strokeWidth={8}
         strokeDasharray={cInner} strokeDashoffset={cInner * (1 - Math.min(aiFraction, 1))} strokeLinecap="round" transform="rotate(-90 130 130)" />
       <text x={130} y={126} textAnchor="middle" className="mono" fill={colors.text} fontSize={44} fontWeight={700}>
-        {`$${total.toLocaleString()}`}
+        {`$${total.toLocaleString("en-US")}`}
       </text>
       <text x={130} y={152} textAnchor="middle" className="mono" fill={colors.coral} fontSize={14}>
         {`${Math.round(pct * 100)}%`}

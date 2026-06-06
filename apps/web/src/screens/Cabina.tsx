@@ -16,6 +16,8 @@ export function Cabina() {
         <Panel title="Navegación">
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <Link to="/projects" style={{ color: colors.text }}>→ Proyectos</Link>
+            <Link to="/costs" style={{ color: colors.text }}>→ Costos & IA</Link>
+            <Link to="/reports" style={{ color: colors.text }}>→ Reportes</Link>
             <Link to="/settings" style={{ color: colors.text }}>→ Settings & tarifas</Link>
           </div>
         </Panel>

@@ -916,7 +916,7 @@ git commit -m "feat(api): cost aggregation adapter + reporting controller + modu
 - Create: `apps/web/src/features/model-pricing/api/use-model-prices.ts`
 - Create: `apps/web/src/features/reporting/api/use-reporting.ts`
 
-- [ ] **Step 1: Create `use-model-prices.ts`**
+- [x] **Step 1: Create `use-model-prices.ts`**
 
 ```typescript
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -940,7 +940,7 @@ export function useCreateModelPrice() {
 }
 ```
 
-- [ ] **Step 2: Create `use-reporting.ts`**
+- [x] **Step 2: Create `use-reporting.ts`**
 
 ```typescript
 import { useQuery } from "@tanstack/react-query";
@@ -977,7 +977,7 @@ export function useWeeklyCost() {
 }
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/web/src/features/model-pricing apps/web/src/features/reporting
@@ -993,7 +993,7 @@ git commit -m "feat(web): reporting + model-pricing data hooks (TanStack Query)"
 - Create: `apps/web/src/components/DonutGauge/DonutGauge.tsx` + `index.ts`
 - Create: `apps/web/src/components/StackedBars/StackedBars.tsx` + `index.ts`
 
-- [ ] **Step 1: Create `StatTile.tsx`** (KPI tile — props in, JSX out)
+- [x] **Step 1: Create `StatTile.tsx`** (KPI tile — props in, JSX out)
 
 ```tsx
 import { colors, radius } from "../../theme/tokens";
@@ -1016,7 +1016,7 @@ export function StatTile({ label, value, sub, accent = colors.text }: StatTilePr
 }
 ```
 
-- [ ] **Step 2: Create `DonutGauge.tsx`** (composition ring from segments)
+- [x] **Step 2: Create `DonutGauge.tsx`** (composition ring from segments)
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -1063,7 +1063,7 @@ export function DonutGauge({ segments, centerLabel }: { segments: DonutSegment[]
 }
 ```
 
-- [ ] **Step 3: Create `StackedBars.tsx`** (weekly human/ai)
+- [x] **Step 3: Create `StackedBars.tsx`** (weekly human/ai)
 
 ```tsx
 import { colors } from "../../theme/tokens";
@@ -1097,18 +1097,18 @@ export function StackedBars({ data }: { data: StackedBar[] }) {
 }
 ```
 
-- [ ] **Step 4: Create the three `index.ts` barrels**
+- [x] **Step 4: Create the three `index.ts` barrels**
 
 `StatTile/index.ts`: `export { StatTile } from "./StatTile";`
 `DonutGauge/index.ts`: `export { DonutGauge } from "./DonutGauge";`
 `StackedBars/index.ts`: `export { StackedBars } from "./StackedBars";`
 
-- [ ] **Step 5: Build to confirm types**
+- [x] **Step 5: Build to confirm types**
 
 Run: `pnpm --filter @acm/web build`
 Expected: clean.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add apps/web/src/components/StatTile apps/web/src/components/DonutGauge apps/web/src/components/StackedBars
@@ -1126,7 +1126,7 @@ git commit -m "feat(web): reusable StatTile, DonutGauge, StackedBars components"
 - Modify: `apps/web/src/App.tsx`
 - Modify: `apps/web/src/screens/Cabina.tsx`
 
-- [ ] **Step 1: Create `Costs.tsx`**
+- [x] **Step 1: Create `Costs.tsx`**
 
 ```tsx
 import { Chrome } from "../components/Chrome";
@@ -1175,7 +1175,7 @@ export function Costs() {
 }
 ```
 
-- [ ] **Step 2: Create `Reports.tsx`**
+- [x] **Step 2: Create `Reports.tsx`**
 
 ```tsx
 import { Chrome } from "../components/Chrome";
@@ -1220,7 +1220,7 @@ export function Reports() {
 }
 ```
 
-- [ ] **Step 3: Add the model-pricing editor to `Settings.tsx`**
+- [x] **Step 3: Add the model-pricing editor to `Settings.tsx`**
 
 Add a third Panel that lists `useModelPrices()` rows and a small form using `useCreateModelPrice()`. Insert after the existing two panels (keep them). Minimal form:
 
@@ -1269,7 +1269,7 @@ const addPrice = () => {
 
 > Wrap the Settings grid so it holds three panels (e.g. `gridTemplateColumns: "1fr 1fr 1fr"`).
 
-- [ ] **Step 4: Wire routes in `App.tsx`**
+- [x] **Step 4: Wire routes in `App.tsx`**
 
 ```tsx
 import { Costs } from "./screens/Costs";
@@ -1279,7 +1279,7 @@ import { Reports } from "./screens/Reports";
 // <Route path="/reports" element={<Reports />} />
 ```
 
-- [ ] **Step 5: Add Cabina links to the new screens**
+- [x] **Step 5: Add Cabina links to the new screens**
 
 In `Cabina.tsx`, inside the "Navegación" panel, add:
 ```tsx
@@ -1287,12 +1287,12 @@ In `Cabina.tsx`, inside the "Navegación" panel, add:
 <Link to="/reports" style={{ color: colors.text }}>→ Reportes</Link>
 ```
 
-- [ ] **Step 6: Build**
+- [x] **Step 6: Build**
 
 Run: `pnpm --filter @acm/web build`
 Expected: clean (tsc + vite).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add apps/web/src/screens apps/web/src/App.tsx

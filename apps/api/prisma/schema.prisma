@@ -56,9 +56,24 @@ model TimeEntry {
   note                String?
   startedAt           DateTime
   createdAt           DateTime @default(now())
+  aiRuns              AiRun[]
 
   @@index([taskId])
   @@index([memberId])
+}
+
+model AiRun {
+  id          String    @id @default(cuid())
+  timeEntry   TimeEntry @relation(fields: [timeEntryId], references: [id], onDelete: Cascade)
+  timeEntryId String
+  agent       String?
+  model       String
+  tokensIn    Int
+  tokensOut   Int
+  costUsd     Float
+  createdAt   DateTime  @default(now())
+
+  @@index([timeEntryId])
 }
 
 model WorkspaceSettings {

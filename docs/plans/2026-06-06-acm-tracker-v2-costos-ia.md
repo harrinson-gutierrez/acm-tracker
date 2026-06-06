@@ -1305,9 +1305,9 @@ git commit -m "feat(web): Costs + Reports screens, model-pricing editor in Setti
 
 ### Task 13: E2E of Costs & Reports
 
-- [ ] **Step 1: Ensure the stack is running** (db + api + web).
+- [x] **Step 1: Ensure the stack is running** (db + api + web).
 
-- [ ] **Step 2: Seed a couple of model prices via API**
+- [x] **Step 2: Seed a couple of model prices via API**
 
 ```bash
 B=http://localhost:4000/api
@@ -1317,7 +1317,7 @@ curl -s $B/model-prices
 ```
 Expected: two prices returned by the list.
 
-- [ ] **Step 3: Verify aggregation endpoints**
+- [x] **Step 3: Verify aggregation endpoints**
 
 ```bash
 curl -s $B/reports/by-person
@@ -1325,13 +1325,13 @@ curl -s $B/reports/weekly
 ```
 Expected: by-person includes the owner with real `human`/`minutes` and `ai:0`; weekly returns the week(s) that have entries with `ai:0`.
 
-- [ ] **Step 4: Browser E2E**
+- [x] **Step 4: Browser E2E**
 
 Open http://localhost:5173/costs → 4 KPI tiles, donut (human), model-prices list shows the 2 seeded models.
 Open http://localhost:5173/reports → KPIs, weekly stacked bars (coral human, no AI), by-person list with the owner's real cost.
 Open http://localhost:5173/settings → add a model price via the form; confirm it appears in the list without reload (queryKey invalidation) AND appears on /costs.
 
-- [ ] **Step 5: Commit any fixes + mark plan complete**
+- [x] **Step 5: Commit any fixes + mark plan complete**
 
 ```bash
 git add -A

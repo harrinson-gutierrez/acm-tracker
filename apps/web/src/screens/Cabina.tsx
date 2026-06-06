@@ -6,6 +6,7 @@ import { PersonCostRow } from "../components/PersonCostRow";
 import { McpStream } from "../components/McpStream";
 import { TimerDock } from "../components/TimerDock";
 import { useTodaySummary, useTeamToday } from "../features/reporting/api/use-today";
+import { useIsMobile } from "../lib/use-is-mobile";
 import { colors } from "../theme/tokens";
 
 function hm(min: number): string {
@@ -15,15 +16,16 @@ function hm(min: number): string {
 export function Cabina() {
   const { data: today } = useTodaySummary();
   const { data: team = [] } = useTeamToday();
+  const isMobile = useIsMobile();
   const cost = today?.cost ?? 0;
   return (
     <Chrome breadcrumb="FLIGHT DECK · cabina" status="SYSTEMS NOMINAL">
-      <div style={{ display: "grid", gridTemplateColumns: "560px 1fr", gap: 16, alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "560px 1fr", gap: 16, alignItems: "start" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <Panel title="Burn rate · hoy">
             <div className="mono" style={{ fontSize: 11, color: colors.dim, marginTop: -6, marginBottom: 8 }}>vs objetivo diario $2,400</div>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <RingGauge total={cost} target={2400} aiFraction={0} caption="del objetivo" />
+              <RingGauge total={cost} target={2400} aiFraction={0} caption="del objetivo" size={isMobile ? 200 : 260} />
             </div>
             <div style={{ display: "flex", gap: 24, marginTop: 12 }}>
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -37,6 +39,7 @@ export function Cabina() {
             </div>
           </Panel>
           <TileRow
+            columns={isMobile ? 2 : 4}
             tiles={[
               { label: "Hoy", value: today ? hm(today.trackedMinutes) : "—", sub: "trackeado" },
               { label: "Semana", value: "—", sub: "de 40h" },

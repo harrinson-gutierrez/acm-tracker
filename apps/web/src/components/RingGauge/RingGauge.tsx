@@ -5,16 +5,17 @@ interface RingGaugeProps {
   target: number;
   aiFraction: number;
   caption: string;
+  size?: number;
 }
 
-export function RingGauge({ total, target, aiFraction, caption }: RingGaugeProps) {
+export function RingGauge({ total, target, aiFraction, caption, size = 260 }: RingGaugeProps) {
   const pct = target > 0 ? Math.min(total / target, 1) : 0;
   const rOuter = 86;
   const rInner = 64;
   const cOuter = 2 * Math.PI * rOuter;
   const cInner = 2 * Math.PI * rInner;
   return (
-    <svg width={260} height={260} viewBox="0 0 260 260" role="img" aria-label={`${caption}: ${total} of ${target}`}>
+    <svg width={size} height={size} viewBox="0 0 260 260" role="img" aria-label={`${caption}: ${total} of ${target}`}>
       <circle cx={130} cy={130} r={rOuter} fill="none" stroke={colors.surface2} strokeWidth={16} />
       <circle cx={130} cy={130} r={rOuter} fill="none" stroke={colors.coral} strokeWidth={16}
         strokeDasharray={cOuter} strokeDashoffset={cOuter * (1 - pct)} strokeLinecap="round" transform="rotate(-90 130 130)" />

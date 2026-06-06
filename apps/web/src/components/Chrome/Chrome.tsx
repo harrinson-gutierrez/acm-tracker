@@ -3,6 +3,8 @@ import { colors } from "../../theme/tokens";
 
 interface ChromeProps {
   breadcrumb: string;
+  status?: string;
+  statusColor?: string;
   children: ReactNode;
 }
 
@@ -15,34 +17,20 @@ function Mark({ pos }: { pos: CSSProperties }) {
   );
 }
 
-export function Chrome({ breadcrumb, children }: ChromeProps) {
+export function Chrome({ breadcrumb, status = "LIVE", statusColor = colors.green, children }: ChromeProps) {
   return (
     <div className="grid-bg" style={{ minHeight: "100vh", position: "relative", padding: 28 }}>
       <Mark pos={{ top: 14, left: 14 }} />
       <Mark pos={{ top: 14, right: 14 }} />
       <Mark pos={{ bottom: 14, left: 14 }} />
       <Mark pos={{ bottom: 14, right: 14 }} />
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          height: 52,
-          padding: "0 20px",
-          background: colors.surface,
-          border: `1px solid ${colors.border}`,
-          borderRadius: 8,
-          marginBottom: 24,
-        }}
-      >
-        <span className="mono" style={{ color: colors.coral, fontWeight: 700, letterSpacing: 1 }}>
-          ◆ ACM-TRACKER
-        </span>
-        <span className="mono" style={{ color: colors.muted, marginLeft: 24, fontSize: 13 }}>
-          {breadcrumb}
-        </span>
+      <header style={{ display: "flex", alignItems: "center", height: 52, padding: "0 20px", background: colors.surface, border: `1px solid ${colors.border}`, borderRadius: 8, marginBottom: 24 }}>
+        <span className="mono" style={{ color: colors.coral, fontWeight: 700, letterSpacing: 1 }}>◆ ACM-TRACKER</span>
+        <span className="mono" style={{ color: colors.muted, marginLeft: 24, fontSize: 13 }}>{breadcrumb}</span>
         <span style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 7, height: 7, borderRadius: 4, background: colors.green }} />
-          <span className="mono" style={{ color: colors.green, fontSize: 12 }}>LOCAL</span>
+          <span style={{ width: 7, height: 7, borderRadius: 4, background: statusColor }} />
+          <span className="mono" style={{ color: statusColor, fontSize: 12, letterSpacing: 1 }}>{status}</span>
+          <span className="mono" style={{ color: colors.text, fontSize: 13, marginLeft: 16 }}>HG ▾</span>
         </span>
       </header>
       {children}

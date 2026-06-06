@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id                 String      @id @default(cuid())
+  name               String
+  email              String      @unique
+  role               String      @default("member")
+  ratePerHour        Float       @default(0)
+  authProviderUserId String?     @unique
+  createdAt          DateTime    @default(now())
+  timeEntries        TimeEntry[]
+}
+
+model Project {
+  id             String   @id @default(cuid())
+  name           String
+  client         String?
+  contractAmount Float?
+  status         String   @default("active")
+  createdAt      DateTime @default(now())
+  tasks          Task[]
+}
+
+model Task {
+  id              String      @id @default(cuid())
+  project         Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId       String
+  code            String
+  title           String
+  phase           String?
+  status          String      @default("todo")
+  estimateMinutes Int?
+  createdAt       DateTime    @default(now())
+  timeEntries     TimeEntry[]
+
+  @@unique([projectId, code])
+}
+
+model TimeEntry {
+  id                  String   @id @default(cuid())
+  task                Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId              String
+  member              Member   @relation(fields: [memberId], references: [id])
+  memberId            String
+  origin              String   @default("manual")
+  minutes             Int
+  billable            Boolean  @default(true)
+  ratePerHourSnapshot Float
+  note                String?
+  startedAt           DateTime
+  createdAt           DateTime @default(now())
+
+  @@index([taskId])
+  @@index([memberId])
+}
+
+model WorkspaceSettings {
+  id           Int     @id @default(1)
+  authProvider String  @default("none")
+  authConfig   Json?
+}

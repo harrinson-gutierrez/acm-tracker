@@ -392,7 +392,7 @@ git commit -m "feat(shared): cost computation helpers with tests"
 - Create: `apps/api/src/main.ts`, `apps/api/src/app.module.ts`
 - Create: `apps/api/src/prisma/prisma.service.ts`, `apps/api/src/prisma/prisma.module.ts`
 
-- [ ] **Step 1: Create `apps/api/package.json`**
+- [x] **Step 1: Create `apps/api/package.json`**
 
 ```json
 {
@@ -441,7 +441,7 @@ git commit -m "feat(shared): cost computation helpers with tests"
 }
 ```
 
-- [ ] **Step 2: Create `apps/api/tsconfig.json`**
+- [x] **Step 2: Create `apps/api/tsconfig.json`**
 
 ```json
 {
@@ -460,13 +460,13 @@ git commit -m "feat(shared): cost computation helpers with tests"
 }
 ```
 
-- [ ] **Step 3: Create `apps/api/nest-cli.json`**
+- [x] **Step 3: Create `apps/api/nest-cli.json`**
 
 ```json
 { "collection": "@nestjs/schematics", "sourceRoot": "src" }
 ```
 
-- [ ] **Step 4: Create `apps/api/prisma/schema.prisma`**
+- [x] **Step 4: Create `apps/api/prisma/schema.prisma`**
 
 ```prisma
 generator client {
@@ -539,7 +539,7 @@ model WorkspaceSettings {
 }
 ```
 
-- [ ] **Step 5: Create `apps/api/src/prisma/prisma.service.ts`**
+- [x] **Step 5: Create `apps/api/src/prisma/prisma.service.ts`**
 
 ```typescript
 import { Injectable, OnModuleInit } from "@nestjs/common";
@@ -553,7 +553,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 }
 ```
 
-- [ ] **Step 6: Create `apps/api/src/prisma/prisma.module.ts`**
+- [x] **Step 6: Create `apps/api/src/prisma/prisma.module.ts`**
 
 ```typescript
 import { Global, Module } from "@nestjs/common";
@@ -564,7 +564,7 @@ import { PrismaService } from "./prisma.service";
 export class PrismaModule {}
 ```
 
-- [ ] **Step 7: Create `apps/api/src/app.module.ts`**
+- [x] **Step 7: Create `apps/api/src/app.module.ts`** (DEVIATION: created MINIMAL — imports only PrismaModule. The auth/members/projects/tasks/time-entries imports shown below are added in their own tasks so the app stays compilable now, per the Architecture Authority note.)
 
 ```typescript
 import { Module } from "@nestjs/common";
@@ -581,7 +581,7 @@ import { TimeEntriesModule } from "./time-entries/time-entries.module";
 export class AppModule {}
 ```
 
-- [ ] **Step 8: Create `apps/api/src/main.ts`**
+- [x] **Step 8: Create `apps/api/src/main.ts`**
 
 ```typescript
 import { NestFactory } from "@nestjs/core";
@@ -598,7 +598,7 @@ async function bootstrap() {
 bootstrap();
 ```
 
-- [ ] **Step 9: Generate client + first migration against the remote DB**
+- [x] **Step 9: Generate client + first migration** (validated against a TEMPORARY local Postgres in Docker — not the remote DB — to avoid exposing credentials; container + local .env torn down after. Migration `20260606000355_init` created the 5 tables successfully. For the remote DB, set DATABASE_URL and run `prisma migrate deploy`.)
 
 Run:
 ```bash
@@ -611,7 +611,7 @@ Expected: Prisma connects to remote Postgres, creates the 5 tables, writes a mig
 
 > NOTE: `app.module.ts` imports modules built in later tasks. Comment those imports out until their tasks land, or build Tasks 6—10 before the first `nest start`.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add apps/api

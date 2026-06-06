@@ -101,7 +101,7 @@ model ModelPrice {
 **Files:**
 - Modify: `packages/shared/src/types.ts`
 
-- [ ] **Step 1: Append the new types to `packages/shared/src/types.ts`**
+- [x] **Step 1: Append the new types to `packages/shared/src/types.ts`**
 
 ```typescript
 export interface ModelPrice {
@@ -141,12 +141,12 @@ export interface WeeklyCost {
 }
 ```
 
-- [ ] **Step 2: Build shared to confirm it compiles**
+- [x] **Step 2: Build shared to confirm it compiles**
 
 Run: `pnpm --filter @acm/shared build`
 Expected: tsc completes, no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add packages/shared/src/types.ts
@@ -161,7 +161,7 @@ git commit -m "feat(shared): cost/AI domain types (ModelPrice, AiUsage, CostBrea
 - Test: `packages/shared/src/cost.test.ts` (append)
 - Modify: `packages/shared/src/cost.ts`
 
-- [ ] **Step 1: Append failing tests to `packages/shared/src/cost.test.ts`**
+- [x] **Step 1: Append failing tests to `packages/shared/src/cost.test.ts`**
 
 ```typescript
 import { aiCostFromUsage, breakdownCost } from "./cost";
@@ -198,12 +198,12 @@ describe("breakdownCost", () => {
 });
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `pnpm --filter @acm/shared test`
 Expected: FAIL — `aiCostFromUsage`/`breakdownCost` are not exported.
 
-- [ ] **Step 3: Append implementation to `packages/shared/src/cost.ts`**
+- [x] **Step 3: Append implementation to `packages/shared/src/cost.ts`**
 
 ```typescript
 import type { AiUsage, CostBreakdown, ModelPrice } from "./types";
@@ -224,12 +224,12 @@ export function breakdownCost(human: number, ai: number): CostBreakdown {
 
 > NOTE: `cost.ts` already imports `TimeEntry` from `./types`. Add the new imports at the top of the file alongside the existing import (merge into one import line or add a second `import type` line — both compile).
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `pnpm --filter @acm/shared test`
 Expected: PASS — all cost tests green (the original 4 plus the new 5).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/shared/src/cost.ts packages/shared/src/cost.test.ts

@@ -42,3 +42,39 @@ export interface TimeEntry {
   startedAt: string;
   createdAt: string;
 }
+
+export interface ModelPrice {
+  id: string;
+  provider: string;
+  model: string;
+  inputPer1M: number;
+  outputPer1M: number;
+  createdAt: string;
+}
+
+export interface AiUsage {
+  model: string;
+  tokensIn: number;
+  tokensOut: number;
+}
+
+export interface CostBreakdown {
+  human: number;
+  ai: number;
+  total: number;
+}
+
+export interface PersonCost {
+  memberId: string;
+  name: string;
+  minutes: number;
+  human: number;
+  ai: number;
+  total: number;
+}
+
+export interface WeeklyCost {
+  week: string;
+  human: number;
+  ai: number;
+}

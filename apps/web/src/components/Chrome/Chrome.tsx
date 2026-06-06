@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { colors } from "../../theme/tokens";
 
 interface ChromeProps {
@@ -7,6 +8,24 @@ interface ChromeProps {
   statusColor?: string;
   children: ReactNode;
 }
+
+interface NavLink {
+  to: string;
+  icon: string;
+  label: string;
+}
+
+const NAV: NavLink[] = [
+  { to: "/", icon: "◆", label: "Cabina" },
+  { to: "/projects", icon: "⊞", label: "Proyectos" },
+  { to: "/tracker", icon: "◷", label: "Tiempo" },
+  { to: "/costs", icon: "$", label: "Costos & IA" },
+  { to: "/reports", icon: "▤", label: "Reportes" },
+  { to: "/documents", icon: "⎙", label: "Documentos" },
+  { to: "/mcp", icon: "◇", label: "Servidor MCP" },
+  { to: "/notifications", icon: "◔", label: "Notificaciones" },
+  { to: "/settings", icon: "✎", label: "Settings" },
+];
 
 function Mark({ pos }: { pos: CSSProperties }) {
   return (
@@ -17,12 +36,39 @@ function Mark({ pos }: { pos: CSSProperties }) {
   );
 }
 
+function Sidebar() {
+  const { pathname } = useLocation();
+  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+  return (
+    <nav
+      style={{ position: "fixed", top: 0, left: 0, bottom: 0, width: 64, background: colors.surface, borderRight: `1px solid ${colors.border}`, display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0", gap: 6, zIndex: 20 }}
+    >
+      <Link to="/" title="ACM-TRACKER" style={{ color: colors.coral, fontWeight: 700, fontSize: 18, marginBottom: 14, textDecoration: "none" }}>◆</Link>
+      {NAV.map((n) => {
+        const active = isActive(n.to);
+        return (
+          <Link
+            key={n.to}
+            to={n.to}
+            title={n.label}
+            aria-label={n.label}
+            style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 10, textDecoration: "none", fontSize: 18, color: active ? colors.coral : colors.muted, background: active ? colors.surface2 : "transparent", borderLeft: active ? `2px solid ${colors.coral}` : "2px solid transparent" }}
+          >
+            {n.icon}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
 export function Chrome({ breadcrumb, status = "LIVE", statusColor = colors.green, children }: ChromeProps) {
   return (
-    <div className="grid-bg" style={{ minHeight: "100vh", position: "relative", padding: 28 }}>
-      <Mark pos={{ top: 14, left: 14 }} />
+    <div className="grid-bg" style={{ minHeight: "100vh", position: "relative", padding: 28, paddingLeft: 92 }}>
+      <Sidebar />
+      <Mark pos={{ top: 14, left: 78 }} />
       <Mark pos={{ top: 14, right: 14 }} />
-      <Mark pos={{ bottom: 14, left: 14 }} />
+      <Mark pos={{ bottom: 14, left: 78 }} />
       <Mark pos={{ bottom: 14, right: 14 }} />
       <header style={{ display: "flex", alignItems: "center", height: 52, padding: "0 20px", background: colors.surface, border: `1px solid ${colors.border}`, borderRadius: 8, marginBottom: 24 }}>
         <span className="mono" style={{ color: colors.coral, fontWeight: 700, letterSpacing: 1 }}>◆ ACM-TRACKER</span>

@@ -5,6 +5,7 @@ import { TileRow } from "../components/TileRow";
 import { PersonCostRow } from "../components/PersonCostRow";
 import { McpStream } from "../components/McpStream";
 import { TimerDock } from "../components/TimerDock";
+import { useNavigate } from "react-router-dom";
 import { useTodaySummary, useTeamToday } from "../features/reporting/api/use-today";
 import { useIsMobile } from "../lib/use-is-mobile";
 import { colors } from "../theme/tokens";
@@ -14,6 +15,7 @@ function hm(min: number): string {
 }
 
 export function Cabina() {
+  const navigate = useNavigate();
   const { data: today } = useTodaySummary();
   const { data: team = [] } = useTeamToday();
   const isMobile = useIsMobile();
@@ -70,9 +72,10 @@ export function Cabina() {
       <TimerDock
         elapsed="00:00:00"
         taskTitle="Sin tarea activa"
-        meta="inicia el timer en un proyecto"
-        onStop={() => {}}
-        onManual={() => {}}
+        meta="elige un proyecto para registrar tiempo"
+        running={false}
+        onManual={() => navigate("/projects")}
+        manualLabel="+ registrar tiempo"
       />
     </Chrome>
   );

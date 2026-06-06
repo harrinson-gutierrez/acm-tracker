@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { TileRow } from "../components/TileRow";
@@ -13,6 +14,7 @@ function hm(min: number): string {
 }
 
 export function Tracker() {
+  const navigate = useNavigate();
   const { data: entries = [] } = useTodayEntries();
   const { data: today } = useTodaySummary();
 
@@ -65,9 +67,10 @@ export function Tracker() {
       <TimerDock
         elapsed="00:00:00"
         taskTitle="Sin tarea activa"
-        meta="inicia el timer en un proyecto"
-        onStop={() => {}}
-        onManual={() => {}}
+        meta="elige un proyecto para registrar tiempo"
+        running={false}
+        onManual={() => navigate("/projects")}
+        manualLabel="+ registrar tiempo"
       />
     </Chrome>
   );

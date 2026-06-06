@@ -12,7 +12,18 @@ export interface CreateTimeEntryData {
   startedAt: Date;
 }
 
+export interface TodayEntryView {
+  id: string;
+  time: string;
+  origin: string;
+  taskCode: string;
+  taskTitle: string;
+  minutes: number;
+  cost: number;
+}
+
 export interface TimeEntryRepositoryPort {
   create(data: CreateTimeEntryData): Promise<TimeEntry>;
   findByTask(taskId: string): Promise<TimeEntry[]>;
+  findToday(from: Date, to: Date): Promise<TodayEntryView[]>;
 }

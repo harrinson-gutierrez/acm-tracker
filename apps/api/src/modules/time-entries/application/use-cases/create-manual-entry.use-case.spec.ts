@@ -3,6 +3,7 @@ import type { TimeEntry } from "@acm/shared";
 import {
   CreateTimeEntryData,
   TimeEntryRepositoryPort,
+  TodayEntryView,
 } from "../../domain/ports/time-entry.repository.port";
 import { MemberRateReaderPort } from "../../domain/ports/member-rate.port";
 
@@ -18,6 +19,9 @@ class FakeEntryRepo implements TimeEntryRepositoryPort {
     };
   }
   async findByTask(): Promise<TimeEntry[]> {
+    return [];
+  }
+  async findToday(): Promise<TodayEntryView[]> {
     return [];
   }
 }

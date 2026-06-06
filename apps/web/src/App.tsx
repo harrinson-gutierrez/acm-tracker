@@ -5,6 +5,7 @@ import { ProjectDetail } from "./screens/ProjectDetail";
 import { Settings } from "./screens/Settings";
 import { Costs } from "./screens/Costs";
 import { Reports } from "./screens/Reports";
+import { Tracker } from "./screens/Tracker";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
       <Route path="/projects/:id" element={<ProjectDetail />} />
       <Route path="/costs" element={<Costs />} />
       <Route path="/reports" element={<Reports />} />
+      <Route path="/tracker" element={<Tracker />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

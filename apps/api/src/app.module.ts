@@ -5,8 +5,19 @@ import { MembersModule } from "./modules/members/members.module";
 import { ProjectsModule } from "./modules/projects/projects.module";
 import { TasksModule } from "./modules/tasks/tasks.module";
 import { TimeEntriesModule } from "./modules/time-entries/time-entries.module";
+import { ModelPricingModule } from "./modules/model-pricing/model-pricing.module";
+import { ReportingModule } from "./modules/reporting/reporting.module";
 
 @Module({
-  imports: [PrismaModule, AuthModule, MembersModule, ProjectsModule, TasksModule, TimeEntriesModule],
+  imports: [
+    PrismaModule,
+    AuthModule,
+    MembersModule,
+    ProjectsModule,
+    TasksModule,
+    TimeEntriesModule,
+    ModelPricingModule,
+    ReportingModule,
+  ],
 })
 export class AppModule {}

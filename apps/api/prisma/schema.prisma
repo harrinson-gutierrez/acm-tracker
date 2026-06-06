@@ -66,3 +66,14 @@ model WorkspaceSettings {
   authProvider String  @default("none")
   authConfig   Json?
 }
+
+model ModelPrice {
+  id          String   @id @default(cuid())
+  provider    String
+  model       String
+  inputPer1M  Float
+  outputPer1M Float
+  createdAt   DateTime @default(now())
+
+  @@unique([provider, model])
+}

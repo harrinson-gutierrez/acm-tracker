@@ -245,7 +245,7 @@ git commit -m "feat(shared): aiCostFromUsage + breakdownCost helpers with tests"
 **Files:**
 - Modify: `apps/api/prisma/schema.prisma`
 
-- [ ] **Step 1: Append the `ModelPrice` model to `apps/api/prisma/schema.prisma`**
+- [x] **Step 1: Append the `ModelPrice` model to `apps/api/prisma/schema.prisma`**
 
 ```prisma
 model ModelPrice {
@@ -260,7 +260,7 @@ model ModelPrice {
 }
 ```
 
-- [ ] **Step 2: Create the migration against a throwaway local Postgres**
+- [x] **Step 2: Create the migration against a throwaway local Postgres**
 
 Run (temporary DB, then tear down — do NOT touch remote, do NOT add to compose):
 ```bash
@@ -272,7 +272,7 @@ rm -f .env && docker rm -f acm-pg-tmp
 ```
 Expected: migration `*_add_model_price` created; `ModelPrice` table listed; temp DB + .env removed.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add apps/api/prisma/schema.prisma apps/api/prisma/migrations
@@ -288,7 +288,7 @@ git commit -m "feat(api): ModelPrice schema + migration"
 - Create: `apps/api/src/modules/model-pricing/interfaces/http/dto/create-model-price.dto.ts`
 - Create: `apps/api/src/modules/model-pricing/interfaces/http/dto/update-model-price.dto.ts`
 
-- [ ] **Step 1: Create the port**
+- [x] **Step 1: Create the port**
 
 ```typescript
 import type { ModelPrice } from "@acm/shared";
@@ -317,7 +317,7 @@ export interface ModelPriceRepositoryPort {
 }
 ```
 
-- [ ] **Step 2: Create `create-model-price.dto.ts`**
+- [x] **Step 2: Create `create-model-price.dto.ts`**
 
 ```typescript
 import { IsNumber, IsString, Min } from "class-validator";
@@ -330,7 +330,7 @@ export class CreateModelPriceDto {
 }
 ```
 
-- [ ] **Step 3: Create `update-model-price.dto.ts`**
+- [x] **Step 3: Create `update-model-price.dto.ts`**
 
 ```typescript
 import { PartialType } from "@nestjs/mapped-types";
@@ -339,7 +339,7 @@ import { CreateModelPriceDto } from "./create-model-price.dto";
 export class UpdateModelPriceDto extends PartialType(CreateModelPriceDto) {}
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add apps/api/src/modules/model-pricing/domain apps/api/src/modules/model-pricing/interfaces/http/dto
@@ -357,7 +357,7 @@ git commit -m "feat(api): model-price port + DTOs"
 - Create: `apps/api/src/modules/model-pricing/application/use-cases/update-model-price.use-case.ts`
 - Create: `apps/api/src/modules/model-pricing/application/use-cases/delete-model-price.use-case.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 import { CreateModelPriceUseCase } from "./create-model-price.use-case";
@@ -389,12 +389,12 @@ describe("CreateModelPriceUseCase", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm --filter @acm/api test create-model-price`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Create the four use cases**
+- [x] **Step 3: Create the four use cases**
 
 `create-model-price.use-case.ts`:
 ```typescript
@@ -457,12 +457,12 @@ export class DeleteModelPriceUseCase {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm --filter @acm/api test create-model-price`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/api/src/modules/model-pricing/application
@@ -480,7 +480,7 @@ git commit -m "feat(api): model-price use cases (CRUD) with test"
 - Create: `apps/api/src/modules/model-pricing/model-pricing.module.ts`
 - Modify: `apps/api/src/app.module.ts`
 
-- [ ] **Step 1: Create the mapper**
+- [x] **Step 1: Create the mapper**
 
 ```typescript
 import type { ModelPrice as PrismaModelPrice } from "@prisma/client";
@@ -498,7 +498,7 @@ export function toDomainModelPrice(row: PrismaModelPrice): ModelPrice {
 }
 ```
 
-- [ ] **Step 2: Create the Prisma adapter**
+- [x] **Step 2: Create the Prisma adapter**
 
 ```typescript
 import { Injectable } from "@nestjs/common";
@@ -533,7 +533,7 @@ export class PrismaModelPriceRepository implements ModelPriceRepositoryPort {
 }
 ```
 
-- [ ] **Step 3: Create the controller (RESTful)**
+- [x] **Step 3: Create the controller (RESTful)**
 
 ```typescript
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseGuards } from "@nestjs/common";
@@ -570,7 +570,7 @@ export class ModelPricesController {
 }
 ```
 
-- [ ] **Step 4: Create the module**
+- [x] **Step 4: Create the module**
 
 ```typescript
 import { Module } from "@nestjs/common";
@@ -595,7 +595,7 @@ import { ModelPricesController } from "./interfaces/http/model-prices.controller
 export class ModelPricingModule {}
 ```
 
-- [ ] **Step 5: Register in `app.module.ts`**
+- [x] **Step 5: Register in `app.module.ts`**
 
 Add the import and include `ModelPricingModule` in the `imports` array (alongside the existing modules).
 
@@ -604,12 +604,12 @@ import { ModelPricingModule } from "./modules/model-pricing/model-pricing.module
 // imports: [..., ModelPricingModule]
 ```
 
-- [ ] **Step 6: Build + test**
+- [x] **Step 6: Build + test**
 
 Run: `pnpm --filter @acm/api build && pnpm --filter @acm/api test`
 Expected: build clean; all tests green.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add apps/api/src/modules/model-pricing apps/api/src/app.module.ts
@@ -625,7 +625,7 @@ git commit -m "feat(api): model-prices adapter + RESTful controller + module"
 **Files:**
 - Create: `apps/api/src/modules/reporting/domain/ports/cost-aggregation.port.ts`
 
-- [ ] **Step 1: Create the port**
+- [x] **Step 1: Create the port**
 
 ```typescript
 import type { PersonCost, WeeklyCost } from "@acm/shared";
@@ -646,7 +646,7 @@ export interface CostAggregationPort {
 
 > AI fields are added by the use cases at value 0 for now (no token data until MCP). The port returns only human figures it can derive from TimeEntry.
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add apps/api/src/modules/reporting/domain
@@ -663,7 +663,7 @@ git commit -m "feat(api): cost aggregation port"
 - Create: `apps/api/src/modules/reporting/application/use-cases/cost-by-person.use-case.ts`
 - Create: `apps/api/src/modules/reporting/application/use-cases/weekly-cost-series.use-case.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 import { ProjectCostBreakdownUseCase } from "./project-cost-breakdown.use-case";
@@ -686,12 +686,12 @@ describe("ProjectCostBreakdownUseCase", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm --filter @acm/api test project-cost-breakdown`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Create the use cases**
+- [x] **Step 3: Create the use cases**
 
 `project-cost-breakdown.use-case.ts`:
 ```typescript
@@ -749,12 +749,12 @@ export class WeeklyCostSeriesUseCase {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm --filter @acm/api test project-cost-breakdown`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/api/src/modules/reporting/application
@@ -771,7 +771,7 @@ git commit -m "feat(api): cost aggregation use cases (breakdown, by-person, week
 - Create: `apps/api/src/modules/reporting/reporting.module.ts`
 - Modify: `apps/api/src/app.module.ts`
 
-- [ ] **Step 1: Create the Prisma adapter**
+- [x] **Step 1: Create the Prisma adapter**
 
 ```typescript
 import { Injectable } from "@nestjs/common";
@@ -838,7 +838,7 @@ function weekLabel(date: Date): string {
 
 > `weekLabel` derives an ISO-ish week number from `startedAt`; it uses no `Date.now()` (only the stored entry date), so it is deterministic per entry.
 
-- [ ] **Step 2: Create the controller (RESTful, ≤2-level nesting)**
+- [x] **Step 2: Create the controller (RESTful, ≤2-level nesting)**
 
 ```typescript
 import { Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
@@ -868,7 +868,7 @@ export class ReportingController {
 }
 ```
 
-- [ ] **Step 3: Create the module**
+- [x] **Step 3: Create the module**
 
 ```typescript
 import { Module } from "@nestjs/common";
@@ -891,15 +891,15 @@ import { ReportingController } from "./interfaces/http/reporting.controller";
 export class ReportingModule {}
 ```
 
-- [ ] **Step 4: Register in `app.module.ts`** (add import + include `ReportingModule` in `imports`).
+- [x] **Step 4: Register in `app.module.ts`** (add import + include `ReportingModule` in `imports`).
 
-- [ ] **Step 5: Build + test, then verify via HTTP against the running stack**
+- [x] **Step 5: Build + test, then verify via HTTP against the running stack**
 
 Run: `pnpm --filter @acm/api build && pnpm --filter @acm/api test`
 Then (stack up): `curl -s http://localhost:4000/api/projects/<helios-id>/cost`
 Expected: build + tests green; the curl returns `{human, ai:0, total, minutes}`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add apps/api/src/modules/reporting apps/api/src/app.module.ts

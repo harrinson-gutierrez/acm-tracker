@@ -1,55 +1,321 @@
 # ACM-TRACKER
 
-Self-hosted **time + cost tracker**. The single place to register how long work took and what it really cost — human time (rate × time) plus, later, AI cost (tokens × model price). Local app, remote database, no per-seat cost.
+Self-hosted **time + cost tracker**. The single source of truth for what work really costs — human time (rate × time) **plus AI cost** (tokens × model price, reported by agents via MCP). Local app, remote database, no per-seat cost.
 
-> Status: **v1 in progress** — building the time+cost core. See the implementation plan in [`docs/plans/`](docs/plans/).
+> **Estado:** v1 + v2 funcionales y verificadas por E2E (19/19). UI fiel al diseño "Flight Deck". Costo IA real vía MCP.
 
-## Why
+![Cabina](docs/screenshots/app-01-cabina.png)
 
-Replace the Jira + Clockify combo with one self-hosted tool where:
+---
 
-- Time and cost live together, per **person** and per **project**.
-- Cost is the real cost: `time × rate` today, `+ AI (tokens × model price)` in phase 2.
-- A **MCP server** (phase 2) lets agents report work, time and tokens directly — the data model is already MCP-ready.
-- Integrations are **notifications only** — this app is the single source of truth, not another platform to sync.
+## Tabla de contenido
 
-## Stack
+- [Qué es](#qué-es)
+- [Stack y arquitectura](#stack-y-arquitectura)
+- [Cómo levantarlo](#cómo-levantarlo)
+- [Pantallas y funcionalidades](#pantallas-y-funcionalidades) ← **inventario completo**
+- [API REST (endpoints)](#api-rest-endpoints)
+- [Modelo de datos](#modelo-de-datos)
+- [Pruebas (unit + E2E)](#pruebas-unit--e2e)
+- [Convenciones de ingeniería](#convenciones-de-ingeniería)
+- [Flujo de trabajo (PR)](#flujo-de-trabajo-pr)
+- [Roadmap](#roadmap)
+- [Docs internas](#docs-internas)
 
-| Layer | Choice |
-|-------|--------|
-| Frontend | React 18 + Vite — reactive (TanStack Query + Zustand), decoupled reusable components (`apps/web`) |
-| Backend | NestJS 10 — **Hexagonal** (ports & adapters), SOLID, RESTful (`apps/api`) |
-| Shared | TypeScript types + cost helpers (`packages/shared`) |
-| ORM / migrations | Prisma 5 (Postgres) |
-| Database | **Remote** Postgres (via `DATABASE_URL`) — not bundled |
-| Auth | Pluggable `AuthProvider`; v1 ships `NoAuthProvider` (single local owner). Cognito can be enabled later. |
-| Run | `docker compose up` (2 services: web + api) |
+---
 
-## Run it (once v1 lands)
+## Qué es
 
-```bash
-cp .env.example .env       # set DATABASE_URL to your remote Postgres
-docker compose up --build
-# open http://localhost:5173
+Reemplaza el combo Jira + Clockify con una sola herramienta self-hosted donde:
+
+- **Tiempo y costo viven juntos**, por persona y por proyecto.
+- El costo es el costo real: `tiempo × tarifa` (humano) **+ tokens × precio de modelo** (IA).
+- Un **servidor MCP** deja que los agentes (Claude Code, etc.) reporten trabajo, tiempo y tokens directamente — el costo IA se calcula con la tabla de precios y se concilia con el tiempo humano en la misma línea.
+- Las **integraciones son solo notificaciones** — esta app es la fuente de verdad, no otra plataforma que sincronizar.
+- **Self-hosted**, BD remota, sin costo por puesto. Auth pluggable (arranca sin auth, owner local).
+
+Proyecto de ejemplo en los datos sembrados: **Helios · Plataforma fintech**.
+
+---
+
+## Stack y arquitectura
+
+| Capa | Tecnología |
+|------|-----------|
+| Frontend | React 18 + Vite, **TanStack Query** (estado servidor) + **Zustand** (estado UI) |
+| Backend | NestJS 10 — **Hexagonal** (ports & adapters), SOLID, RESTful |
+| Compartido | `@acm/shared` — tipos + helpers de costo puros (CommonJS) |
+| ORM | Prisma 5 |
+| BD | **Postgres remoto** (vía `DATABASE_URL`) — no se empaqueta |
+| Auth | `AuthProvider` pluggable; v1 = `NoAuthProvider` (owner local). Cognito enchufable después |
+| Tests | Jest (api) · Vitest (shared) · **Playwright** (E2E web) |
+| Run | `docker compose up` (web + api; BD remota) |
+
+**Monorepo (pnpm workspaces):**
+
+```
+acm-tracker/
+├── apps/
+│   ├── api/   # NestJS hexagonal (domain/application/infrastructure/interfaces por módulo)
+│   └── web/   # React + Vite (components reusables / features / screens) + e2e (Playwright)
+├── packages/
+│   └── shared/  # tipos + cost helpers (computeEntryCost, sumCost, aiCostFromUsage, breakdownCost)
+├── docs/
+│   ├── plans/        # planes de implementación (v1, v2, UI fidelity) — fuente de verdad de tareas
+│   ├── design/       # frames Figma de referencia (01..13)
+│   └── screenshots/  # capturas reales de la app
+├── docker-compose.yml
+└── CLAUDE.md         # contrato de ingeniería (reglas obligatorias)
 ```
 
-## Design
+**Backend hexagonal** — cada feature en `apps/api/src/modules/<feature>/`:
+- `domain/ports/` — interfaces + Symbol token (el dominio no conoce Prisma ni Nest)
+- `application/use-cases/` — un caso de uso = una clase con un `execute()`
+- `infrastructure/persistence/` — adaptador Prisma + mapper (único lugar con Prisma)
+- `interfaces/http/` — controller delgado + DTOs
 
-Visual direction: **Flight Deck** — dark cockpit theme, ring gauges for burn rate,
-JetBrains Mono for data + Inter for labels, technical grid background.
-Screens are designed in Figma (page "ACM-TRACKER · Variations").
+**Frontend reactivo** — `apps/web/src/`:
+- `components/` — presentacionales reusables (no fetchean): Chrome (sidebar+topbar), Panel, RingGauge, DonutGauge, StackedBars, StatTile, TileRow, Avatar, Tag, PersonCostRow, McpStream, TimerDock, DataTable, SideNav, CommandPalette
+- `features/<feature>/api/` — hooks TanStack Query (con invalidación → la UI se refresca sola)
+- `screens/` — componen features + componentes; `App.tsx` solo rutas
+
+---
+
+## Cómo levantarlo
+
+### Con Docker (un comando)
+
+```bash
+cp .env.example .env        # set DATABASE_URL a tu Postgres remoto
+docker compose up --build
+# web  → http://localhost:5173
+# api  → http://localhost:4000/api
+```
+Las migraciones corren solas al arrancar el contenedor `api`.
+
+> Hay un `docker-compose.override.yml` (gitignored) opcional que levanta un Postgres local para pruebas.
+
+### Sin Docker (desarrollo)
+
+```bash
+pnpm install
+cd apps/api && cp ../../.env.example .env   # set DATABASE_URL
+pnpm prisma migrate dev && pnpm seed         # crea owner + proyecto Helios de ejemplo
+cd ../.. && pnpm dev                          # api + web en paralelo
+```
+
+### Variables de entorno (`.env`)
+
+```
+DATABASE_URL="postgresql://USER:PASS@HOST:5432/acm_tracker?schema=public"
+API_PORT=4000
+WEB_PORT=5173
+OWNER_NAME="Harry G."
+OWNER_EMAIL="owner@acm.local"
+OWNER_RATE_PER_HOUR=45
+```
+
+---
+
+## Pantallas y funcionalidades
+
+La navegación es por **sidebar de íconos** (persistente, izquierda) + **⌘K / Ctrl+K** (command palette). Tema oscuro "Flight Deck": gauges de anillo, grid técnico, JetBrains Mono para datos.
+
+### 1. Cabina (`/`)
+![Cabina](docs/screenshots/app-01-cabina.png)
+- **Burn rate de hoy**: gauge de anillo con el costo del día vs objetivo ($2,400), desglose Humano/IA.
+- **Equipo · costo real hoy**: cada persona con su tiempo trackeado y costo (datos reales de `/reports/team-today`).
+- **MCP · ingesta en vivo**: stream de reportes recibidos de agentes (vacío hasta que un agente reporte).
+- **Tiles**: Hoy (trackeado), Semana, Facturable, Margen.
+- **Timer dock**: "+ registrar tiempo" → abre el **modal de registro** (proyecto→tarea→minutos→facturable→guardar).
+- Responsive: en móvil colapsa a una columna.
+
+### 2. Proyectos (`/projects`)
+![Proyectos](docs/screenshots/app-08-proyectos.png)
+- Lista de proyectos con cliente y monto de contrato.
+- **Crear proyecto** (input + Enter o "+ Crear").
+- Clic en un proyecto → detalle.
+
+### 3. Detalle de proyecto (`/projects/:id`)
+- Header: avatar + nombre + contrato + etiqueta.
+- **Tabs funcionales**: Resumen / Tareas / Tiempo / Costos / Equipo / Documentos (este último navega a `/documents`).
+- **Costo real acumulado**: cifra grande, % consumido vs contrato, desglose Humano/IA/Horas (real, de `/projects/:id/cost`).
+- **Tareas · tiempo + costo**: tabla con código, título, tiempo real, costo por tarea, y **"+ tiempo"** (abre el modal de registro preseteando la tarea).
+- **Crear tarea** (input + "+ Tarea").
+
+### 4. Costos & IA (`/costs`)
+![Costos](docs/screenshots/app-02-costos.png)
+- Tiles: Proyectos, Humano, IA ($0 hasta que llegue vía MCP), Modelos con precio.
+- **Composición del costo** (donut Humano/IA).
+- **IA · costo por modelo**: tabla de precios (de `/model-prices`).
+
+### 5. Reportes (`/reports`)
+![Reportes](docs/screenshots/app-03-reportes.png)
+- 5 KPIs calculados de datos reales: Horas, Costo total, Costo IA, $/hora prom, Personas.
+- **Tiempo+costo por semana**: barras apiladas humano/IA (de `/reports/weekly`).
+- **Por persona · costo real**: tabla (de `/reports/by-person`).
+- **Exportar CSV** real (descarga `costo-por-persona.csv`).
+
+### 6. Time tracker (`/tracker`)
+![Tracker](docs/screenshots/app-04-tracker.png)
+- Tiles del día: Trackeado, Facturable, Costo hoy, De IA.
+- **Línea de tiempo**: entradas de hoy con hora, origen (tag `manual`/`mcp`), tarea, duración, costo (de `/time-entries/today`).
+- **Objetivo del día**: progreso vs 8h.
+- Timer dock con "+ registrar tiempo".
+
+### 7. Servidor MCP (`/mcp`)
+![MCP](docs/screenshots/app-05-mcp.png)
+- **Endpoint** del servidor MCP.
+- **Contrato `report_work()`**: el payload que un agente envía.
+- **Reportes recibidos**: stream en vivo (poll cada 5s) de lo reportado por agentes — persona, tarea, tiempo, costo, modelo→$.
+- Funcional: `POST /api/mcp/report-work` crea un time entry (origin=mcp) + ai_runs y **calcula el costo IA real** (tokens × precio de modelo).
+
+### 8. Documentos (`/documents`)
+![Documentos](docs/screenshots/app-06-documentos.png)
+- **Sidebar de espacios + fases** (Ventas/Kickoff/Cotización/Prototipo/Validación/Ejecución/Entrega) que **filtra la lista** de verdad.
+- **Crear documento** (título + URL opcional → tipo página/enlace; hereda la fase seleccionada).
+- Tabla híbrida: ícono por tipo, fase (tag), creado por, fecha, **Borrar**.
+
+### 9. Settings (`/settings`)
+![Settings](docs/screenshots/app-07-settings.png)
+- **SideNav**: Miembros & tarifas / Precios de modelos (scroll), MCP & tokens / Notificaciones (navegan).
+- **Miembros & tarifas**: tabla con avatar, rol, tarifa $/h, estado.
+- **Precios de modelos** (fuente de verdad del costo IA): tabla USD/1M tokens con **crear** (form) y **borrar** por fila.
+- **Proveedor de autenticación**: modo actual (sin auth · owner local).
+
+### 10. Notificaciones (`/notifications`)
+- Banner: "solo avisos salientes, ACM-TRACKER es la fuente de verdad".
+- Canales: Slack/Email/WhatsApp/Webhook.
+- **Reglas de aviso**: tabla con **crear** (evento/condición/canal), **toggle** activar/desactivar (funcional), **borrar**.
+
+### 11. Auth · sign-in (`/auth`)
+![Auth](docs/screenshots/app-09-auth.png)
+- Split: panel de marca con gauge + formulario de login.
+- **Login funcional**: valida el email contra los miembros (`/auth/login`) → entra a la cabina. Modo sin-auth (owner local).
+
+### 12. Command palette (⌘K / Ctrl+K)
+- Overlay global con acciones de navegación a todas las secciones.
+
+---
+
+## API REST (endpoints)
+
+Base: `http://localhost:4000/api` · todos protegidos por `AuthGuard` (en modo NoAuth resuelve al owner local).
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET/POST/PATCH | `/members` | miembros + tarifas |
+| GET/POST/GET:id/PATCH | `/projects` `/projects/:id` | proyectos (con tareas en :id) |
+| GET/POST/PATCH | `/tasks?projectId=` | tareas por proyecto |
+| POST/GET | `/time-entries` `/time-entries/task/:id` | registrar/leer tiempo |
+| GET | `/time-entries/task/:id/cost` | costo de una tarea |
+| GET | `/time-entries/today` | entradas de hoy (timeline) |
+| GET/POST/PATCH/DELETE | `/model-prices` | precios de modelos (CRUD) |
+| GET | `/projects/:id/cost` | breakdown humano/IA/total del proyecto |
+| GET | `/reports/by-person` · `/reports/weekly` | agregaciones |
+| GET | `/reports/today` · `/reports/team-today` | resumen del día / equipo hoy |
+| GET/POST/DELETE | `/documents?projectId=` | documentos (CRUD) |
+| GET/POST/PATCH/DELETE | `/notification-rules` | reglas de notificación (CRUD + toggle) |
+| POST/GET | `/mcp/report-work` · `/mcp/reports` | **ingesta MCP** (calcula costo IA) + reportes |
+| POST | `/auth/login` · `/auth/me` | login (valida miembro) / owner |
+
+### Ejemplo: reportar trabajo desde un agente (MCP)
+
+```bash
+curl -X POST http://localhost:4000/api/mcp/report-work -H "Content-Type: application/json" -d '{
+  "taskId": "<task-id>",
+  "memberEmail": "owner@acm.local",
+  "minutes": 45,
+  "output": "PR #318 preToken",
+  "aiRuns": [{ "model": "claude-opus-4-8", "tokensIn": 1240, "tokensOut": 980 }]
+}'
+# → { "recorded": true, "aiCost": 0.09 }   (1240/1M×$15 + 980/1M×$75)
+```
+
+---
+
+## Modelo de datos
+
+Tablas Prisma (Postgres): `Member`, `Project`, `Task`, `TimeEntry` (con `origin: manual|mcp`), `AiRun` (tokens + costo, ligado a TimeEntry), `ModelPrice`, `Document`, `NotificationRule`, `WorkspaceSettings`.
+
+- **Costo humano** = `minutes/60 × ratePerHourSnapshot` (la tarifa se congela al crear la entrada).
+- **Costo IA** = Σ por `AiRun` de `(tokensIn/1M × inputPer1M) + (tokensOut/1M × outputPer1M)`.
+- Helpers puros en `@acm/shared`: `computeEntryCost`, `sumCost`, `aiCostFromUsage`, `breakdownCost`.
+
+---
+
+## Pruebas (unit + E2E)
+
+```bash
+# unit (shared + api)
+pnpm --filter @acm/shared test     # cost helpers
+pnpm --filter @acm/api test        # use cases (hexagonal, fakes de puertos)
+
+# E2E (requiere stack corriendo en :5173 / :4000)
+pnpm --filter @acm/web e2e         # Playwright — 19 tests
+```
+
+La suite E2E (`apps/web/e2e/`) **asevera comportamiento real** de cada pantalla: navegación sidebar + ⌘K, flujo proyecto→tarea→tiempo→costo ($45), CRUD de proyectos/tareas/documentos/precios/reglas, toggle de reglas, login, export CSV, tabs de proyecto, filtro de documentos por fase, nav de settings, y **MCP report_work → costo IA $0.09**.
+
+```
+19 passed
+```
+
+---
+
+## Convenciones de ingeniería
+
+Reglas obligatorias en [`CLAUDE.md`](CLAUDE.md), [`apps/api/CLAUDE.md`](apps/api/CLAUDE.md), [`apps/web/CLAUDE.md`](apps/web/CLAUDE.md):
+- SOLID, hexagonal (backend), reactivo + componentes desacoplados (frontend).
+- Reuse-before-create, zero-comment, funciones cortas, RESTful (≤2 niveles de anidación).
+- Agentes especializados en `.claude/agents/` (backend-architect, frontend-architect, db-schema-guardian, code-reviewer) y skills en `.claude/skills/`.
+
+---
+
+## Flujo de trabajo (PR)
+
+`main` está **protegida**: no se puede push directo. Todo cambio va por Pull Request.
+
+```bash
+git checkout -b feat/mi-cambio
+# ... cambios + tests ...
+git push -u origin feat/mi-cambio
+gh pr create --fill            # abrir PR
+# revisar, luego mergear (squash recomendado)
+gh pr merge --squash
+```
+
+---
 
 ## Roadmap
 
-- **v1 (now):** time+cost core — auth scaffold, Cabina, Projects, Tasks, manual time entries, cost = time × rate, Settings (members/rates).
-- **v2:** MCP server (agents report work/time/tokens), AI cost (tokens × model price), model pricing table.
-- **later:** documents (files + pages + links), reports & analytics, Cognito auth + invitations.
+**Hecho (v1 + v2 + UI fidelity):**
+- ✅ Núcleo tiempo+costo (auth scaffold, proyectos, tareas, time entries, costo = tiempo×tarifa).
+- ✅ Costos & IA: tabla de precios de modelos, reportes (por persona, semanal), agregaciones del día.
+- ✅ Servidor MCP funcional (`report_work` → costo IA real) + pantalla.
+- ✅ Documentos (CRUD + filtro por fase), Notificaciones (CRUD + toggle), Auth login.
+- ✅ 13 pantallas fieles al diseño Flight Deck + navegación + ⌘K + responsive.
+- ✅ Suite E2E (19 tests).
 
-## Engineering standards
+**Siguiente:**
+- ⏳ **Timer real en vivo** (cronómetro que corre y registra al parar), no solo registro manual.
+- ⏳ **MCP server por protocolo** (SSE + tool registration) además del endpoint REST de ingesta.
+- ⏳ **Auth Cognito** real (enchufar el `AuthProvider`) + invitaciones a workspace.
+- ⏳ **Documentos**: subida de archivos real (storage), páginas con editor, costo de producción por doc.
+- ⏳ **Margen y presupuesto** por proyecto (datos reales en los gauges que hoy muestran "—").
+- ⏳ **Notificaciones**: envío real a los canales (Slack/email/webhook).
+- ⏳ **Export**: PDF de reporte cliente y factura.
+- ⏳ CI (GitHub Actions): build + unit + E2E en cada PR.
+- ⏳ Deploy a producción (BD remota real + dominio).
 
-This repo enforces a strict quality contract — read [`CLAUDE.md`](CLAUDE.md), [`apps/api/CLAUDE.md`](apps/api/CLAUDE.md), [`apps/web/CLAUDE.md`](apps/web/CLAUDE.md). Backend is hexagonal (ports & adapters, SOLID); frontend is reactive with decoupled reusable components. SOLID, RESTful, zero-comment, reuse-before-create, small focused units. Specialized agents in `.claude/agents/` (backend-architect, frontend-architect, db-schema-guardian, code-reviewer) and skills in `.claude/skills/` keep implementation consistent and non-improvised.
+---
 
-## Docs
+## Docs internas
 
-- [Implementation plans](docs/plans/)
-- [Design mockups](docs/design/)
+- [Planes de implementación](docs/plans/) — v1, v2 (costos/IA), UI Figma fidelity (cada tarea, inmutables).
+- [Diseño Figma de referencia](docs/design/) — los 13 frames.
+- [Capturas reales](docs/screenshots/) — la app funcionando.
+
+---
+
+Repo: https://github.com/harrinson-gutierrez/acm-tracker · Licencia: privada/personal.

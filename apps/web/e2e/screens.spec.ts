@@ -7,10 +7,10 @@ test("cabina shows burn rate gauge and team panel", async ({ page }) => {
   await expect(page.getByText("Harry G.")).toBeVisible();
 });
 
-test("cabina '+ registrar tiempo' navigates to projects", async ({ page }) => {
+test("cabina '+ registrar tiempo' opens the time-entry modal", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "+ registrar tiempo" }).click();
-  await expect(page).toHaveURL(/\/projects/);
+  await expect(page.getByRole("dialog", { name: "Registrar tiempo" })).toBeVisible();
 });
 
 test("costs shows model prices table", async ({ page }) => {

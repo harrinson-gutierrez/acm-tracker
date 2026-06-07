@@ -110,7 +110,7 @@ export function ProjectDetail() {
               title: t.title,
               real: <TaskRealCell taskId={t.id} />,
               cost: <TaskCostCell taskId={t.id} />,
-              action: <AddTimeButton taskId={t.id} />,
+              action: <AddTimeButton taskId={t.id} projectId={id} />,
             },
           }))}
           emptyLabel="Sin tareas aún."

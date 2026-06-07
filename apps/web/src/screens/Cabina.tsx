@@ -5,8 +5,8 @@ import { TileRow } from "../components/TileRow";
 import { PersonCostRow } from "../components/PersonCostRow";
 import { McpStream } from "../components/McpStream";
 import { TimerDock } from "../components/TimerDock";
-import { useNavigate } from "react-router-dom";
 import { useTodaySummary, useTeamToday } from "../features/reporting/api/use-today";
+import { useTimeEntryModal } from "../features/time-entries/use-time-entry-modal";
 import { useIsMobile } from "../lib/use-is-mobile";
 import { colors } from "../theme/tokens";
 
@@ -15,7 +15,7 @@ function hm(min: number): string {
 }
 
 export function Cabina() {
-  const navigate = useNavigate();
+  const openModal = useTimeEntryModal((s) => s.openModal);
   const { data: today } = useTodaySummary();
   const { data: team = [] } = useTeamToday();
   const isMobile = useIsMobile();
@@ -74,7 +74,7 @@ export function Cabina() {
         taskTitle="Sin tarea activa"
         meta="elige un proyecto para registrar tiempo"
         running={false}
-        onManual={() => navigate("/projects")}
+        onManual={() => openModal()}
         manualLabel="+ registrar tiempo"
       />
     </Chrome>

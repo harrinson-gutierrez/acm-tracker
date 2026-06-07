@@ -13,6 +13,7 @@ import { Auth } from "./screens/Auth";
 import { Settings } from "./screens/Settings";
 import { CommandPalette } from "./components/CommandPalette";
 import { useCommandPalette } from "./features/command-palette/use-command-palette";
+import { TimeEntryModal } from "./features/time-entries/components/TimeEntryModal";
 
 function GlobalCommandPalette() {
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ export default function App() {
   return (
     <>
       <GlobalCommandPalette />
+      <TimeEntryModal />
       <Routes>
         <Route path="/" element={<Cabina />} />
         <Route path="/projects" element={<Projects />} />

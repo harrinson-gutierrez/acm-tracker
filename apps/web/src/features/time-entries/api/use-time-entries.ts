@@ -17,6 +17,12 @@ export function useCreateTimeEntry() {
       apiClient.post<TimeEntry>("/time-entries", dto),
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ["task-cost", variables.taskId] });
+      qc.invalidateQueries({ queryKey: ["today-summary"] });
+      qc.invalidateQueries({ queryKey: ["team-today"] });
+      qc.invalidateQueries({ queryKey: ["today-entries"] });
+      qc.invalidateQueries({ queryKey: ["cost-by-person"] });
+      qc.invalidateQueries({ queryKey: ["weekly-cost"] });
+      qc.invalidateQueries({ queryKey: ["project-cost"] });
     },
   });
 }

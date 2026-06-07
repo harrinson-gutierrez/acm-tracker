@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { TileRow } from "../components/TileRow";
@@ -7,6 +6,7 @@ import { Tag } from "../components/Tag";
 import { TimerDock } from "../components/TimerDock";
 import { useTodayEntries } from "../features/time-entries/api/use-today-entries";
 import { useTodaySummary } from "../features/reporting/api/use-today";
+import { useTimeEntryModal } from "../features/time-entries/use-time-entry-modal";
 import { colors } from "../theme/tokens";
 
 function hm(min: number): string {
@@ -14,7 +14,7 @@ function hm(min: number): string {
 }
 
 export function Tracker() {
-  const navigate = useNavigate();
+  const openModal = useTimeEntryModal((s) => s.openModal);
   const { data: entries = [] } = useTodayEntries();
   const { data: today } = useTodaySummary();
 
@@ -69,7 +69,7 @@ export function Tracker() {
         taskTitle="Sin tarea activa"
         meta="elige un proyecto para registrar tiempo"
         running={false}
-        onManual={() => navigate("/projects")}
+        onManual={() => openModal()}
         manualLabel="+ registrar tiempo"
       />
     </Chrome>

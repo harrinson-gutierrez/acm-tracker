@@ -6,7 +6,7 @@ import { DataTable } from "../components/DataTable";
 import { Tag } from "../components/Tag";
 import { Avatar } from "../components/Avatar";
 import { useMembers } from "../features/members/api/use-members";
-import { useModelPrices, useCreateModelPrice } from "../features/model-pricing/api/use-model-prices";
+import { useModelPrices, useCreateModelPrice, useDeleteModelPrice } from "../features/model-pricing/api/use-model-prices";
 import { colors } from "../theme/tokens";
 
 const inputStyle = {
@@ -25,6 +25,7 @@ export function Settings() {
   const { data: members = [] } = useMembers();
   const { data: prices = [] } = useModelPrices();
   const createPrice = useCreateModelPrice();
+  const deletePrice = useDeleteModelPrice();
   const [model, setModel] = useState("");
   const [inputPer1M, setInputPer1M] = useState("");
   const [outputPer1M, setOutputPer1M] = useState("");
@@ -90,9 +91,10 @@ export function Settings() {
             <DataTable
               columns={[
                 { key: "model", label: "Modelo" },
-                { key: "provider", label: "Proveedor", width: 140 },
-                { key: "in", label: "Input", width: 100, align: "right" },
-                { key: "out", label: "Output", width: 100, align: "right" },
+                { key: "provider", label: "Proveedor", width: 130 },
+                { key: "in", label: "Input", width: 90, align: "right" },
+                { key: "out", label: "Output", width: 90, align: "right" },
+                { key: "action", label: "", width: 80, align: "right" },
               ]}
               rows={prices.map((p) => ({
                 id: p.id,
@@ -101,6 +103,11 @@ export function Settings() {
                   provider: <span style={{ color: colors.muted, fontSize: 12 }}>{p.provider}</span>,
                   in: <span className="mono" style={{ color: colors.green }}>${p.inputPer1M}</span>,
                   out: <span className="mono" style={{ color: colors.green }}>${p.outputPer1M}</span>,
+                  action: (
+                    <button onClick={() => deletePrice.mutate(p.id)} aria-label={`Borrar ${p.model}`} style={{ background: "transparent", color: colors.muted, border: `1px solid ${colors.border}`, borderRadius: 6, padding: "4px 10px", cursor: "pointer" }}>
+                      Borrar
+                    </button>
+                  ),
                 },
               }))}
               emptyLabel="Sin modelos aún."

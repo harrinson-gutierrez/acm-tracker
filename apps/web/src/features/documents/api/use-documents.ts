@@ -17,3 +17,11 @@ export function useCreateDocument(projectId?: string) {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["documents", { projectId: projectId ?? null }] }),
   });
 }
+
+export function useDeleteDocument(projectId?: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => apiClient.del<void>(`/documents/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["documents", { projectId: projectId ?? null }] }),
+  });
+}

@@ -14,6 +14,19 @@ export function Reports() {
   const totalHours = Math.round(totalMinutes / 60);
   const avgRate = totalHours > 0 ? (totalHuman / totalHours).toFixed(1) : "0";
 
+  const exportCsv = () => {
+    const header = "persona,minutos,horas,ia_usd,costo_usd";
+    const lines = people.map((p) => `${p.name},${p.minutes},${(p.minutes / 60).toFixed(2)},${p.ai},${p.total}`);
+    const csv = [header, ...lines].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "acm-tracker-costo-por-persona.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Chrome breadcrumb="/ reportes · últimos 30 días">
       <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>Reportes · analítica</h1>
@@ -63,20 +76,19 @@ export function Reports() {
       </div>
       <div style={{ marginTop: 16 }}>
         <Panel title="Exportar / facturar">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
-            {[
-              { t: "CSV · time entries", d: "todas las entradas con costo desglosado" },
-              { t: "PDF · reporte cliente", d: "resumen por proyecto, horas y monto" },
-              { t: "Factura Helios", d: "listo para enviar" },
-            ].map((c) => (
-              <div key={c.t} style={{ background: colors.surface2, border: `1px solid ${colors.border}`, borderRadius: 10, padding: 18 }}>
-                <div style={{ fontWeight: 600 }}>{c.t}</div>
-                <div style={{ fontSize: 12, color: colors.muted, marginTop: 6 }}>{c.d}</div>
-                <button disabled style={{ marginTop: 14, background: "transparent", color: colors.dim, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "8px 14px" }}>
-                  Generar → próximamente
-                </button>
-              </div>
-            ))}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ background: colors.surface2, border: `1px solid ${colors.border}`, borderRadius: 10, padding: 18 }}>
+              <div style={{ fontWeight: 600 }}>CSV · costo por persona</div>
+              <div style={{ fontSize: 12, color: colors.muted, marginTop: 6 }}>persona, horas, IA, costo total</div>
+              <button onClick={exportCsv} aria-label="Exportar CSV" style={{ marginTop: 14, background: colors.coral, color: colors.bg, border: "none", borderRadius: 8, padding: "8px 14px", fontWeight: 700 }}>
+                Descargar CSV →
+              </button>
+            </div>
+            <div style={{ background: colors.surface2, border: `1px solid ${colors.border}`, borderRadius: 10, padding: 18 }}>
+              <div style={{ fontWeight: 600 }}>Resumen total</div>
+              <div style={{ fontSize: 12, color: colors.muted, marginTop: 6 }}>{people.length} personas · {totalHours}h · ${Math.round(totalHuman)}</div>
+              <div className="mono" style={{ fontSize: 12, color: colors.dim, marginTop: 14 }}>PDF/factura · próximamente</div>
+            </div>
           </div>
         </Panel>
       </div>

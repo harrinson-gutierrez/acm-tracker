@@ -17,3 +17,11 @@ export function useCreateModelPrice() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["model-prices"] }),
   });
 }
+
+export function useDeleteModelPrice() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => apiClient.del<void>(`/model-prices/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["model-prices"] }),
+  });
+}

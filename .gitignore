@@ -17,3 +17,8 @@ coverage/
 
 # local-only compose override (test Postgres)
 docker-compose.override.yml
+
+# playwright e2e artifacts
+apps/web/test-results/
+apps/web/playwright-report/
+apps/web/.playwright-mcp/

@@ -26,3 +26,11 @@ export function useToggleNotificationRule() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["notification-rules"] }),
   });
 }
+
+export function useDeleteNotificationRule() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => apiClient.del<void>(`/notification-rules/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["notification-rules"] }),
+  });
+}

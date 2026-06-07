@@ -4,7 +4,7 @@ import { Panel } from "../components/Panel";
 import { SideNav } from "../components/SideNav";
 import { DataTable } from "../components/DataTable";
 import { Tag } from "../components/Tag";
-import { useDocuments, useCreateDocument } from "../features/documents/api/use-documents";
+import { useDocuments, useCreateDocument, useDeleteDocument } from "../features/documents/api/use-documents";
 import { colors } from "../theme/tokens";
 
 const KIND_ICON: Record<string, string> = { page: "▤", file: "⎙", link: "⇲" };
@@ -14,6 +14,7 @@ const PHASES = ["Ventas", "Kickoff", "Cotización", "Prototipo", "Validación", 
 export function Documents() {
   const { data: docs = [] } = useDocuments();
   const createDoc = useCreateDocument();
+  const deleteDoc = useDeleteDocument();
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
 
@@ -47,7 +48,8 @@ export function Documents() {
               { key: "doc", label: "Documento" },
               { key: "phase", label: "Fase", width: 130 },
               { key: "by", label: "Por", width: 120 },
-              { key: "date", label: "Creado", width: 110, align: "right" },
+              { key: "date", label: "Creado", width: 100, align: "right" },
+              { key: "action", label: "", width: 80, align: "right" },
             ]}
             rows={docs.map((d) => ({
               id: d.id,
@@ -62,6 +64,11 @@ export function Documents() {
                 phase: d.phase ? <Tag label={d.phase} color={colors.amber} /> : <span style={{ color: colors.dim }}>—</span>,
                 by: <span style={{ color: colors.muted, fontSize: 12 }}>{d.createdBy ?? "—"}</span>,
                 date: <span className="mono" style={{ fontSize: 11, color: colors.dim }}>{d.createdAt.slice(0, 10)}</span>,
+                action: (
+                  <button onClick={() => deleteDoc.mutate(d.id)} aria-label={`Borrar ${d.title}`} style={{ background: "transparent", color: colors.muted, border: `1px solid ${colors.border}`, borderRadius: 6, padding: "4px 10px", cursor: "pointer" }}>
+                    Borrar
+                  </button>
+                ),
               },
             }))}
             emptyLabel="Sin documentos. Crea el primero arriba."

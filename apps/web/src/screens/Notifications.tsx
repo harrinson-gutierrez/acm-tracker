@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { DataTable } from "../components/DataTable";
-import { useNotificationRules, useCreateNotificationRule, useToggleNotificationRule } from "../features/notifications/api/use-notification-rules";
+import { useNotificationRules, useCreateNotificationRule, useToggleNotificationRule, useDeleteNotificationRule } from "../features/notifications/api/use-notification-rules";
 import { colors } from "../theme/tokens";
 
 const CHANNELS = ["Slack", "Email", "WhatsApp", "Webhook"];
@@ -19,6 +19,7 @@ export function Notifications() {
   const { data: rules = [] } = useNotificationRules();
   const createRule = useCreateNotificationRule();
   const toggleRule = useToggleNotificationRule();
+  const deleteRule = useDeleteNotificationRule();
   const [event, setEvent] = useState("");
   const [condition, setCondition] = useState("");
   const [channel, setChannel] = useState("Slack");
@@ -64,8 +65,9 @@ export function Notifications() {
           columns={[
             { key: "event", label: "Evento" },
             { key: "condition", label: "Condición" },
-            { key: "channel", label: "Canal", width: 140 },
-            { key: "toggle", label: "Activa", width: 90, align: "right" },
+            { key: "channel", label: "Canal", width: 120 },
+            { key: "toggle", label: "Activa", width: 70, align: "right" },
+            { key: "action", label: "", width: 80, align: "right" },
           ]}
           rows={rules.map((r) => ({
             id: r.id,
@@ -77,9 +79,14 @@ export function Notifications() {
                 <button
                   onClick={() => toggleRule.mutate({ id: r.id, enabled: !r.enabled })}
                   style={{ width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", background: r.enabled ? colors.green : colors.surface2, position: "relative" }}
-                  aria-label="Activar regla"
+                  aria-label={`Activar regla ${r.event}`}
                 >
                   <span style={{ position: "absolute", top: 3, left: r.enabled ? 23 : 3, width: 18, height: 18, borderRadius: 9, background: "#fff", transition: "left .15s" }} />
+                </button>
+              ),
+              action: (
+                <button onClick={() => deleteRule.mutate(r.id)} aria-label={`Borrar regla ${r.event}`} style={{ background: "transparent", color: colors.muted, border: `1px solid ${colors.border}`, borderRadius: 6, padding: "4px 10px", cursor: "pointer" }}>
+                  Borrar
                 </button>
               ),
             },

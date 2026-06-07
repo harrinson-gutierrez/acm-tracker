@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { SideNav } from "../components/SideNav";
@@ -22,6 +23,7 @@ function initialsOf(name: string): string {
 }
 
 export function Settings() {
+  const navigate = useNavigate();
   const { data: members = [] } = useMembers();
   const { data: prices = [] } = useModelPrices();
   const createPrice = useCreateModelPrice();
@@ -44,16 +46,14 @@ export function Settings() {
         <SideNav
           title="Ajustes"
           items={[
-            { label: "Workspace" },
-            { label: "Miembros & tarifas", active: true },
-            { label: "Precios de modelos", active: true },
-            { label: "MCP & tokens" },
-            { label: "Notificaciones" },
-            { label: "Facturación" },
-            { label: "Auditoría" },
+            { label: "Miembros & tarifas", active: true, onClick: () => document.getElementById("sec-members")?.scrollIntoView({ behavior: "smooth" }) },
+            { label: "Precios de modelos", active: true, onClick: () => document.getElementById("sec-pricing")?.scrollIntoView({ behavior: "smooth" }) },
+            { label: "MCP & tokens", onClick: () => navigate("/mcp") },
+            { label: "Notificaciones", onClick: () => navigate("/notifications") },
           ]}
         />
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div id="sec-members">
           <Panel title="Miembros & tarifas">
             <DataTable
               columns={[
@@ -78,7 +78,9 @@ export function Settings() {
               }))}
             />
           </Panel>
+          </div>
 
+          <div id="sec-pricing">
           <Panel title="Precios de modelos · USD / 1M tokens">
             <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
               <input value={model} onChange={(e) => setModel(e.target.value)} placeholder="modelo" aria-label="Modelo" style={{ ...inputStyle, flex: 2 }} />
@@ -113,6 +115,7 @@ export function Settings() {
               emptyLabel="Sin modelos aún."
             />
           </Panel>
+          </div>
 
           <Panel title="Proveedor de autenticación">
             <p style={{ color: colors.muted, fontSize: 13 }}>

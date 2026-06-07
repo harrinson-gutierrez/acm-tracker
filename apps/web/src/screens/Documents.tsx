@@ -17,23 +17,30 @@ export function Documents() {
   const deleteDoc = useDeleteDocument();
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+  const [filter, setFilter] = useState<string>("Todos los docs");
 
   const add = () => {
     if (!title.trim()) return;
+    const phase = PHASES.includes(filter) ? filter : undefined;
     createDoc.mutate(
-      { kind: url.trim() ? "link" : "page", title: title.trim(), url: url.trim() || undefined },
+      { kind: url.trim() ? "link" : "page", title: title.trim(), url: url.trim() || undefined, phase },
       { onSuccess: () => { setTitle(""); setUrl(""); } },
     );
   };
+
+  const visibleDocs = PHASES.includes(filter) ? docs.filter((d) => d.phase === filter) : docs;
 
   return (
     <Chrome breadcrumb="/ documentos">
       <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 16, alignItems: "start" }}>
         <SideNav
           title="Espacios"
-          items={[{ label: "Todos los docs", active: true }, { label: "Por proyecto" }, { label: "Sin proyecto" }, ...PHASES.map((p) => ({ label: p }))]}
+          items={[
+            { label: "Todos los docs", active: filter === "Todos los docs", onClick: () => setFilter("Todos los docs") },
+            ...PHASES.map((p) => ({ label: p, active: filter === p, onClick: () => setFilter(p) })),
+          ]}
         />
-        <Panel title={`Documentos · ${docs.length}`}>
+        <Panel title={`Documentos · ${visibleDocs.length}${PHASES.includes(filter) ? ` · ${filter}` : ""}`}>
           <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
             <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Título del documento…" aria-label="Título"
               style={{ flex: 2, background: colors.surface2, border: `1px solid ${colors.border}`, color: colors.text, borderRadius: 8, padding: "10px 12px" }} />
@@ -51,7 +58,7 @@ export function Documents() {
               { key: "date", label: "Creado", width: 100, align: "right" },
               { key: "action", label: "", width: 80, align: "right" },
             ]}
-            rows={docs.map((d) => ({
+            rows={visibleDocs.map((d) => ({
               id: d.id,
               cells: {
                 doc: (

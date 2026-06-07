@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { Avatar } from "../components/Avatar";
@@ -19,7 +19,11 @@ export function ProjectDetail() {
   const { data: tasks = [] } = useTasks(id);
   const { data: cost } = useProjectCost(id);
   const createTask = useCreateTask(id);
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
+  const [tab, setTab] = useState("Resumen");
+  const showCost = tab === "Resumen" || tab === "Costos";
+  const showTasks = tab === "Resumen" || tab === "Tareas" || tab === "Tiempo";
 
   const add = () => {
     if (!title.trim()) return;
@@ -43,13 +47,22 @@ export function ProjectDetail() {
         </div>
       </div>
       <div style={{ display: "flex", gap: 28, marginBottom: 20 }}>
-        {TABS.map((t, i) => (
-          <span key={t} className="mono" style={{ fontSize: 14, color: i === 0 ? colors.coral : colors.muted, borderBottom: i === 0 ? `2px solid ${colors.coral}` : "none", paddingBottom: 4 }}>
-            {t}
-          </span>
-        ))}
+        {TABS.map((t) => {
+          const active = t === tab;
+          return (
+            <button
+              key={t}
+              onClick={() => (t === "Documentos" ? navigate("/documents") : setTab(t))}
+              className="mono"
+              style={{ fontSize: 14, background: "transparent", border: "none", cursor: "pointer", color: active ? colors.coral : colors.muted, borderBottom: active ? `2px solid ${colors.coral}` : "2px solid transparent", paddingBottom: 4 }}
+            >
+              {t}
+            </button>
+          );
+        })}
       </div>
 
+      {showCost && (
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
         <Panel title="Costo real · acumulado">
           <div className="mono" style={{ fontSize: 44, fontWeight: 700 }}>${consumed.toLocaleString("en-US")}</div>
@@ -80,7 +93,9 @@ export function ProjectDetail() {
           </div>
         </Panel>
       </div>
+      )}
 
+      {showTasks && (
       <Panel title={`Tareas · tiempo + costo — ${project?.name ?? ""}`}>
         <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
           <input
@@ -116,6 +131,13 @@ export function ProjectDetail() {
           emptyLabel="Sin tareas aún."
         />
       </Panel>
+      )}
+
+      {tab === "Equipo" && (
+        <Panel title="Equipo">
+          <p style={{ color: colors.muted, fontSize: 13 }}>El costo por persona del proyecto se ve en Reportes · por persona.</p>
+        </Panel>
+      )}
 
       <div style={{ marginTop: 12 }}>
         <Link to="/projects" className="mono" style={{ color: colors.muted, fontSize: 13 }}>← Proyectos</Link>

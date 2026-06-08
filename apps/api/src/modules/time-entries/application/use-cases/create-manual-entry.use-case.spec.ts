@@ -2,6 +2,7 @@ import { CreateManualEntryUseCase } from "./create-manual-entry.use-case";
 import type { TimeEntry } from "@acm/shared";
 import {
   CreateTimeEntryData,
+  ProjectEntryView,
   TimeEntryRepositoryPort,
   TodayEntryView,
 } from "../../domain/ports/time-entry.repository.port";
@@ -19,6 +20,9 @@ class FakeEntryRepo implements TimeEntryRepositoryPort {
     };
   }
   async findByTask(): Promise<TimeEntry[]> {
+    return [];
+  }
+  async findByProject(): Promise<ProjectEntryView[]> {
     return [];
   }
   async findToday(): Promise<TodayEntryView[]> {

@@ -138,10 +138,16 @@ La navegación es por **sidebar de íconos** (persistente, izquierda) + **⌘K /
 
 ### 3. Detalle de proyecto (`/projects/:id`)
 - Header: avatar + nombre + contrato + etiqueta.
-- **Tabs funcionales**: Resumen / Tareas / Tiempo / Costos / Equipo / Documentos (este último navega a `/documents`).
+- **Tabs funcionales in-page**: Resumen / Tareas / Tiempo / Costos / Equipo / Documentos.
 - **Costo real acumulado**: cifra grande, % consumido vs contrato, desglose Humano/IA/Horas (real, de `/projects/:id/cost`).
 - **Tareas · tiempo + costo**: tabla con código, título, tiempo real, costo por tarea, y **"+ tiempo"** (abre el modal de registro preseteando la tarea).
 - **Crear tarea** (input + "+ Tarea").
+- **Tiempo**: cronología real de registros del proyecto (fecha/hora · tarea · persona · minutos · costo), de `/time-entries/project/:id`.
+- **Equipo**: quién registró tiempo en el proyecto con horas + costo humano/IA/total, de `/reports/by-person?projectId=`.
+- **Documentos**: documentos acotados al proyecto (alta con `projectId`), de `/documents?projectId=`.
+
+![Proyecto · Tiempo](docs/screenshots/app-10-proyecto-tiempo.png)
+![Proyecto · Equipo](docs/screenshots/app-11-proyecto-equipo.png)
 
 ### 4. Costos & IA (`/costs`)
 ![Costos](docs/screenshots/app-02-costos.png)

@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { StaticWebModule } from "./static-web/static-web.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { AuthModule } from "./auth/auth.module";
 import { MembersModule } from "./modules/members/members.module";
@@ -13,6 +14,7 @@ import { McpModule } from "./modules/mcp/mcp.module";
 
 @Module({
   imports: [
+    StaticWebModule.forRoot(),
     PrismaModule,
     AuthModule,
     MembersModule,

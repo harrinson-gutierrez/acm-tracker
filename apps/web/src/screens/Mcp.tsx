@@ -27,7 +27,7 @@ export function Mcp() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
         <Panel title="Endpoint">
           <div className="mono" style={{ background: colors.surface2, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "12px 14px", color: colors.green }}>
-            POST http://localhost:4000/api/mcp/report-work
+            POST /api/mcp/report-work
           </div>
           <div className="mono" style={{ fontSize: 11, color: colors.dim, marginTop: 12 }}>
             ● activo · {reports.length} reportes recibidos

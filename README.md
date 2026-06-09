@@ -116,6 +116,26 @@ Las migraciones corren solas al arrancar el contenedor `api`.
 
 > Hay un `docker-compose.override.yml` (gitignored) opcional que levanta un Postgres local para pruebas.
 
+### Instalar / Self-host (imagen única)
+
+Una sola imagen con web + api + SQLite, sin dependencias externas. La api sirve el build estático del front en `/` y la API en `/api` (single-origin, sin CORS). Los datos persisten en un volumen montado en `/data` (BD `file:/data/acm.db` y archivos en `/data/uploads`).
+
+```bash
+docker run -p 5173:5173 -v acm-data:/data ghcr.io/harrinson-gutierrez/acm-tracker:latest
+# app → http://localhost:5173   ·   api → http://localhost:5173/api
+```
+
+El entrypoint corre `db:bootstrap` (migrate + seed SQLite idempotente) en cada arranque y luego sirve la app. Reiniciar el contenedor conserva los datos del volumen `acm-data`.
+
+Para construir la imagen localmente:
+
+```bash
+docker build -t acm-tracker .                 # Dockerfile de la raíz (multi-stage)
+docker compose -f docker-compose.single.yml up --build   # o vía compose, con volumen acm-data
+```
+
+El modo 2-servicios (`docker-compose.yml`, web + api separados sobre Postgres) sigue siendo la opción "equipo"; la imagen única es la opción "solo".
+
 ### Sin Docker, sobre Postgres (desarrollo)
 
 ```bash
@@ -138,6 +158,11 @@ WEB_PORT=5173
 OWNER_NAME="Harry G."
 OWNER_EMAIL="owner@acm.local"
 OWNER_RATE_PER_HOUR=45
+# CORS: solo el modo 2-servicios lo necesita (web y api en orígenes distintos).
+# Sin CORS_ORIGIN no se habilita CORS (single-origin, imagen única). Acepta "*" o lista separada por comas.
+# CORS_ORIGIN=http://localhost:5173
+# WEB_DIST_DIR: si se define, la api sirve ese build estático del front (single-origin). La imagen única lo fija a /repo/apps/web/dist.
+# UPLOADS_DIR: carpeta de archivos subidos. Default local apps/api/uploads; en la imagen única /data/uploads.
 ```
 
 ---

@@ -32,6 +32,7 @@ jobs:
       OWNER_EMAIL: owner@acm.local
       OWNER_RATE_PER_HOUR: "45"
       VITE_API_URL: http://localhost:4000/api
+      CORS_ORIGIN: http://localhost:5173
       API_PORT: "4000"
 
     steps:

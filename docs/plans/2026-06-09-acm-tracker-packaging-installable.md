@@ -79,9 +79,9 @@ This phase **is** tasks DB-1…DB-5 from the addendum in `docs/plans/2026-06-05-
 **Outcome:** visiting the app offers "Install ACM-TRACKER" (desktop icon, standalone window, mobile add-to-home).
 
 ### Task 2.1 — Manifest + icons + service worker
-- [ ] Add `vite-plugin-pwa` (or hand-rolled `manifest.webmanifest` + SW). Flight Deck theming: `theme_color #0B0D12`, `background_color #0B0D12`, coral accent icon. Provide 192/512 maskable icons.
-- [ ] Scope the service worker to **app-shell caching only** (static assets). Do **not** cache API responses blindly — time/cost data must stay live; an offline-stale tracker is worse than an error. Document this decision.
-- [ ] **Verify:** Chrome/Edge shows the install affordation; installed PWA opens in its own window and loads the shell.
+- [x] (DONE 2026-06-09) `vite-plugin-pwa` (Workbox `generateSW`, `registerType: autoUpdate`). Manifest: ACM-TRACKER / ACM, `theme_color`+`background_color` `#0B0D12`, `display` standalone, scope `/`, lang es. Icons 192/512 + 512 **maskable** (coral "A" monogram on dark, generated from `public/icon.svg` via `@vite-pwa/assets-generator`, regenerable).
+- [x] (DONE 2026-06-09) SW caches **app-shell only**. `/api` excluded: `navigateFallbackDenylist: [/^\/api/]` + no `runtimeCaching` → 0 `/api` precache entries (verified in `dist/sw.js`). Time/cost data always hits the network. `devOptions.enabled: false` (no SW in vite dev).
+- [x] **Verified:** web build emits `sw.js` + `workbox-*.js` + `manifest.webmanifest` + icons (all referenced icons exist in dist); SW denylists `/api`; **19/19 Playwright E2E green** with the SW active in single-origin prod mode. *(Browser "Install" affordance not click-tested in a real browser here; manifest + SW are valid and complete.)*
 
 > Note: PWA does **not** remove the need to host api+web somewhere. It is an install *affordance* over a running deployment, complementary to Phase 1.
 

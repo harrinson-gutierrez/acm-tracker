@@ -376,7 +376,7 @@ gh pr merge --squash
 
 **Instalable (4 formatos, ruta crítica — [plan de empaquetado](docs/plans/2026-06-09-acm-tracker-packaging-installable.md)):**
 - ✅ **Self-host en 1 comando**: imagen única (web+api+SQLite, single-origin) con `docker run -p 5173:5173 -v acm-data:/data …`; el workflow de release publica multi-arch a GHCR en tag `v*`. *(Falta el smoke `docker build`/`run` en un host con Docker y el primer tag de release.)*
-- ⏳ **PWA**: instalable desde el navegador (manifest + service worker, icono Flight Deck). Win barato sobre el build de producción.
+- ✅ **PWA**: instalable desde el navegador (manifest + service worker autoUpdate, iconos Flight Deck 192/512/maskable). El SW cachea solo el app-shell; `/api` nunca se cachea (datos siempre en vivo).
 - ⏳ **App de escritorio** (Tauri): instalador `.exe`/`.dmg`/`.AppImage`, doble-clic, SQLite local, sin terminal — para usuarios no técnicos.
 - ⏳ **Cloud one-click / Helm**: botón "Deploy" + chart de Helm para equipos con infra propia (reusa la imagen GHCR).
 

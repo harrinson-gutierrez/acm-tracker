@@ -4,7 +4,7 @@ RUN npm i -g pnpm@9
 WORKDIR /repo
 COPY . .
 RUN pnpm install --frozen-lockfile=false
-RUN pnpm --filter @acm/shared build && pnpm --filter @acm/api exec prisma generate && pnpm --filter @acm/api build
+RUN pnpm --filter @acm/shared build && pnpm --filter @acm/api prisma:generate:all && pnpm --filter @acm/api build
 WORKDIR /repo/apps/api
 EXPOSE 4000
-CMD ["sh", "-c", "pnpm exec prisma migrate deploy && node dist/src/main.js"]
+CMD ["sh", "-c", "pnpm db:bootstrap && node dist/src/main.js"]

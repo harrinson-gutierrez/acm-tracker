@@ -1,5 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { createPrismaClient } from "../src/prisma/prisma.service";
+
+const prisma = createPrismaClient();
 
 async function main() {
   await prisma.workspaceSettings.upsert({
@@ -18,6 +19,11 @@ async function main() {
       ratePerHour: Number(process.env.OWNER_RATE_PER_HOUR ?? 45),
     },
   });
+
+  if ((await prisma.project.count()) > 0) {
+    console.log(`Seeded owner ${owner.email}; sample project already present`);
+    return;
+  }
 
   const project = await prisma.project.create({
     data: { name: "Helios", client: "Helios", contractAmount: 30000, status: "active" },

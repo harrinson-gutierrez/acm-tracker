@@ -136,6 +136,35 @@ docker compose -f docker-compose.single.yml up --build   # o vía compose, con v
 
 El modo 2-servicios (`docker-compose.yml`, web + api separados sobre Postgres) sigue siendo la opción "equipo"; la imagen única es la opción "solo".
 
+### Cloud 1-click
+
+Despliega la imagen GHCR con Postgres gestionado + disco persistente:
+
+- **Render** — usa [`render.yaml`](render.yaml) (Blueprint): crea la web (imagen GHCR) + un Postgres gestionado + disco en `/data`. New → Blueprint → apunta a este repo.
+- **Railway** — usa [`railway.json`](railway.json): build desde el `Dockerfile`, healthcheck en `/api/projects`. Añade un plugin Postgres y enlaza `DATABASE_URL` + `DB_BACKEND=postgres`.
+
+### Kubernetes (Helm)
+
+Chart en [`charts/acm-tracker`](charts/acm-tracker). Reusa la imagen GHCR.
+
+```bash
+# Modo solo (SQLite en un PersistentVolume — 1 réplica):
+helm install acm ./charts/acm-tracker
+
+# Modo equipo (Postgres externo — escalable):
+helm install acm ./charts/acm-tracker \
+  --set db.backend=postgres \
+  --set db.postgres.url="postgresql://USER:PASS@HOST:5432/acm_tracker"
+# o con un Secret existente:
+#   --set db.postgres.urlSecret.name=acm-db --set db.postgres.urlSecret.key=databaseUrl
+
+# Exponer con Ingress:
+helm install acm ./charts/acm-tracker \
+  --set ingress.enabled=true --set ingress.host=acm.example.com
+```
+
+Valores clave en [`values.yaml`](charts/acm-tracker/values.yaml): `db.backend` (sqlite|postgres), `persistence` (PVC para `/data`), `ingress`, `resources`, `cors.origin`. Con `db.backend=sqlite` mantén `replicaCount: 1` (un solo volumen); para HA usa `postgres`.
+
 ### Sin Docker, sobre Postgres (desarrollo)
 
 ```bash
@@ -378,7 +407,7 @@ gh pr merge --squash
 - ✅ **Self-host en 1 comando**: imagen única (web+api+SQLite, single-origin) con `docker run -p 5173:5173 -v acm-data:/data …`; el workflow de release publica multi-arch a GHCR en tag `v*`. *(Falta el smoke `docker build`/`run` en un host con Docker y el primer tag de release.)*
 - ✅ **PWA**: instalable desde el navegador (manifest + service worker autoUpdate, iconos Flight Deck 192/512/maskable). El SW cachea solo el app-shell; `/api` nunca se cachea (datos siempre en vivo).
 - ⏳ **App de escritorio** (Tauri): instalador `.exe`/`.dmg`/`.AppImage`, doble-clic, SQLite local, sin terminal — para usuarios no técnicos.
-- ⏳ **Cloud one-click / Helm**: botón "Deploy" + chart de Helm para equipos con infra propia (reusa la imagen GHCR).
+- ✅ **Cloud one-click / Helm**: `render.yaml` + `railway.json` (1-click con Postgres gestionado) y chart de Helm (`charts/acm-tracker`, sqlite o postgres, PVC, ingress) — reusan la imagen GHCR.
 
 ---
 

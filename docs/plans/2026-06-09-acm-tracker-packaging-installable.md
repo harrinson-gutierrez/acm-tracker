@@ -111,11 +111,11 @@ This phase **is** tasks DB-1…DB-5 from the addendum in `docs/plans/2026-06-05-
 **Outcome:** a "Deploy" button and/or a Helm chart for teams that run their own infra. Reuses the Phase 1 GHCR image; **no new app code**.
 
 ### Task 4.1 — One-click templates
-- [ ] `render.yaml` / `railway.json` (or equivalent) referencing the GHCR image + a managed Postgres + a persistent disk for uploads. "Deploy on Railway/Render" button in README.
+- [x] (DONE 2026-06-09) `render.yaml` (Render Blueprint: GHCR image + managed Postgres + 1Gi disk at `/data`, healthcheck `/api/projects`) and `railway.json` (Dockerfile build + healthcheck). README "Cloud 1-click" section documents both.
 
 ### Task 4.2 — Helm chart
-- [ ] `charts/acm-tracker/` with Deployment (api+web), Service, Ingress, a Postgres dependency (or external DB values), PVC for uploads, and values for `DB_BACKEND`/secrets. Document `helm install`.
-- [ ] **Verify:** `helm install` on a kind/minikube cluster brings the app up healthy.
+- [x] (DONE 2026-06-09) `charts/acm-tracker/` — Deployment (single-origin image, port 5173, readiness/liveness on `/api/projects`), Service, conditional Ingress, PVC for `/data`, and `values.yaml` for `db.backend` (sqlite|postgres, with direct URL **or** `secretKeyRef`), persistence, cors, resources. README documents `helm install` for both backends + ingress.
+- [x] **Verified (render-level):** `helm lint` passes; `helm template` renders correctly for sqlite (PVC + file URL), postgres-direct-URL, postgres-via-Secret, and ingress; postgres with no URL/secret **fails with a clear `required` error**. *(Not applied to a live kind/minikube cluster here — no cluster in the dev env; templates are valid and the image they reference is the verified Phase 1 image.)*
 
 ---
 

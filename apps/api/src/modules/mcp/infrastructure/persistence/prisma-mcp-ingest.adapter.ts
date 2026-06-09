@@ -24,6 +24,11 @@ export class PrismaMcpIngestAdapter implements McpIngestPort {
     return member ? { id: member.id, ratePerHour: member.ratePerHour } : null;
   }
 
+  async getOwnerEmail(): Promise<string | null> {
+    const owner = await this.prisma.member.findFirst({ orderBy: { createdAt: "asc" } });
+    return owner?.email ?? null;
+  }
+
   async recordWork(input: RecordWorkInput): Promise<void> {
     await this.prisma.timeEntry.create({
       data: {

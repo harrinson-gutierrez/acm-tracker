@@ -19,3 +19,21 @@ export function useMcpReports() {
     refetchInterval: 5000,
   });
 }
+
+export interface McpClaudeConfig {
+  mcpServers: Record<string, { command: string; args: string[]; env: Record<string, string> }>;
+}
+
+export interface McpConfig {
+  mcpServerPath: string | null;
+  apiUrl: string;
+  ownerEmail: string;
+  claudeConfig: McpClaudeConfig;
+}
+
+export function useMcpConfig() {
+  return useQuery({
+    queryKey: ["mcp-config"],
+    queryFn: () => apiClient.get<McpConfig>("/mcp/config"),
+  });
+}

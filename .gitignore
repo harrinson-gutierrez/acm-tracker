@@ -7,6 +7,9 @@ build/
 .DS_Store
 Thumbs.db
 apps/api/prisma/*.db
+apps/api/prisma/**/*.db
+apps/api/prisma/**/*.db-journal
+apps/api/prisma/sqlite/tmp/
 uploads/
 coverage/
 .vite/

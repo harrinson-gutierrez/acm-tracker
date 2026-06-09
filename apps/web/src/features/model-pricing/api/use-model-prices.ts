@@ -18,6 +18,15 @@ export function useCreateModelPrice() {
   });
 }
 
+export function useUpdateModelPrice() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...dto }: { id: string; provider?: string; model?: string; inputPer1M?: number; outputPer1M?: number }) =>
+      apiClient.patch<ModelPrice>(`/model-prices/${id}`, dto),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["model-prices"] }),
+  });
+}
+
 export function useDeleteModelPrice() {
   const qc = useQueryClient();
   return useMutation({

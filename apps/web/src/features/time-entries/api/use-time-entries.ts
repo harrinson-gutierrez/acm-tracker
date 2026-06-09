@@ -23,6 +23,8 @@ export function useCreateTimeEntry() {
       qc.invalidateQueries({ queryKey: ["cost-by-person"] });
       qc.invalidateQueries({ queryKey: ["weekly-cost"] });
       qc.invalidateQueries({ queryKey: ["project-cost"] });
+      qc.invalidateQueries({ queryKey: ["project-entries"] });
+      qc.invalidateQueries({ queryKey: ["project-team"] });
     },
   });
 }

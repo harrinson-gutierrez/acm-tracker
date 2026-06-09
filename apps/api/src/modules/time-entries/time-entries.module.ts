@@ -3,6 +3,7 @@ import { TIME_ENTRY_REPOSITORY } from "./domain/ports/time-entry.repository.port
 import { MEMBER_RATE_READER } from "./domain/ports/member-rate.port";
 import { CreateManualEntryUseCase } from "./application/use-cases/create-manual-entry.use-case";
 import { ListTaskEntriesUseCase } from "./application/use-cases/list-task-entries.use-case";
+import { ListProjectEntriesUseCase } from "./application/use-cases/list-project-entries.use-case";
 import { ListTodayEntriesUseCase } from "./application/use-cases/list-today-entries.use-case";
 import { TaskCostUseCase } from "./application/use-cases/task-cost.use-case";
 import { PrismaTimeEntryRepository } from "./infrastructure/persistence/prisma-time-entry.repository";
@@ -14,6 +15,7 @@ import { TimeEntriesController } from "./interfaces/http/time-entries.controller
   providers: [
     CreateManualEntryUseCase,
     ListTaskEntriesUseCase,
+    ListProjectEntriesUseCase,
     ListTodayEntriesUseCase,
     TaskCostUseCase,
     { provide: TIME_ENTRY_REPOSITORY, useClass: PrismaTimeEntryRepository },

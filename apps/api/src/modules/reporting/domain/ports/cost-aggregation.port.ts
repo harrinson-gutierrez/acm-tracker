@@ -23,7 +23,7 @@ export interface TeamTodayRow {
 
 export interface CostAggregationPort {
   projectHumanCost(projectId: string): Promise<ProjectCostRow>;
-  costByPerson(): Promise<PersonCost[]>;
+  costByPerson(projectId?: string): Promise<PersonCost[]>;
   weeklyHumanCost(weeks: number): Promise<WeeklyCost[]>;
   todaySummary(from: Date, to: Date): Promise<TodaySummary>;
   teamToday(from: Date, to: Date): Promise<TeamTodayRow[]>;

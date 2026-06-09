@@ -26,6 +26,7 @@ jobs:
           --health-retries 10
 
     env:
+      DB_BACKEND: postgres
       DATABASE_URL: postgresql://acm:acm@localhost:5432/acm_tracker?schema=public
       OWNER_NAME: "Harry G."
       OWNER_EMAIL: owner@acm.local

@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,18 +32,30 @@ mkdirSync(payloadSidecar, { recursive: true });
 
 const isWin = process.platform === "win32";
 const quoted = isWin ? `"${payloadApi}"` : payloadApi;
-execFileSync("pnpm", ["--filter", "@acm/api", "deploy", quoted], {
-  cwd: repoRoot,
-  stdio: "inherit",
-  shell: isWin,
-});
+execFileSync(
+  "pnpm",
+  ["--filter", "@acm/api", "--prod", "--config.node-linker=hoisted", "deploy", quoted],
+  { cwd: repoRoot, stdio: "inherit", shell: isWin },
+);
 
 regeneratePrismaClientsInPayload();
+pruneTypeDeclarations(payloadApi);
 
 cpSync(webDist, payloadWeb, { recursive: true });
 cpSync(join(desktopRoot, "sidecar"), payloadSidecar, { recursive: true });
 
 console.log(`Payload assembled at ${payload}`);
+
+function pruneTypeDeclarations(root) {
+  for (const entry of readdirSync(root)) {
+    const full = join(root, entry);
+    if (statSync(full).isDirectory()) {
+      pruneTypeDeclarations(full);
+    } else if (entry.endsWith(".d.ts") || entry.endsWith(".d.ts.map") || entry.endsWith(".map")) {
+      rmSync(full);
+    }
+  }
+}
 
 function regeneratePrismaClientsInPayload() {
   const prismaBin = requireFrom.resolve("prisma/package.json", { paths: [payloadApi] });

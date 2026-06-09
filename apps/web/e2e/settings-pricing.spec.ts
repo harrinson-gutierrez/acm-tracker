@@ -10,6 +10,8 @@ test("create and delete a model price", async ({ page }) => {
   const model = `e2e-model-${Date.now()}`;
   await page.goto("/settings");
 
+  await page.getByRole("button", { name: "Precios de modelos" }).click();
+
   await page.getByLabel("Modelo").fill(model);
   await page.getByLabel("Precio input").fill("3");
   await page.getByLabel("Precio output").fill("9");

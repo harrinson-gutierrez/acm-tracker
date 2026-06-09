@@ -14,9 +14,19 @@ test("project detail tabs switch sections", async ({ page }) => {
   await expect(page.getByText("Costo real · acumulado")).toHaveCount(0);
   await expect(page.getByText("Tareas · tiempo + costo", { exact: false })).toBeVisible();
 
-  // Documentos tab navigates to documents
+  // Documentos tab stays on the project and shows its scoped documents
   await page.getByRole("button", { name: "Documentos", exact: true }).click();
-  await expect(page).toHaveURL(/\/documents/);
+  await expect(page).toHaveURL(/\/projects\/.+/);
+  await expect(page.getByText("Documentos ·", { exact: false })).toBeVisible();
+
+  // Tiempo tab shows the chronological timeline, not the tasks table
+  await page.getByRole("button", { name: "Tiempo", exact: true }).click();
+  await expect(page.getByText("Tiempo · cronología de registros")).toBeVisible();
+  await expect(page.getByText("Tareas · tiempo + costo", { exact: false })).toHaveCount(0);
+
+  // Equipo tab shows the project team panel
+  await page.getByRole("button", { name: "Equipo", exact: true }).click();
+  await expect(page.getByText("Equipo · tiempo registrado", { exact: false })).toBeVisible();
 });
 
 test("documents sidebar filters by phase", async ({ page }) => {

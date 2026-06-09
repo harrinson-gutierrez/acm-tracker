@@ -6,7 +6,7 @@ import { COST_AGGREGATION, CostAggregationPort } from "../../domain/ports/cost-a
 export class CostByPersonUseCase {
   constructor(@Inject(COST_AGGREGATION) private readonly agg: CostAggregationPort) {}
 
-  execute(): Promise<PersonCost[]> {
-    return this.agg.costByPerson();
+  execute(projectId?: string): Promise<PersonCost[]> {
+    return this.agg.costByPerson(projectId);
   }
 }

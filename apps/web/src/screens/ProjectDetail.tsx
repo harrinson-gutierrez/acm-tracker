@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { Avatar } from "../components/Avatar";
@@ -9,6 +9,9 @@ import { useProject } from "../features/projects/api/use-projects";
 import { useTasks, useCreateTask } from "../features/tasks/api/use-tasks";
 import { useProjectCost } from "../features/reporting/api/use-reporting";
 import { TaskRealCell, TaskCostCell, AddTimeButton } from "../features/tasks/components/TaskCostCells";
+import { ProjectTimeline } from "../features/time-entries/components/ProjectTimeline";
+import { ProjectDocuments } from "../features/documents/components/ProjectDocuments";
+import { ProjectTeam } from "../features/reporting/components/ProjectTeam";
 import { colors } from "../theme/tokens";
 
 const TABS = ["Resumen", "Tareas", "Tiempo", "Costos", "Equipo", "Documentos"];
@@ -19,11 +22,10 @@ export function ProjectDetail() {
   const { data: tasks = [] } = useTasks(id);
   const { data: cost } = useProjectCost(id);
   const createTask = useCreateTask(id);
-  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [tab, setTab] = useState("Resumen");
   const showCost = tab === "Resumen" || tab === "Costos";
-  const showTasks = tab === "Resumen" || tab === "Tareas" || tab === "Tiempo";
+  const showTasks = tab === "Resumen" || tab === "Tareas";
 
   const add = () => {
     if (!title.trim()) return;
@@ -52,7 +54,7 @@ export function ProjectDetail() {
           return (
             <button
               key={t}
-              onClick={() => (t === "Documentos" ? navigate("/documents") : setTab(t))}
+              onClick={() => setTab(t)}
               className="mono"
               style={{ fontSize: 14, background: "transparent", border: "none", cursor: "pointer", color: active ? colors.coral : colors.muted, borderBottom: active ? `2px solid ${colors.coral}` : "2px solid transparent", paddingBottom: 4 }}
             >
@@ -133,11 +135,11 @@ export function ProjectDetail() {
       </Panel>
       )}
 
-      {tab === "Equipo" && (
-        <Panel title="Equipo">
-          <p style={{ color: colors.muted, fontSize: 13 }}>El costo por persona del proyecto se ve en Reportes · por persona.</p>
-        </Panel>
-      )}
+      {tab === "Tiempo" && <ProjectTimeline projectId={id} />}
+
+      {tab === "Equipo" && <ProjectTeam projectId={id} />}
+
+      {tab === "Documentos" && <ProjectDocuments projectId={id} />}
 
       <div style={{ marginTop: 12 }}>
         <Link to="/projects" className="mono" style={{ color: colors.muted, fontSize: 13 }}>← Proyectos</Link>

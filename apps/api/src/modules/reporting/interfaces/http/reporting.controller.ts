@@ -28,8 +28,8 @@ export class ReportingController {
     return this.projectBreakdown.execute(id);
   }
 
-  @Get("reports/by-person") costByPerson() {
-    return this.byPerson.execute();
+  @Get("reports/by-person") costByPerson(@Query("projectId") projectId?: string) {
+    return this.byPerson.execute(projectId);
   }
 
   @Get("reports/weekly") weeklyCost(@Query("weeks") weeks?: string) {

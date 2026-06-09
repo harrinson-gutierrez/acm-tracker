@@ -4,6 +4,7 @@ import { computeEntryCost } from "@acm/shared";
 import { PrismaService } from "../../../../prisma/prisma.service";
 import {
   CreateTimeEntryData,
+  ProjectEntryView,
   TimeEntryRepositoryPort,
   TodayEntryView,
 } from "../../domain/ports/time-entry.repository.port";
@@ -24,6 +25,26 @@ export class PrismaTimeEntryRepository implements TimeEntryRepositoryPort {
       orderBy: { startedAt: "desc" },
     });
     return rows.map(toDomainTimeEntry);
+  }
+
+  async findByProject(projectId: string): Promise<ProjectEntryView[]> {
+    const rows = await this.prisma.timeEntry.findMany({
+      where: { task: { projectId } },
+      orderBy: { startedAt: "desc" },
+      include: { task: true, member: true },
+    });
+    return rows.map((r) => ({
+      id: r.id,
+      startedAt: r.startedAt.toISOString(),
+      origin: r.origin,
+      taskId: r.taskId,
+      taskCode: r.task.code,
+      taskTitle: r.task.title,
+      memberId: r.memberId,
+      memberName: r.member.name,
+      minutes: r.minutes,
+      cost: computeEntryCost(r as unknown as TimeEntry),
+    }));
   }
 
   async findToday(from: Date, to: Date): Promise<TodayEntryView[]> {

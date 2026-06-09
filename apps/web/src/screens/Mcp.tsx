@@ -1,6 +1,7 @@
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { McpStream } from "../components/McpStream";
+import { McpConnectGuide } from "../features/mcp/components";
 import { useMcpReports } from "../features/mcp/api/use-mcp";
 import { colors } from "../theme/tokens";
 
@@ -37,6 +38,8 @@ export function Mcp() {
           <pre className="mono" style={{ fontSize: 11, color: colors.text, whiteSpace: "pre-wrap", margin: 0, lineHeight: 1.5 }}>{CONTRACT}</pre>
         </Panel>
       </div>
+
+      <McpConnectGuide />
 
       <Panel title="Reportes recibidos">
         <McpStream

@@ -33,6 +33,7 @@ export interface McpReportView {
 export interface McpIngestPort {
   getModelPrices(): Promise<ModelPrice[]>;
   getMemberRateByEmail(email: string): Promise<{ id: string; ratePerHour: number } | null>;
+  getOwnerEmail(): Promise<string | null>;
   recordWork(input: RecordWorkInput): Promise<void>;
   recentReports(limit: number): Promise<McpReportView[]>;
 }

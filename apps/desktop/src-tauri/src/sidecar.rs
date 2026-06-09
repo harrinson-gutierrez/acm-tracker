@@ -26,6 +26,7 @@ struct Payload {
     web_dist: PathBuf,
     prisma_schema: PathBuf,
     sidecar_entry: PathBuf,
+    mcp_entry: PathBuf,
 }
 
 fn resolve_payload(app: &AppHandle) -> Result<Payload, String> {
@@ -35,6 +36,7 @@ fn resolve_payload(app: &AppHandle) -> Result<Payload, String> {
         web_dist: base.join("web-dist"),
         prisma_schema: base.join("api/prisma/sqlite/schema.prisma"),
         sidecar_entry: base.join("sidecar/bootstrap-and-serve.cjs"),
+        mcp_entry: base.join("mcp/dist/index.js"),
     })
 }
 
@@ -76,6 +78,7 @@ pub fn spawn_api_sidecar(app: &AppHandle) -> Result<SidecarHandle, String> {
         .env("API_PORT", API_PORT)
         .env("ACM_API_ROOT", &payload.api_root)
         .env("ACM_PRISMA_SCHEMA", &payload.prisma_schema)
+        .env("ACM_MCP_ENTRY", &payload.mcp_entry)
         .spawn()
         .map_err(|e| format!("failed to spawn api sidecar: {e}"))?;
 

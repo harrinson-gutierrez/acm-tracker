@@ -2129,4 +2129,32 @@ Plan complete. Two execution options:
 1. **Subagent-Driven (recommended)** — fresh subagent per task, review between tasks.
 2. **Inline Execution** — execute tasks in this session with checkpoints.
 
+---
+
+## Addendum — 2026-06-09 · Single-user mode on local SQLite
+
+**Decision (owner):** When ACM-TRACKER is used by **a single person**, the stack should run on a **local SQLite database file** instead of requiring a remote Postgres server. Conceptually this is the "solo / no-cloud" mode — the natural companion to `NoAuthProvider` (single implicit owner). Same zero-friction philosophy as the rest of v1: no DB server to provision, just run.
+
+**Persistence shape (chosen):** SQLite **on-disk file** (`file:./acm.db`), *not* `:memory:` pure RAM. Rationale: a time/cost tracker must not lose entries on restart; a local file gives the same "no server" simplicity while persisting across restarts. (`:memory:` stays available only for ephemeral tests/demos, never as the user-facing default.)
+
+**Schema strategy (chosen): Postgres-compatible always.** Postgres remains the **source of truth** for the data model (the existing `schema.prisma` + migrations under `apps/api/prisma/migrations/` are authoritative). SQLite is a **"lite" adapter** with a mirrored schema. Postgres feature-richness is never sacrificed for SQLite; instead the SQLite mirror is kept faithful to the same 5 tables / fields / relations.
+
+### Why this matters (constraints to respect — do not improvise)
+
+- **Prisma binds `provider` at generate/migrate time.** A single `schema.prisma` cannot freely switch `postgresql` ⇄ `sqlite` at runtime. The two providers also differ in column types (e.g. native `enum`, `@db.*` attributes, `Decimal` precision). The mirror must account for this.
+- **Hexagonal boundary is the safety net.** Per `apps/api/CLAUDE.md`, use cases depend on **ports**, never on Prisma directly. So selecting SQLite vs Postgres is an **infrastructure-adapter** concern — domain and use cases must not change. This is exactly the seam that makes a second DB backend cheap.
+- **Cost math stays in `packages/shared`.** No DB-specific cost logic. Decimal handling (Postgres `Decimal` vs SQLite `REAL`/integer-cents) must be normalized at the adapter edge so `computeEntryCost`/`sumCost` see identical inputs.
+
+### Tasks to add (single-user SQLite mode)
+
+- [ ] **DB-1: Decide Decimal/enum normalization at the adapter edge.** Document how `rate`/cost (`Decimal` in Postgres) and any `enum` (`origin`, statuses) map onto SQLite. Prefer **integer cents** for money and **string-checked** values for enums so both backends round-trip identically. Write this decision into `apps/api/CLAUDE.md` (architecture authority) before coding.
+- [ ] **DB-2: Add the mirrored SQLite Prisma schema.** Keep Postgres as source of truth. Add a SQLite schema espejo (e.g. `prisma/schema.sqlite.prisma`) covering the same 5 tables/fields/relations. Generate its own migration set under a separate migrations dir. Delegate to **db-schema-guardian**; the two schemas must stay in lockstep (a drift check is part of "done").
+- [ ] **DB-3: Wire backend selection by env (`DB_BACKEND=sqlite|postgres`).** Default for the solo distribution = `sqlite` → `DATABASE_URL="file:./acm.db"`. Selection happens in **infrastructure only** (Prisma datasource + which schema is generated/migrated). Use cases and domain untouched. Provide an opt-in `file::memory:` path for ephemeral demo/test runs (never the default).
+- [ ] **DB-4: Solo run path — no Postgres, no `docker compose up` needed.** Document a `pnpm dev:solo` (or equivalent) that runs api+web against `file:./acm.db`, runs the SQLite migration + seed, and starts. README gets a "Solo mode (SQLite, single user)" section alongside the existing remote-Postgres path.
+- [ ] **DB-5: Test both backends.** The existing api unit/e2e suites must pass under **both** `DB_BACKEND=sqlite` and `DB_BACKEND=postgres` (CI matrix or a documented local toggle). This is the guarantee that the espejo schema didn't diverge. No green on both = not done.
+
+### Out of scope (unchanged)
+
+Multi-tenant, row-level isolation, Cognito, MCP server — still deferred. Single-user SQLite mode is purely a **deployment/persistence option**, not a data-model change.
+
 

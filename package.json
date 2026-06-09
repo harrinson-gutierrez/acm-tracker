@@ -2,6 +2,8 @@
   "name": "acm-tracker",
   "private": true,
   "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "author": "Harrinson Gutierrez Coronado <hgutieco@gmail.com>",
   "scripts": {
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",

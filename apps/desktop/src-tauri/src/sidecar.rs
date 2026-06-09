@@ -42,7 +42,7 @@ fn payload_base(app: &AppHandle) -> Result<PathBuf, String> {
     let bundled = app
         .path()
         .resource_dir()
-        .map(|dir| dir.join("payload"))
+        .map(|dir| dunce::simplified(&dir.join("payload")).to_path_buf())
         .map_err(|e| e.to_string())?;
     if bundled.join("sidecar/bootstrap-and-serve.cjs").exists() {
         return Ok(bundled);
@@ -53,7 +53,11 @@ fn payload_base(app: &AppHandle) -> Result<PathBuf, String> {
 }
 
 fn app_data_db_url(app: &AppHandle) -> Result<(String, PathBuf), String> {
-    let dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    let dir = app
+        .path()
+        .app_data_dir()
+        .map(|dir| dunce::simplified(&dir).to_path_buf())
+        .map_err(|e| e.to_string())?;
     let db_file = dir.join("acm.db");
     Ok((format!("file:{}", db_file.display()), dir))
 }

@@ -407,7 +407,7 @@ gh pr merge --squash
 
 **Siguiente:**
 - ⏳ **Timer real en vivo** (cronómetro que corre y registra al parar), no solo registro manual.
-- ⏳ **MCP server por protocolo** (SSE + tool registration) además del endpoint REST de ingesta.
+- ✅ **MCP server real** (`packages/mcp`, stdio) — Claude Code y otros agentes descubren las tools `report_work`/`list_projects`/`list_tasks` y reportan trabajo+tokens; el servidor calcula el costo IA real. Ver [packages/mcp/README.md](packages/mcp/README.md). *(Transporte HTTP/SSE remoto = futuro, para el modo equipo.)*
 - ⏳ **Auth Cognito** real (enchufar el `AuthProvider`) + invitaciones a workspace.
 - ⏳ **Documentos**: subida de archivos real (storage), páginas con editor, costo de producción por doc.
 - ⏳ **Margen y presupuesto** por proyecto (datos reales en los gauges que hoy muestran "—").

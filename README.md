@@ -1,5 +1,7 @@
 # ACM-TRACKER
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](./LICENSE) [![Commercial license available](https://img.shields.io/badge/Commercial%20license-available-F44E5C.svg)](./COMMERCIAL-LICENSE.md)
+
 Self-hosted **time + cost tracker**. The single source of truth for what work really costs — human time (rate × time) **plus AI cost** (tokens × model price, reported by agents via MCP). Local app, remote database, no per-seat cost.
 
 > **Estado:** v1 + v2 funcionales y verificadas por E2E (19/19). UI fiel al diseño "Flight Deck". Costo IA real vía MCP.
@@ -21,6 +23,7 @@ Self-hosted **time + cost tracker**. The single source of truth for what work re
 - [Flujo de trabajo (PR)](#flujo-de-trabajo-pr)
 - [Roadmap](#roadmap)
 - [Docs internas](#docs-internas)
+- [Licencia](#licencia)
 
 ---
 
@@ -313,6 +316,7 @@ gh pr merge --squash
 - ⏳ **Export**: PDF de reporte cliente y factura.
 - ⏳ CI (GitHub Actions): build + unit + E2E en cada PR.
 - ⏳ Deploy a producción (BD remota real + dominio).
+- ⏳ **Modo solo-usuario sobre SQLite local** (`file:./acm.db`, sin Postgres ni `docker compose`) — Postgres sigue siendo la fuente de verdad del schema; SQLite es un adaptador "lite" espejo, seleccionable por `DB_BACKEND`. Detalle y tareas en el [addendum del plan v1](docs/plans/2026-06-05-acm-tracker-v1-local.md#addendum--2026-06-09--single-user-mode-on-local-sqlite).
 
 ---
 
@@ -321,6 +325,18 @@ gh pr merge --squash
 - [Planes de implementación](docs/plans/) — v1, v2 (costos/IA), UI Figma fidelity (cada tarea, inmutables).
 - [Diseño Figma de referencia](docs/design/) — los 13 frames.
 - [Capturas reales](docs/screenshots/) — la app funcionando.
+
+---
+
+## Licencia
+
+ACM-TRACKER se distribuye bajo **GNU Affero General Public License v3.0 (AGPL-3.0)** — ver [`LICENSE`](./LICENSE).
+
+- **Self-hosting libre:** úsalo, modifícalo y compártelo gratis para ti, tu equipo o tu empresa.
+- **Copyleft de red:** si ofreces una versión **modificada** a terceros **por red**, debes publicar tu código bajo AGPL-3.0.
+- **¿Necesitas SaaS cerrado o embeber en producto propietario?** Hay una **licencia comercial** disponible (dual-licensing) que levanta la obligación de abrir el código — ver [`COMMERCIAL-LICENSE.md`](./COMMERCIAL-LICENSE.md). Contacto: <hgutieco@gmail.com>.
+
+© 2026 Harrinson Gutierrez Coronado.
 
 ---
 

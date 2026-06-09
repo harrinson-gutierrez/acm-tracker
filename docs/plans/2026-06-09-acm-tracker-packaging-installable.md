@@ -36,7 +36,7 @@ Binding rules unchanged: `CLAUDE.md` (root), `apps/api/CLAUDE.md` (Hexagonal), `
 
 This phase **is** tasks DB-1…DB-5 from the addendum in `docs/plans/2026-06-05-acm-tracker-v1-local.md` (§ Addendum 2026-06-09). It is restated here as the gate for packaging; do not duplicate the detail — execute it from that addendum.
 
-- [ ] **P0:** Complete DB-1…DB-5 (Decimal→integer-cents + enum-as-string normalization, mirrored SQLite Prisma schema with drift check, `DB_BACKEND` env switch, `pnpm dev:solo`, green tests on both backends). Definition of done = the api boots against `file:./acm.db` with no Postgres reachable, and the full suite passes under `DB_BACKEND=sqlite`.
+- [x] **P0:** Complete DB-1…DB-5. (DONE 2026-06-09) Money kept as `Float` (not integer-cents — see DB-1 rationale), enums already strings, mirrored SQLite schema + drift check, `DB_BACKEND` env switch (default sqlite), `pnpm dev:solo`. **Definition of done met (verified):** api boots against `file:./acm.db` with no Postgres reachable, `GET /api/members` → 200 seeded owner; api unit suite 15/15 green under both `sqlite` and `postgres`; drift-check in lockstep.
 
 ---
 

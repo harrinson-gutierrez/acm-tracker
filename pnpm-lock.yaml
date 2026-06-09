@@ -19,7 +19,7 @@ importers:
     dependencies:
       '@acm/shared':
         specifier: workspace:*
-        version: link:../../packages/shared
+        version: file:packages/shared
       '@nestjs/common':
         specifier: ^10.3.0
         version: 10.4.22(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -44,6 +44,9 @@ importers:
       class-validator:
         specifier: ^0.14.1
         version: 0.14.4
+      prisma:
+        specifier: ^5.14.0
+        version: 5.22.0
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
@@ -69,9 +72,6 @@ importers:
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.19.42)(ts-node@10.9.2(@types/node@20.19.42)(typescript@5.9.3))
-      prisma:
-        specifier: ^5.14.0
-        version: 5.22.0
       supertest:
         specifier: ^6.3.0
         version: 6.3.4
@@ -84,6 +84,9 @@ importers:
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
+    dependenciesMeta:
+      '@acm/shared':
+        injected: true
 
   apps/desktop:
     devDependencies:
@@ -147,6 +150,9 @@ importers:
         version: 1.6.1(@types/node@20.19.42)(terser@5.48.0)
 
 packages:
+
+  '@acm/shared@file:packages/shared':
+    resolution: {directory: packages/shared, type: directory}
 
   '@angular-devkit/core@17.3.11':
     resolution: {integrity: sha512-vTNDYNsLIWpYk2I969LMQFH29GTsLzxNk/0cLw5q56ARF0v5sIWfHYwGTS88jdDqIpuuettcSczbxeA7EuAmqQ==}
@@ -4524,6 +4530,8 @@ packages:
         optional: true
 
 snapshots:
+
+  '@acm/shared@file:packages/shared': {}
 
   '@angular-devkit/core@17.3.11(chokidar@3.6.0)':
     dependencies:

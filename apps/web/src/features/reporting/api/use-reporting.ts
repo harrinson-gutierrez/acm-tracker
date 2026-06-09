@@ -24,6 +24,14 @@ export function useCostByPerson() {
   });
 }
 
+export function useProjectTeam(projectId: string) {
+  return useQuery({
+    queryKey: ["project-team", projectId],
+    queryFn: () => apiClient.get<PersonCost[]>(`/reports/by-person?projectId=${projectId}`),
+    enabled: Boolean(projectId),
+  });
+}
+
 export function useWeeklyCost() {
   return useQuery({
     queryKey: ["weekly-cost"],

@@ -28,11 +28,13 @@ export class PrismaCostAggregationRepository implements CostAggregationPort {
     return { human: round2(human), minutes };
   }
 
-  async costByPerson(): Promise<PersonCost[]> {
+  async costByPerson(projectId?: string): Promise<PersonCost[]> {
     const members = await this.prisma.member.findMany({ orderBy: { createdAt: "asc" } });
     const result: PersonCost[] = [];
     for (const m of members) {
-      const rows = await this.prisma.timeEntry.findMany({ where: { memberId: m.id } });
+      const rows = await this.prisma.timeEntry.findMany({
+        where: { memberId: m.id, ...(projectId ? { task: { projectId } } : {}) },
+      });
       let human = 0;
       let minutes = 0;
       for (const r of rows) {

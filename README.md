@@ -375,7 +375,7 @@ gh pr merge --squash
 - ⏳ **Modo solo-usuario sobre SQLite local** (`file:./acm.db`, sin Postgres ni `docker compose`) — Postgres sigue siendo la fuente de verdad del schema; SQLite es un adaptador "lite" espejo, seleccionable por `DB_BACKEND`. Detalle y tareas en el [addendum del plan v1](docs/plans/2026-06-05-acm-tracker-v1-local.md#addendum--2026-06-09--single-user-mode-on-local-sqlite).
 
 **Instalable (4 formatos, ruta crítica — [plan de empaquetado](docs/plans/2026-06-09-acm-tracker-packaging-installable.md)):**
-- ⏳ **Self-host en 1 comando**: imagen única publicada en GHCR (`docker run … ghcr.io/harrinson-gutierrez/acm-tracker`) con SQLite incluido y volumen de datos. *Requiere el modo SQLite primero.*
+- ✅ **Self-host en 1 comando**: imagen única (web+api+SQLite, single-origin) con `docker run -p 5173:5173 -v acm-data:/data …`; el workflow de release publica multi-arch a GHCR en tag `v*`. *(Falta el smoke `docker build`/`run` en un host con Docker y el primer tag de release.)*
 - ⏳ **PWA**: instalable desde el navegador (manifest + service worker, icono Flight Deck). Win barato sobre el build de producción.
 - ⏳ **App de escritorio** (Tauri): instalador `.exe`/`.dmg`/`.AppImage`, doble-clic, SQLite local, sin terminal — para usuarios no técnicos.
 - ⏳ **Cloud one-click / Helm**: botón "Deploy" + chart de Helm para equipos con infra propia (reusa la imagen GHCR).

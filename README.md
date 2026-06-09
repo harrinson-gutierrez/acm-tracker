@@ -116,6 +116,26 @@ Las migraciones corren solas al arrancar el contenedor `api`.
 
 > Hay un `docker-compose.override.yml` (gitignored) opcional que levanta un Postgres local para pruebas.
 
+### Instalar / Self-host (imagen única)
+
+Una sola imagen con web + api + SQLite, sin dependencias externas. La api sirve el build estático del front en `/` y la API en `/api` (single-origin, sin CORS). Los datos persisten en un volumen montado en `/data` (BD `file:/data/acm.db` y archivos en `/data/uploads`).
+
+```bash
+docker run -p 5173:5173 -v acm-data:/data ghcr.io/harrinson-gutierrez/acm-tracker:latest
+# app → http://localhost:5173   ·   api → http://localhost:5173/api
+```
+
+El entrypoint corre `db:bootstrap` (migrate + seed SQLite idempotente) en cada arranque y luego sirve la app. Reiniciar el contenedor conserva los datos del volumen `acm-data`.
+
+Para construir la imagen localmente:
+
+```bash
+docker build -t acm-tracker .                 # Dockerfile de la raíz (multi-stage)
+docker compose -f docker-compose.single.yml up --build   # o vía compose, con volumen acm-data
+```
+
+El modo 2-servicios (`docker-compose.yml`, web + api separados sobre Postgres) sigue siendo la opción "equipo"; la imagen única es la opción "solo".
+
 ### Sin Docker, sobre Postgres (desarrollo)
 
 ```bash
@@ -138,6 +158,11 @@ WEB_PORT=5173
 OWNER_NAME="Harry G."
 OWNER_EMAIL="owner@acm.local"
 OWNER_RATE_PER_HOUR=45
+# CORS: solo el modo 2-servicios lo necesita (web y api en orígenes distintos).
+# Sin CORS_ORIGIN no se habilita CORS (single-origin, imagen única). Acepta "*" o lista separada por comas.
+# CORS_ORIGIN=http://localhost:5173
+# WEB_DIST_DIR: si se define, la api sirve ese build estático del front (single-origin). La imagen única lo fija a /repo/apps/web/dist.
+# UPLOADS_DIR: carpeta de archivos subidos. Default local apps/api/uploads; en la imagen única /data/uploads.
 ```
 
 ---
@@ -350,7 +375,7 @@ gh pr merge --squash
 - ⏳ **Modo solo-usuario sobre SQLite local** (`file:./acm.db`, sin Postgres ni `docker compose`) — Postgres sigue siendo la fuente de verdad del schema; SQLite es un adaptador "lite" espejo, seleccionable por `DB_BACKEND`. Detalle y tareas en el [addendum del plan v1](docs/plans/2026-06-05-acm-tracker-v1-local.md#addendum--2026-06-09--single-user-mode-on-local-sqlite).
 
 **Instalable (4 formatos, ruta crítica — [plan de empaquetado](docs/plans/2026-06-09-acm-tracker-packaging-installable.md)):**
-- ⏳ **Self-host en 1 comando**: imagen única publicada en GHCR (`docker run … ghcr.io/harrinson-gutierrez/acm-tracker`) con SQLite incluido y volumen de datos. *Requiere el modo SQLite primero.*
+- ✅ **Self-host en 1 comando**: imagen única (web+api+SQLite, single-origin) con `docker run -p 5173:5173 -v acm-data:/data …`; el workflow de release publica multi-arch a GHCR en tag `v*`. *(Falta el smoke `docker build`/`run` en un host con Docker y el primer tag de release.)*
 - ⏳ **PWA**: instalable desde el navegador (manifest + service worker, icono Flight Deck). Win barato sobre el build de producción.
 - ⏳ **App de escritorio** (Tauri): instalador `.exe`/`.dmg`/`.AppImage`, doble-clic, SQLite local, sin terminal — para usuarios no técnicos.
 - ⏳ **Cloud one-click / Helm**: botón "Deploy" + chart de Helm para equipos con infra propia (reusa la imagen GHCR).

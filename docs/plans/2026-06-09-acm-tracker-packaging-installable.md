@@ -45,10 +45,21 @@ This phase **is** tasks DB-1…DB-5 from the addendum in `docs/plans/2026-06-05-
 **Outcome:** `docker run -p 5173:5173 -v acm-data:/data ghcr.io/harrinson-gutierrez/acm-tracker` boots the whole app (web + api + SQLite) with zero external dependencies; data persists in the volume.
 
 ### Task 1.1 — Production web build, runtime-configurable API URL
-- [ ] Replace `apps/web/Dockerfile` `CMD ["pnpm","dev"...]` with a **prod build** (`vite build`) served statically (vite `preview` or a tiny static server / nginx). No dev server in distributed images.
-- [ ] Make the API base URL **runtime-configurable**, not baked at build time. `VITE_*` vars are compile-time; introduce a runtime config (e.g. a `/config.js` emitted at container start from an env var, or same-origin `/api` reverse-proxied) so one image works on any host/port without rebuild.
-- [ ] Update `docker-compose.yml` `web.environment.VITE_API_URL` accordingly (remove the hardcoded `http://localhost`).
-- [ ] **Verify:** built image serves the SPA and reaches the api on a non-localhost host.
+- [x] (DONE 2026-06-09) `apps/web/Dockerfile` now `vite build` + `vite preview` — no dev server in images.
+- [x] (DONE 2026-06-09) **Solved via single-origin instead of `/config.js`:** `api-client.ts` BASE defaults to relative `/api`; NestJS serves the static front, so one image works on any host/port with no runtime URL injection. `VITE_API_URL` still overrides for the 2-service dev mode (a dev-only vite `/api` proxy keeps `pnpm dev` working).
+- [x] (DONE 2026-06-09) `docker-compose.yml` updated (api gets `CORS_ORIGIN`/`UPLOADS_DIR`; web no longer needs a hardcoded localhost URL).
+- [x] **Verified (native):** built SPA serves with relative `/api` (no `localhost` baked in); single-origin smoke confirms `/`, deep SPA route, `/api/*`, and `/api/nope`→404 JSON all correct on a non-localhost-bound port.
+
+### Task 1.2 — Single-image option (web + api + SQLite in one container)
+- [x] (DONE 2026-06-09) Multi-stage root `Dockerfile`; `docker/entrypoint.sh` runs `db:bootstrap` (SQLite migrate+seed idempotent) then serves api+static web. Defaults `DATABASE_URL=file:/data/acm.db`, `DB_BACKEND=sqlite`, port 5173.
+- [x] (DONE 2026-06-09) `/data` for the SQLite file + `/data/uploads` for files; `docker-compose.single.yml` documents the `acm-data` named volume.
+- [x] (DONE 2026-06-09) 2-service compose kept as the "team" (Postgres) deployment; single image is "solo". Both documented in README.
+- [ ] **Verify on a Docker host:** `docker build` + `docker run -v acm-data:/data` → create data → restart → data persists. *(Not run here — Docker engine unavailable in dev env; native equivalent verified. Pending a real Docker host or the first release build.)*
+
+### Task 1.3 — Publish to GHCR via CI
+- [x] (DONE 2026-06-09) `.github/workflows/release.yml` — on tag `v*`, buildx multi-arch (amd64+arm64) push to `ghcr.io/harrinson-gutierrez/acm-tracker:{version,latest}` with `packages: write`.
+- [x] (DONE 2026-06-09) README "Instalar / Self-host (imagen única)" section with the `docker run` one-liner.
+- [ ] **Verify:** push a `v*` tag → pull the image on a clean machine and run it. *(Pending the first tagged release.)*
 
 ### Task 1.2 — Single-image option (web + api + SQLite in one container)
 - [ ] Add a combined image (multi-stage: build shared+api+web, then a runtime stage) whose entrypoint runs `prisma migrate deploy` (SQLite) + seeds on first run + starts the api and serves the static web. Default `DATABASE_URL="file:/data/acm.db"`, `DB_BACKEND=sqlite`.

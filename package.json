@@ -6,10 +6,12 @@
   "author": "Harrinson Gutierrez Coronado <hgutieco@gmail.com>",
   "scripts": {
     "dev": "pnpm -r --parallel dev",
+    "dev:solo": "cross-env DB_BACKEND=sqlite DATABASE_URL=file:./acm.db pnpm --filter @acm/api db:bootstrap && cross-env DB_BACKEND=sqlite DATABASE_URL=file:./acm.db pnpm -r --parallel dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "typescript": "^5.4.0"
   },
   "packageManager": "pnpm@9.0.0"

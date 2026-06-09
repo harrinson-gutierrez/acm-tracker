@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,34 +10,33 @@ const desktopRoot = join(here, "..");
 const repoRoot = join(desktopRoot, "..", "..");
 const apiRoot = join(repoRoot, "apps", "api");
 const webDist = join(repoRoot, "apps", "web", "dist");
+const sharedRoot = join(repoRoot, "packages", "shared");
 
 const payload = join(desktopRoot, "src-tauri", "payload");
 const payloadApi = join(payload, "api");
 const payloadWeb = join(payload, "web-dist");
 const payloadSidecar = join(payload, "sidecar");
 
-function assertBuilt(path, hint) {
-  if (!existsSync(path)) {
-    throw new Error(`Missing ${path}. Run: ${hint}`);
-  }
-}
-
 assertBuilt(join(apiRoot, "dist", "src", "main.js"), "pnpm --filter @acm/api build");
 assertBuilt(webDist, "pnpm --filter @acm/web build");
 assertBuilt(join(apiRoot, "prisma", "sqlite", ".generated", "index.js"), "pnpm --filter @acm/api prisma:generate:sqlite");
+assertBuilt(join(sharedRoot, "dist", "index.js"), "pnpm --filter @acm/shared build");
 
 rmSync(payload, { recursive: true, force: true });
 mkdirSync(payloadApi, { recursive: true });
-mkdirSync(payloadSidecar, { recursive: true });
+
+cpSync(join(apiRoot, "dist"), join(payloadApi, "dist"), { recursive: true });
+cpSync(join(apiRoot, "prisma"), join(payloadApi, "prisma"), { recursive: true });
+writeStandalonePackageJson();
 
 const isWin = process.platform === "win32";
-const quoted = isWin ? `"${payloadApi}"` : payloadApi;
-execFileSync(
-  "pnpm",
-  ["--filter", "@acm/api", "--prod", "--config.node-linker=hoisted", "deploy", quoted],
-  { cwd: repoRoot, stdio: "inherit", shell: isWin },
-);
+execFileSync("npm", ["install", "--omit=dev", "--no-audit", "--no-fund", "--ignore-scripts"], {
+  cwd: payloadApi,
+  stdio: "inherit",
+  shell: isWin,
+});
 
+linkWorkspaceShared();
 regeneratePrismaClientsInPayload();
 pruneTypeDeclarations(payloadApi);
 
@@ -45,6 +44,27 @@ cpSync(webDist, payloadWeb, { recursive: true });
 cpSync(join(desktopRoot, "sidecar"), payloadSidecar, { recursive: true });
 
 console.log(`Payload assembled at ${payload}`);
+
+function assertBuilt(path, hint) {
+  if (!existsSync(path)) {
+    throw new Error(`Missing ${path}. Run: ${hint}`);
+  }
+}
+
+function writeStandalonePackageJson() {
+  const pkg = JSON.parse(readFileSync(join(apiRoot, "package.json"), "utf8"));
+  const deps = { ...pkg.dependencies };
+  delete deps["@acm/shared"];
+  const standalone = { name: pkg.name, version: pkg.version, private: true, dependencies: deps };
+  writeFileSync(join(payloadApi, "package.json"), JSON.stringify(standalone, null, 2));
+}
+
+function linkWorkspaceShared() {
+  const dest = join(payloadApi, "node_modules", "@acm", "shared");
+  mkdirSync(dirname(dest), { recursive: true });
+  cpSync(join(sharedRoot, "dist"), join(dest, "dist"), { recursive: true });
+  cpSync(join(sharedRoot, "package.json"), join(dest, "package.json"));
+}
 
 function pruneTypeDeclarations(root) {
   for (const entry of readdirSync(root)) {

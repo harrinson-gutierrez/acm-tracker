@@ -165,6 +165,20 @@ helm install acm ./charts/acm-tracker \
 
 Valores clave en [`values.yaml`](charts/acm-tracker/values.yaml): `db.backend` (sqlite|postgres), `persistence` (PVC para `/data`), `ingress`, `resources`, `cors.origin`. Con `db.backend=sqlite` mantén `replicaCount: 1` (un solo volumen); para HA usa `postgres`.
 
+### App de escritorio (Tauri)
+
+Ventana nativa (sin Docker, sin terminal): Tauri arranca la **api NestJS como sidecar** (un proceso Node que corre `dist/src/main.js`) apuntado a un SQLite en el directorio de datos del SO (`%APPDATA%\com.acmtracker.desktop` en Windows, `~/Library/Application Support/...` en macOS, `~/.local/share/...` en Linux). El front estático single-origin lo sirve la propia api; la ventana carga `http://127.0.0.1:5188/`. En el primer arranque corre migrate + seed (idempotente) contra esa BD.
+
+```bash
+# Dev (requiere Node + Rust/cargo). Ensambla el payload (build de web+api+shared) y lanza la ventana:
+pnpm --filter @acm/desktop dev
+
+# Build local de instaladores (NSIS/MSI · DMG · AppImage/deb):
+pnpm --filter @acm/desktop build
+```
+
+El sidecar usa el **Node del sistema** (`node` en el PATH): es lo pragmático para que funcione hoy; ver el follow-up de Node embebido / SEA más abajo. Los instaladores firmados salen de CI: el workflow [`.github/workflows/desktop.yml`](.github/workflows/desktop.yml) compila la matriz `windows-latest`/`macos-latest`/`ubuntu-latest` al hacer push de un tag `desktop-v*` (o manualmente vía `workflow_dispatch`) y los adjunta a un **GitHub Release (draft)**. El **code-signing** (Authenticode en Windows, notarización en macOS) y el auto-updater quedan como TODO documentado en el workflow — requieren certificados de pago.
+
 ### Sin Docker, sobre Postgres (desarrollo)
 
 ```bash
@@ -406,7 +420,7 @@ gh pr merge --squash
 **Instalable (4 formatos, ruta crítica — [plan de empaquetado](docs/plans/2026-06-09-acm-tracker-packaging-installable.md)):**
 - ✅ **Self-host en 1 comando**: imagen única (web+api+SQLite, single-origin) con `docker run -p 5173:5173 -v acm-data:/data …`; el workflow de release publica multi-arch a GHCR en tag `v*`. *(Falta el smoke `docker build`/`run` en un host con Docker y el primer tag de release.)*
 - ✅ **PWA**: instalable desde el navegador (manifest + service worker autoUpdate, iconos Flight Deck 192/512/maskable). El SW cachea solo el app-shell; `/api` nunca se cachea (datos siempre en vivo).
-- ⏳ **App de escritorio** (Tauri): instalador `.exe`/`.dmg`/`.AppImage`, doble-clic, SQLite local, sin terminal — para usuarios no técnicos.
+- ✅ **App de escritorio** (Tauri): ventana nativa, sidecar NestJS + SQLite en app-data del SO, single-origin. Instaladores `.exe`/`.msi`/`.dmg`/`.AppImage`/`.deb` los compila CI (`desktop.yml`) en tag `desktop-v*`. *(Falta code-signing — certificados de pago — y el smoke del primer arranque desde el instalador de CI.)*
 - ✅ **Cloud one-click / Helm**: `render.yaml` + `railway.json` (1-click con Postgres gestionado) y chart de Helm (`charts/acm-tracker`, sqlite o postgres, PVC, ingress) — reusan la imagen GHCR.
 
 ---

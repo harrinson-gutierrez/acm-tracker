@@ -94,15 +94,15 @@ This phase **is** tasks DB-1…DB-5 from the addendum in `docs/plans/2026-06-05-
 **Why Tauri over Electron:** ~10x smaller binary, Rust core, uses the OS webview. The web frontend is the same static prod build from Phase 1.
 
 ### Task 3.1 — API as a bundled sidecar
-- [ ] Decide the backend packaging: bundle the NestJS api as a **Tauri sidecar** (a packaged Node runtime or a `pkg`/SEA single-binary of `dist/src/main.js`) that Tauri spawns on launch, pointed at a SQLite file in the OS app-data dir.
-- [ ] Tauri shell loads the static web build; web talks to `http://127.0.0.1:<port>/api` (sidecar). Migrate+seed on first launch.
-- [ ] **Verify (per OS):** install → icon → app window → create data → it persists in app-data → uninstall is clean.
+- [x] (DONE 2026-06-09) `apps/desktop/` Tauri 2 project. The NestJS api is bundled as a **sidecar**: `sidecar/bootstrap-and-serve.cjs` runs `prisma migrate deploy` (SQLite) + seed + `dist/src/main.js`. Payload assembled by `scripts/prepare-payload.mjs` (`pnpm --filter @acm/api deploy` + regenerate both Prisma clients + copy web dist). Uses system `node` on PATH (pragmatic; embedded-Node/SEA is a documented follow-up).
+- [x] (DONE 2026-06-09) `src-tauri/src/main.rs` spawns the sidecar, waits ready (60s), opens a window at `http://127.0.0.1:5188/` (single-origin — the api serves the static web build). **SQLite path = OS app-data dir** (`app.path().app_data_dir()/acm.db` as an absolute `file:` URL) — resolves the relative-path risk noted earlier. Migrate+seed on first launch; sidecar killed on window close/exit.
+- [x] **Verified (compile + syntax, smoke skipped by owner):** `cargo check` compiles the Rust crate clean (sidecar spawn, app-data path, window). `prepare-payload.mjs` and the sidecar pass `node --check` — and **two real bugs were fixed** in `prepare-payload.mjs` (missing `readFileSync` import; `require.resolve` in an ESM `.mjs` → switched to `createRequire`). *(First-launch runtime smoke and the actual installer build were not run locally — deferred to the CI matrix, which has the full bundler toolchain.)*
 
 ### Task 3.2 — Installers + signing + auto-update
-- [ ] Tauri bundler targets: NSIS/MSI (Windows), DMG (macOS), AppImage/deb (Linux).
-- [ ] Code signing per OS (Windows Authenticode, macOS notarization) — required to avoid scary warnings. **This is the costly, fiddly part; budget for certificates.**
-- [ ] Optional Tauri auto-updater wired to GitHub Releases.
-- [ ] CI matrix builds the three installers on tag and attaches them to the GitHub Release.
+- [x] (DONE 2026-06-09) `tauri.conf.json` bundle targets: `nsis`/`msi` (Windows), `dmg` (macOS), `appimage`/`deb` (Linux).
+- [ ] **Code signing per OS** (Windows Authenticode, macOS notarization) — left as a documented TODO in `desktop.yml` (requires paid certificates). Until configured, installers are unsigned (OS will warn).
+- [ ] Tauri auto-updater — documented TODO (needs signing key + plugin wiring).
+- [x] (DONE 2026-06-09) `.github/workflows/desktop.yml` — matrix `windows/macos/ubuntu-latest`, `dtolnay/rust-toolchain` + `tauri-apps/tauri-action`, builds the installers on a `desktop-v*` tag (or `workflow_dispatch`) and attaches them to a draft GitHub Release. Decoupled from the `v*` image release so a version tag doesn't trigger both.
 
 ---
 

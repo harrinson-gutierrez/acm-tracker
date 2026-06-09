@@ -86,6 +86,24 @@ acm-tracker/
 
 ## Cómo levantarlo
 
+> **Dos backends de BD.** Postgres es la **fuente de verdad** del schema; SQLite es un espejo "lite" para el modo solo-usuario. Se eligen con `DB_BACKEND` (`sqlite` por defecto · `postgres`). Detalle en [`apps/api/CLAUDE.md`](apps/api/CLAUDE.md#db-backends-postgres-source-of-truth-sqlite-mirror).
+
+### Modo solo (SQLite, un usuario)
+
+Sin Postgres ni Docker. Un solo comando levanta api + web sobre un archivo SQLite local (`file:./acm.db`, bajo `apps/api/prisma/sqlite/`):
+
+```bash
+pnpm install
+pnpm dev:solo
+# migra el set SQLite + seed (owner + proyecto Helios) y levanta:
+# web  → http://localhost:5173
+# api  → http://localhost:4000/api
+```
+
+`dev:solo` fija `DB_BACKEND=sqlite` y `DATABASE_URL=file:./acm.db`, corre `db:bootstrap` (migración SQLite idempotente + seed) y luego `pnpm dev`. El seed es idempotente: re-ejecutar no duplica datos. Para migrar/seedear sin levantar nada: `pnpm --filter @acm/api db:bootstrap`.
+
+`DB_BACKEND=sqlite` es el **default** de la distribución: cualquier arranque sin variables de BD usa SQLite local.
+
 ### Con Docker (un comando)
 
 ```bash
@@ -98,19 +116,23 @@ Las migraciones corren solas al arrancar el contenedor `api`.
 
 > Hay un `docker-compose.override.yml` (gitignored) opcional que levanta un Postgres local para pruebas.
 
-### Sin Docker (desarrollo)
+### Sin Docker, sobre Postgres (desarrollo)
 
 ```bash
 pnpm install
-cd apps/api && cp ../../.env.example .env   # set DATABASE_URL
-pnpm prisma migrate dev && pnpm seed         # crea owner + proyecto Helios de ejemplo
-cd ../.. && pnpm dev                          # api + web en paralelo
+cd apps/api && cp ../../.env.example .env   # DB_BACKEND=postgres + DATABASE_URL postgres
+DB_BACKEND=postgres pnpm prisma migrate dev && pnpm seed   # owner + proyecto Helios
+cd ../.. && DB_BACKEND=postgres pnpm dev                    # api + web en paralelo
 ```
 
 ### Variables de entorno (`.env`)
 
 ```
-DATABASE_URL="postgresql://USER:PASS@HOST:5432/acm_tracker?schema=public"
+# Backend de BD: "sqlite" (default, modo solo) o "postgres"
+DB_BACKEND=sqlite
+# SQLite: opcional, default file:./acm.db. Postgres: requerido.
+DATABASE_URL="file:./acm.db"
+# DB_BACKEND=postgres → DATABASE_URL="postgresql://USER:PASS@HOST:5432/acm_tracker?schema=public"
 API_PORT=4000
 WEB_PORT=5173
 OWNER_NAME="Harry G."
@@ -263,6 +285,15 @@ pnpm --filter @acm/api test        # use cases (hexagonal, fakes de puertos)
 # E2E (requiere stack corriendo en :5173 / :4000)
 pnpm --filter @acm/web e2e         # Playwright — 19 tests
 ```
+
+Los unit tests del api usan fakes de puertos en memoria, así que son **agnósticos al backend**: pasan idénticos bajo `DB_BACKEND=sqlite` (default) y `DB_BACKEND=postgres`. Para verificar ambos localmente:
+
+```bash
+DB_BACKEND=sqlite   pnpm --filter @acm/api test    # 15/15
+DB_BACKEND=postgres pnpm --filter @acm/api test    # 15/15
+```
+
+El drift-check de schema (Postgres source ↔ SQLite mirror) corre con `pnpm --filter @acm/api db:drift-check` y debe pasar en CI. Si CI quiere cubrir e2e en ambos backends, lo natural es una matriz `DB_BACKEND ∈ {sqlite, postgres}` (sqlite sin servicios; postgres con el `docker-compose.override.yml` throwaway).
 
 La suite E2E (`apps/web/e2e/`) **asevera comportamiento real** de cada pantalla: navegación sidebar + ⌘K, flujo proyecto→tarea→tiempo→costo ($45), CRUD de proyectos/tareas/documentos/precios/reglas, toggle de reglas, login, export CSV, tabs de proyecto, filtro de documentos por fase, nav de settings, y **MCP report_work → costo IA $0.09**.
 

@@ -10,6 +10,7 @@ apps/api/prisma/*.db
 apps/api/prisma/**/*.db
 apps/api/prisma/**/*.db-journal
 apps/api/prisma/sqlite/tmp/
+apps/api/prisma/sqlite/.generated/
 uploads/
 coverage/
 .vite/

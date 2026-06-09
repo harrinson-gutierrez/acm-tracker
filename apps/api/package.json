@@ -2,18 +2,22 @@
   "name": "@acm/api",
   "version": "0.1.0",
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && prisma generate --schema prisma/sqlite/schema.prisma",
     "dev": "nest start --watch",
     "build": "nest build",
     "start": "node dist/main.js",
     "test": "jest",
     "test:e2e": "jest --config test/jest-e2e.json",
     "prisma:generate": "prisma generate",
+    "prisma:generate:sqlite": "prisma generate --schema prisma/sqlite/schema.prisma",
+    "prisma:generate:all": "prisma generate && prisma generate --schema prisma/sqlite/schema.prisma",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:sqlite:migrate": "prisma migrate deploy --schema prisma/sqlite/schema.prisma",
     "prisma:sqlite:migrate:dev": "prisma migrate dev --schema prisma/sqlite/schema.prisma",
+    "db:migrate": "ts-node prisma/migrate.ts",
     "db:drift-check": "ts-node prisma/drift-check.ts",
+    "db:bootstrap": "ts-node prisma/migrate.ts && ts-node prisma/seed.ts",
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {

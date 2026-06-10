@@ -8,11 +8,18 @@ It is a thin adapter over the ACM-TRACKER REST API (`POST /api/mcp/report-work`)
 
 | Tool | Reads/Writes | Purpose |
 | --- | --- | --- |
-| `list_projects` | read | List projects (id, name, client, contract). |
+| `list_projects` | read | List projects (id, name, client, contract, status). |
+| `create_project` | write | Create a project. |
 | `list_tasks` | read | List a project's tasks (id, code, title, phase, status). |
-| `report_work` | write | Record minutes + AI usage on a task → real AI cost + time entry. |
+| `create_task` | write | Create a task in a project. |
+| `report_work` | write | Record minutes + AI usage on a task → real AI cost + time entry. Identify the task by `taskId`, **or** by `projectName` + `taskCode` (with `createMissing: true` to create them on the fly). |
+| `project_cost` | read | Real cost breakdown of a project (human, AI, hours, contract). |
+| `today_summary` | read | Today's tracked time + cost. |
+| `recent_reports` | read | The most recent MCP-ingested work reports. |
+| `list_model_prices` | read | The AI model price table. |
+| `set_model_price` | write | Add or update a model's price (USD per 1M tokens) — needed for AI cost. |
 
-Typical flow the agent follows: `list_projects` → `list_tasks` → `report_work`.
+**Frictionless flow:** the agent can just call `report_work` with `projectName` + `taskCode` + `createMissing: true` — no need to look up ids first; the project/task are created if missing. (The explicit flow `list_projects` → `list_tasks` → `report_work` still works.)
 
 ## Setup
 

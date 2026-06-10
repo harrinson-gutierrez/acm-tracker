@@ -1,6 +1,6 @@
 {
   "name": "@acm/mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "MCP server for ACM-TRACKER — agents report time + AI cost via the report_work tool.",
   "license": "AGPL-3.0-only",

@@ -6,7 +6,8 @@ import { SideNav } from "../components/SideNav";
 import { DataTable } from "../components/DataTable";
 import { Tag } from "../components/Tag";
 import { Avatar } from "../components/Avatar";
-import { useMembers } from "../features/members/api/use-members";
+import { EditableRate } from "../components/EditableRate";
+import { useMembers, useUpdateMember } from "../features/members/api/use-members";
 import { useModelPrices, useCreateModelPrice } from "../features/model-pricing/api/use-model-prices";
 import { ModelPriceList } from "../features/model-pricing/components/ModelPriceList";
 import { colors } from "../theme/tokens";
@@ -28,6 +29,7 @@ type Section = "members" | "pricing";
 export function Settings() {
   const navigate = useNavigate();
   const { data: members = [] } = useMembers();
+  const updateMember = useUpdateMember();
   const { data: prices = [] } = useModelPrices();
   const createPrice = useCreateModelPrice();
   const [section, setSection] = useState<Section>("members");
@@ -76,7 +78,14 @@ export function Settings() {
                         </span>
                       ),
                       role: <span className="mono" style={{ color: colors.muted, fontSize: 12 }}>{m.role}</span>,
-                      rate: <span className="mono">${m.ratePerHour.toFixed(2)}</span>,
+                      rate: (
+                        <EditableRate
+                          value={m.ratePerHour}
+                          label={m.name}
+                          saving={updateMember.isPending && updateMember.variables?.id === m.id}
+                          onSave={(ratePerHour) => updateMember.mutate({ id: m.id, ratePerHour })}
+                        />
+                      ),
                       state: <Tag label="activo" color={colors.green} />,
                     },
                   }))}

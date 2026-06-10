@@ -1,7 +1,7 @@
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { McpStream } from "../components/McpStream";
-import { McpConnectGuide } from "../features/mcp/components";
+import { McpConnectGuide, McpEndpointPanel } from "../features/mcp/components";
 import { useMcpReports } from "../features/mcp/api/use-mcp";
 import { colors } from "../theme/tokens";
 
@@ -26,14 +26,7 @@ export function Mcp() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-        <Panel title="Endpoint">
-          <div className="mono" style={{ background: colors.surface2, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "12px 14px", color: colors.green }}>
-            POST /api/mcp/report-work
-          </div>
-          <div className="mono" style={{ fontSize: 11, color: colors.dim, marginTop: 12 }}>
-            ● activo · {reports.length} reportes recibidos
-          </div>
-        </Panel>
+        <McpEndpointPanel reportCount={reports.length} />
         <Panel title="Contrato de reporte · report_work()">
           <pre className="mono" style={{ fontSize: 11, color: colors.text, whiteSpace: "pre-wrap", margin: 0, lineHeight: 1.5 }}>{CONTRACT}</pre>
         </Panel>

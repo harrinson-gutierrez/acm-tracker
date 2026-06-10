@@ -1,7 +1,10 @@
 import { Panel } from "../../../components/Panel";
 import { CopyButton } from "../../../components/CopyButton";
 import { useMcpConfig } from "../api/use-mcp";
+import type { McpClaudeConfig } from "../api/use-mcp";
 import { colors, radius } from "../../../theme/tokens";
+
+const PANEL_TITLE = "Conectar un agente (Claude Code)";
 
 const STEPS = [
   "Copia la configuración de abajo.",
@@ -9,6 +12,18 @@ const STEPS = [
   "Reinicia Claude Code; verás las tools report_work / list_projects / list_tasks.",
   'Dile al agente algo como: "registra 45 min en la tarea T-142, usé opus con 1240/980 tokens" y reportará solo.',
 ];
+
+function buildFallbackConfig(): McpClaudeConfig {
+  return {
+    mcpServers: {
+      "acm-tracker": {
+        command: "node",
+        args: ["<ruta-de-tu-MCP>/dist/index.js"],
+        env: { ACM_API_URL: window.location.origin },
+      },
+    },
+  };
+}
 
 function StepList() {
   return (
@@ -23,18 +38,29 @@ function StepList() {
 }
 
 export function McpConnectGuide() {
-  const { data: config } = useMcpConfig();
-  if (!config) return null;
+  const { data: config, isLoading } = useMcpConfig();
 
-  const json = JSON.stringify(config.claudeConfig, null, 2);
+  if (isLoading) {
+    return (
+      <Panel title={PANEL_TITLE} style={{ marginTop: 16 }}>
+        <div className="mono" style={{ fontSize: 12, color: colors.dim }}>
+          Cargando configuración…
+        </div>
+      </Panel>
+    );
+  }
+
+  const claudeConfig = config?.claudeConfig ?? buildFallbackConfig();
+  const showPathWarning = !config || config.mcpServerPath === null;
+  const json = JSON.stringify(claudeConfig, null, 2);
 
   return (
-    <Panel title="Conectar un agente (Claude Code)" style={{ marginTop: 16 }}>
+    <Panel title={PANEL_TITLE} style={{ marginTop: 16 }}>
       <div style={{ marginBottom: 16 }}>
         <StepList />
       </div>
 
-      {config.mcpServerPath === null && (
+      {showPathWarning && (
         <div
           className="mono"
           style={{

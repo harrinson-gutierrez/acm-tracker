@@ -28,6 +28,11 @@
     },
     "longDescription": "ACM-TRACKER desktop app: local time and cost tracking with a bundled NestJS API sidecar and SQLite stored in the OS app-data directory.",
     "shortDescription": "ACM-TRACKER desktop app",
-    "category": "Productivity"
+    "category": "Productivity",
+    "windows": {
+      "nsis": {
+        "installerHooks": "installer-hooks.nsh"
+      }
+    }
   }
 }

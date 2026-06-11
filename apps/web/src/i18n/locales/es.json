@@ -44,6 +44,28 @@
       "documentos": "Documentos"
     }
   },
+  "costs": {
+    "breadcrumb": "/ costos · mes actual",
+    "title": "Costos · mes actual",
+    "subtitle": "TIEMPO HUMANO + IA + INFRA · una sola fuente de verdad",
+    "tileProyectosLabel": "Proyectos",
+    "tileProyectosSub": "activos",
+    "tileHumanoLabel": "Humano",
+    "tileHumanoSub": "por proyecto",
+    "tileIaLabel": "IA",
+    "tileIaSub": "vía MCP · próximamente",
+    "tileModelosLabel": "Modelos",
+    "tileModelosSub": "con precio",
+    "compositionPanelTitle": "Composición del costo",
+    "segmentHumano": "Humano",
+    "segmentIa": "IA",
+    "legendHumano": "▇ Humano",
+    "legendIa": "▇ IA",
+    "modelPanelTitle": "IA · costo por modelo (USD / 1M tokens)",
+    "colModelo": "Modelo",
+    "colCosto": "Costo",
+    "emptyModels": "Sin modelos. Añádelos en Settings."
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

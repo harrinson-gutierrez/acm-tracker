@@ -44,6 +44,28 @@
       "documentos": "Documents"
     }
   },
+  "costs": {
+    "breadcrumb": "/ costs · current month",
+    "title": "Costs · current month",
+    "subtitle": "HUMAN TIME + AI + INFRA · single source of truth",
+    "tileProyectosLabel": "Projects",
+    "tileProyectosSub": "active",
+    "tileHumanoLabel": "Human",
+    "tileHumanoSub": "per project",
+    "tileIaLabel": "AI",
+    "tileIaSub": "via MCP · coming soon",
+    "tileModelosLabel": "Models",
+    "tileModelosSub": "with price",
+    "compositionPanelTitle": "Cost composition",
+    "segmentHumano": "Human",
+    "segmentIa": "AI",
+    "legendHumano": "▇ Human",
+    "legendIa": "▇ AI",
+    "modelPanelTitle": "AI · cost per model (USD / 1M tokens)",
+    "colModelo": "Model",
+    "colCosto": "Cost",
+    "emptyModels": "No models. Add them in Settings."
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cockpit",
     "status": "SYSTEMS NOMINAL",

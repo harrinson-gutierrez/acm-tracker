@@ -211,6 +211,28 @@
     "signInButton": "Entrar →",
     "helperText": "modo sin auth · owner local"
   },
+  "nav": {
+    "cabina": "Cabina",
+    "projects": "Proyectos",
+    "tracker": "Tiempo",
+    "costs": "Costos & IA",
+    "reports": "Reportes",
+    "documents": "Documentos",
+    "mcp": "Servidor MCP",
+    "notifications": "Notificaciones",
+    "settings": "Settings"
+  },
+  "palette": {
+    "cabina": "Ir a Cabina",
+    "projects": "Ir a Proyectos",
+    "costs": "Ir a Costos & IA",
+    "reports": "Ir a Reportes",
+    "tracker": "Ir a Tiempo",
+    "documents": "Ir a Documentos",
+    "mcp": "Ir a Servidor MCP",
+    "settings": "Ir a Settings",
+    "searchPlaceholder": "Buscar acción, proyecto, persona, tarea…"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

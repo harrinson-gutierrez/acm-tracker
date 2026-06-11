@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { colors } from "../../theme/tokens";
 
 interface ChromeProps {
@@ -12,19 +13,19 @@ interface ChromeProps {
 interface NavLink {
   to: string;
   icon: string;
-  label: string;
+  key: string;
 }
 
 const NAV: NavLink[] = [
-  { to: "/", icon: "◆", label: "Cabina" },
-  { to: "/projects", icon: "⊞", label: "Proyectos" },
-  { to: "/tracker", icon: "◷", label: "Tiempo" },
-  { to: "/costs", icon: "$", label: "Costos & IA" },
-  { to: "/reports", icon: "▤", label: "Reportes" },
-  { to: "/documents", icon: "⎙", label: "Documentos" },
-  { to: "/mcp", icon: "◇", label: "Servidor MCP" },
-  { to: "/notifications", icon: "◔", label: "Notificaciones" },
-  { to: "/settings", icon: "✎", label: "Settings" },
+  { to: "/", icon: "◆", key: "cabina" },
+  { to: "/projects", icon: "⊞", key: "projects" },
+  { to: "/tracker", icon: "◷", key: "tracker" },
+  { to: "/costs", icon: "$", key: "costs" },
+  { to: "/reports", icon: "▤", key: "reports" },
+  { to: "/documents", icon: "⎙", key: "documents" },
+  { to: "/mcp", icon: "◇", key: "mcp" },
+  { to: "/notifications", icon: "◔", key: "notifications" },
+  { to: "/settings", icon: "✎", key: "settings" },
 ];
 
 function Mark({ pos }: { pos: CSSProperties }) {
@@ -38,6 +39,7 @@ function Mark({ pos }: { pos: CSSProperties }) {
 
 function Sidebar() {
   const { pathname } = useLocation();
+  const { t } = useTranslation();
   const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
   return (
     <nav
@@ -46,12 +48,13 @@ function Sidebar() {
       <Link to="/" title="ACM-TRACKER" style={{ color: colors.coral, fontWeight: 700, fontSize: 18, marginBottom: 14, textDecoration: "none" }}>◆</Link>
       {NAV.map((n) => {
         const active = isActive(n.to);
+        const label = t(`nav.${n.key}`);
         return (
           <Link
             key={n.to}
             to={n.to}
-            title={n.label}
-            aria-label={n.label}
+            title={label}
+            aria-label={label}
             style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 10, textDecoration: "none", fontSize: 18, color: active ? colors.coral : colors.muted, background: active ? colors.surface2 : "transparent", borderLeft: active ? `2px solid ${colors.coral}` : "2px solid transparent" }}
           >
             {n.icon}

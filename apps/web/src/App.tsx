@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Cabina } from "./screens/Cabina";
 import { Projects } from "./screens/Projects";
 import { ProjectDetail } from "./screens/ProjectDetail";
@@ -18,6 +19,7 @@ import { TimeEntryModal } from "./features/time-entries/components/TimeEntryModa
 function GlobalCommandPalette() {
   const navigate = useNavigate();
   const { open, setOpen } = useCommandPalette();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -37,14 +39,14 @@ function GlobalCommandPalette() {
       open={open}
       onClose={() => setOpen(false)}
       commands={[
-        { icon: "◆", label: "Ir a Cabina", hint: "C", onRun: () => go("/") },
-        { icon: "⊞", label: "Ir a Proyectos", hint: "P", onRun: () => go("/projects") },
-        { icon: "$", label: "Ir a Costos & IA", onRun: () => go("/costs") },
-        { icon: "▤", label: "Ir a Reportes", onRun: () => go("/reports") },
-        { icon: "◷", label: "Ir a Tiempo", onRun: () => go("/tracker") },
-        { icon: "⎙", label: "Ir a Documentos", onRun: () => go("/documents") },
-        { icon: "◇", label: "Ir a Servidor MCP", onRun: () => go("/mcp") },
-        { icon: "✎", label: "Ir a Settings", onRun: () => go("/settings") },
+        { icon: "◆", label: t("palette.cabina"), hint: "C", onRun: () => go("/") },
+        { icon: "⊞", label: t("palette.projects"), hint: "P", onRun: () => go("/projects") },
+        { icon: "$", label: t("palette.costs"), onRun: () => go("/costs") },
+        { icon: "▤", label: t("palette.reports"), onRun: () => go("/reports") },
+        { icon: "◷", label: t("palette.tracker"), onRun: () => go("/tracker") },
+        { icon: "⎙", label: t("palette.documents"), onRun: () => go("/documents") },
+        { icon: "◇", label: t("palette.mcp"), onRun: () => go("/mcp") },
+        { icon: "✎", label: t("palette.settings"), onRun: () => go("/settings") },
       ]}
     />
   );

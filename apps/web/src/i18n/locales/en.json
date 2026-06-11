@@ -211,6 +211,28 @@
     "signInButton": "Sign in →",
     "helperText": "no-auth mode · local owner"
   },
+  "nav": {
+    "cabina": "Cockpit",
+    "projects": "Projects",
+    "tracker": "Time",
+    "costs": "Costs & AI",
+    "reports": "Reports",
+    "documents": "Documents",
+    "mcp": "MCP Server",
+    "notifications": "Notifications",
+    "settings": "Settings"
+  },
+  "palette": {
+    "cabina": "Go to Cockpit",
+    "projects": "Go to Projects",
+    "costs": "Go to Costs & AI",
+    "reports": "Go to Reports",
+    "tracker": "Go to Time",
+    "documents": "Go to Documents",
+    "mcp": "Go to MCP Server",
+    "settings": "Go to Settings",
+    "searchPlaceholder": "Search action, project, person, task…"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cockpit",
     "status": "SYSTEMS NOMINAL",

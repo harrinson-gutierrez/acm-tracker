@@ -1,5 +1,6 @@
 ---
 description: Show today's ACM-TRACKER summary and, if a project is named, its cost.
+argument-hint: "[project-name]"
 ---
 
 Use the ACM-TRACKER MCP tools to report status.

@@ -174,7 +174,9 @@
     "modalTaskAriaLabel": "Task",
     "modalNoTasks": "— no tasks in this project —",
     "modalMinutesLabel": "MINUTES",
-    "modalMinutesAriaLabel": "Minutes"
+    "modalMinutesAriaLabel": "Minutes",
+    "addTimeAria": "Add time",
+    "addTimeButton": "+ time"
   },
   "documents": {
     "breadcrumb": "/ documents",

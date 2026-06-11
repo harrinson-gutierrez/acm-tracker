@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { colors } from "../../theme/tokens";
 
 export interface Column {
@@ -18,7 +19,9 @@ function flexFor(width?: number | string): string {
   return `0 0 ${typeof width === "number" ? `${width}px` : width}`;
 }
 
-export function DataTable({ columns, rows, emptyLabel = "Sin datos" }: { columns: Column[]; rows: Row[]; emptyLabel?: string }) {
+export function DataTable({ columns, rows, emptyLabel }: { columns: Column[]; rows: Row[]; emptyLabel?: string }) {
+  const { t } = useTranslation();
+  const label = emptyLabel ?? t("common.empty");
   return (
     <div>
       <div style={{ display: "flex", padding: "0 0 8px", borderBottom: `1px solid ${colors.border}` }}>
@@ -37,7 +40,7 @@ export function DataTable({ columns, rows, emptyLabel = "Sin datos" }: { columns
           ))}
         </div>
       ))}
-      {rows.length === 0 && <div style={{ color: colors.muted, fontSize: 13, padding: "12px 0" }}>{emptyLabel}</div>}
+      {rows.length === 0 && <div style={{ color: colors.muted, fontSize: 13, padding: "12px 0" }}>{label}</div>}
     </div>
   );
 }

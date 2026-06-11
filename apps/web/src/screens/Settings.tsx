@@ -53,25 +53,25 @@ export function Settings() {
     <Chrome breadcrumb="/ settings / workspace">
       <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 16, alignItems: "start" }}>
         <SideNav
-          title="Ajustes"
+          title={t("settings.title")}
           items={[
-            { label: "Miembros & tarifas", active: section === "members", onClick: () => setSection("members") },
-            { label: "Precios de modelos", active: section === "pricing", onClick: () => setSection("pricing") },
+            { label: t("settings.navMembers"), active: section === "members", onClick: () => setSection("members") },
+            { label: t("settings.navPricing"), active: section === "pricing", onClick: () => setSection("pricing") },
             { label: t("settings.preferences"), active: section === "preferences", onClick: () => setSection("preferences") },
-            { label: "MCP & tokens", onClick: () => navigate("/mcp") },
-            { label: "Notificaciones", onClick: () => navigate("/notifications") },
+            { label: t("settings.navMcp"), onClick: () => navigate("/mcp") },
+            { label: t("settings.navNotifications"), onClick: () => navigate("/notifications") },
           ]}
         />
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {section === "members" && (
             <>
-              <Panel title="Miembros & tarifas">
+              <Panel title={t("settings.membersPanel")}>
                 <DataTable
                   columns={[
-                    { key: "person", label: "Persona" },
-                    { key: "role", label: "Rol", width: 160 },
-                    { key: "rate", label: "Tarifa $/h", width: 120, align: "right" },
-                    { key: "state", label: "Estado", width: 110, align: "right" },
+                    { key: "person", label: t("settings.colPerson") },
+                    { key: "role", label: t("settings.colRole"), width: 160 },
+                    { key: "rate", label: t("settings.colRate"), width: 120, align: "right" },
+                    { key: "state", label: t("settings.colState"), width: 110, align: "right" },
                   ]}
                   rows={members.map((m, i) => ({
                     id: m.id,
@@ -91,28 +91,28 @@ export function Settings() {
                           onSave={(ratePerHour) => updateMember.mutate({ id: m.id, ratePerHour })}
                         />
                       ),
-                      state: <Tag label="activo" color={colors.green} />,
+                      state: <Tag label={t("settings.tagActive")} color={colors.green} />,
                     },
                   }))}
                 />
               </Panel>
 
-              <Panel title="Proveedor de autenticación">
+              <Panel title={t("settings.authPanel")}>
                 <p style={{ color: colors.muted, fontSize: 13 }}>
-                  Modo actual: <b className="mono" style={{ color: colors.green }}>sin auth (owner local)</b>
+                  {t("settings.authModeLabel")} <b className="mono" style={{ color: colors.green }}>{t("settings.authModeValue")}</b>
                 </p>
               </Panel>
             </>
           )}
 
           {section === "pricing" && (
-            <Panel title="Precios de modelos · USD / 1M tokens">
+            <Panel title={t("settings.pricingPanel")}>
               <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-                <input value={model} onChange={(e) => setModel(e.target.value)} placeholder="modelo" aria-label="Modelo" style={{ ...inputStyle, flex: 2 }} />
-                <input value={inputPer1M} onChange={(e) => setInputPer1M(e.target.value)} placeholder="in" aria-label="Precio input" style={{ ...inputStyle, width: 70 }} />
-                <input value={outputPer1M} onChange={(e) => setOutputPer1M(e.target.value)} placeholder="out" aria-label="Precio output" style={{ ...inputStyle, width: 70 }} />
+                <input value={model} onChange={(e) => setModel(e.target.value)} placeholder={t("settings.modelPlaceholder")} aria-label={t("settings.modelAriaLabel")} style={{ ...inputStyle, flex: 2 }} />
+                <input value={inputPer1M} onChange={(e) => setInputPer1M(e.target.value)} placeholder="in" aria-label={t("settings.inputPriceAriaLabel")} style={{ ...inputStyle, width: 70 }} />
+                <input value={outputPer1M} onChange={(e) => setOutputPer1M(e.target.value)} placeholder="out" aria-label={t("settings.outputPriceAriaLabel")} style={{ ...inputStyle, width: 70 }} />
                 <button onClick={addPrice} disabled={createPrice.isPending} style={{ background: colors.coral, color: colors.bg, border: "none", borderRadius: 8, padding: "8px 14px", fontWeight: 700 }}>
-                  + Añadir
+                  {t("settings.addButton")}
                 </button>
               </div>
               <ModelPriceList prices={prices} />

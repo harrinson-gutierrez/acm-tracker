@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { ModelPrice } from "@acm/shared";
 import { useUpdateModelPrice, useDeleteModelPrice } from "../api/use-model-prices";
 import { colors } from "../../../theme/tokens";
@@ -24,6 +25,7 @@ const actionStyle = {
 const cell = (flex: string, align: "left" | "right" = "left") => ({ flex, textAlign: align } as const);
 
 export function ModelPriceRow({ price }: { price: ModelPrice }) {
+  const { t } = useTranslation();
   const update = useUpdateModelPrice();
   const deletePrice = useDeleteModelPrice();
   const [editing, setEditing] = useState(false);
@@ -60,13 +62,13 @@ export function ModelPriceRow({ price }: { price: ModelPrice }) {
       <span style={cell("0 0 150px", "right")}>
         {editing ? (
           <span style={{ display: "inline-flex", gap: 6 }}>
-            <button onClick={save} disabled={update.isPending} aria-label={`Guardar ${price.model}`} style={{ ...actionStyle, color: colors.green, borderColor: colors.green }}>Guardar</button>
-            <button onClick={() => setEditing(false)} aria-label={`Cancelar ${price.model}`} style={actionStyle}>Cancelar</button>
+            <button onClick={save} disabled={update.isPending} aria-label={t("settings.saveModel", { model: price.model })} style={{ ...actionStyle, color: colors.green, borderColor: colors.green }}>{t("common.save")}</button>
+            <button onClick={() => setEditing(false)} aria-label={t("settings.cancelModel", { model: price.model })} style={actionStyle}>{t("common.cancel")}</button>
           </span>
         ) : (
           <span style={{ display: "inline-flex", gap: 6 }}>
-            <button onClick={start} aria-label={`Editar ${price.model}`} style={actionStyle}>Editar</button>
-            <button onClick={() => deletePrice.mutate(price.id)} aria-label={`Borrar ${price.model}`} style={actionStyle}>Borrar</button>
+            <button onClick={start} aria-label={t("settings.editModel", { model: price.model })} style={actionStyle}>{t("common.edit")}</button>
+            <button onClick={() => deletePrice.mutate(price.id)} aria-label={t("settings.deleteModel", { model: price.model })} style={actionStyle}>{t("common.delete")}</button>
           </span>
         )}
       </span>

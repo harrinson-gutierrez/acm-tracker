@@ -10,5 +10,28 @@
   "settings": {
     "preferences": "Preferences",
     "language": "Language"
+  },
+  "cabina": {
+    "breadcrumb": "FLIGHT DECK · cockpit",
+    "status": "SYSTEMS NOMINAL",
+    "burnRatePanel": "Burn rate · today",
+    "dailyTarget": "vs daily target $2,400",
+    "ofTarget": "of target",
+    "human": "Human ${{cost}}",
+    "aiMcp": "AI $0 · via MCP",
+    "today": "Today",
+    "tracked": "tracked",
+    "week": "Week",
+    "ofForty": "of 40h",
+    "billable": "Billable",
+    "margin": "Margin",
+    "teamPanel": "Team · real cost today",
+    "trackedMeta": "{{time}} · tracked",
+    "noActivityToday": "No activity today.",
+    "mcpPanel": "MCP · live ingestion",
+    "noReports": "No reports — connect an agent to the MCP server.",
+    "noActiveTask": "No active task",
+    "pickProject": "pick a project to track time",
+    "manualEntry": "+ log time"
   }
 }

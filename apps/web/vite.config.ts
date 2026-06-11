@@ -8,6 +8,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["src/i18n/test-setup.ts"],
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
   },
   plugins: [
     react(),

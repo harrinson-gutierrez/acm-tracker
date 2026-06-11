@@ -11,6 +11,39 @@
     "preferences": "Preferencias",
     "language": "Idioma"
   },
+  "projects": {
+    "breadcrumb": "/ proyectos",
+    "panelTitle": "Proyectos",
+    "newProjectPlaceholder": "Nuevo proyecto…",
+    "newProjectAriaLabel": "Nombre del proyecto",
+    "createButton": "+ Crear",
+    "detail": {
+      "breadcrumb": "/ proyectos / {{name}}",
+      "clientMeta": "CLIENTE ACTIVO · contrato ${{contract}} · etiqueta: ejecución",
+      "costPanelTitle": "Costo real · acumulado",
+      "contractCaption": "de ${{contract}} contratado · {{pct}}% consumido",
+      "humanLabel": "HUMANO",
+      "aiLabel": "IA",
+      "hoursLabel": "HORAS",
+      "tasksPanelTitle": "Tareas · tiempo + costo — {{name}}",
+      "newTaskPlaceholder": "Nueva tarea…",
+      "newTaskAriaLabel": "Título de la tarea",
+      "addTaskButton": "+ Tarea",
+      "colTask": "Tarea",
+      "colReal": "Real",
+      "colCost": "Costo",
+      "emptyTasks": "Sin tareas aún.",
+      "backLink": "← Proyectos"
+    },
+    "tabs": {
+      "resumen": "Resumen",
+      "tareas": "Tareas",
+      "tiempo": "Tiempo",
+      "costos": "Costos",
+      "equipo": "Equipo",
+      "documentos": "Documentos"
+    }
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

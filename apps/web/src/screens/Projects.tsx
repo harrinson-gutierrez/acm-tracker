@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { useCreateProject, useProjects } from "../features/projects/api/use-projects";
 import { colors } from "../theme/tokens";
 
 export function Projects() {
+  const { t } = useTranslation();
   const { data: projects = [] } = useProjects();
   const createProject = useCreateProject();
   const [name, setName] = useState("");
@@ -16,15 +18,15 @@ export function Projects() {
   };
 
   return (
-    <Chrome breadcrumb="/ proyectos">
-      <Panel title="Proyectos">
+    <Chrome breadcrumb={t("projects.breadcrumb")}>
+      <Panel title={t("projects.panelTitle")}>
         <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && create()}
-            placeholder="Nuevo proyecto…"
-            aria-label="Nombre del proyecto"
+            placeholder={t("projects.newProjectPlaceholder")}
+            aria-label={t("projects.newProjectAriaLabel")}
             style={{ flex: 1, background: colors.surface2, border: `1px solid ${colors.border}`, color: colors.text, borderRadius: 8, padding: "10px 12px" }}
           />
           <button
@@ -32,7 +34,7 @@ export function Projects() {
             disabled={createProject.isPending}
             style={{ background: colors.coral, color: colors.bg, border: "none", borderRadius: 8, padding: "10px 16px", fontWeight: 700 }}
           >
-            + Crear
+            {t("projects.createButton")}
           </button>
         </div>
         {projects.map((p) => (

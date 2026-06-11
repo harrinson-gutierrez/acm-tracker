@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { McpStream } from "../components/McpStream";
@@ -16,25 +17,26 @@ const CONTRACT = `POST /api/mcp/report-work
 → el servidor calcula el costo IA con la tabla de precios por modelo`;
 
 export function Mcp() {
+  const { t } = useTranslation();
   const { data: reports = [] } = useMcpReports();
   const online = reports.length >= 0;
   return (
     <Chrome breadcrumb="/ settings / MCP" status={online ? "MCP ONLINE" : "MCP OFFLINE"} statusColor={colors.green}>
-      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>Servidor MCP</h1>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>{t("mcp.title")}</h1>
       <div className="mono" style={{ fontSize: 12, color: colors.muted, marginBottom: 20 }}>
-        LA PUERTA DE ENTRADA · agentes reportan trabajo, tiempo y tokens aquí
+        {t("mcp.subtitle")}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
         <McpEndpointPanel reportCount={reports.length} />
-        <Panel title="Contrato de reporte · report_work()">
+        <Panel title={t("mcp.contractPanelTitle")}>
           <pre className="mono" style={{ fontSize: 11, color: colors.text, whiteSpace: "pre-wrap", margin: 0, lineHeight: 1.5 }}>{CONTRACT}</pre>
         </Panel>
       </div>
 
       <McpConnectGuide />
 
-      <Panel title="Reportes recibidos">
+      <Panel title={t("mcp.receivedPanelTitle")}>
         <McpStream
           rows={reports.map((r) => ({
             time: r.time,
@@ -45,7 +47,7 @@ export function Mcp() {
             ai: r.aiSummary,
             aiColor: r.aiSummary === "sin IA" ? colors.dim : colors.blue,
           }))}
-          emptyLabel="Sin reportes — envía un POST a /api/mcp/report-work desde un agente."
+          emptyLabel={t("mcp.emptyReports")}
         />
       </Panel>
     </Chrome>

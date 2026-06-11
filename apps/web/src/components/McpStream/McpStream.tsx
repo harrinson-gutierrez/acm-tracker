@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { colors } from "../../theme/tokens";
 
 export interface McpStreamRow {
@@ -10,9 +11,11 @@ export interface McpStreamRow {
   aiColor?: string;
 }
 
-export function McpStream({ rows, emptyLabel = "Sin reportes aún" }: { rows: McpStreamRow[]; emptyLabel?: string }) {
+export function McpStream({ rows, emptyLabel }: { rows: McpStreamRow[]; emptyLabel?: string }) {
+  const { t } = useTranslation();
+  const empty = emptyLabel ?? t("mcp.emptyStream");
   if (rows.length === 0) {
-    return <div style={{ color: colors.muted, fontSize: 13, padding: "12px 0" }}>{emptyLabel}</div>;
+    return <div style={{ color: colors.muted, fontSize: 13, padding: "12px 0" }}>{empty}</div>;
   }
   return (
     <div>

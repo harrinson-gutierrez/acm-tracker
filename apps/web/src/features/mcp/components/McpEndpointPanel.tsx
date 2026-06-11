@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Panel } from "../../../components/Panel";
 import { CopyButton } from "../../../components/CopyButton";
 import { useMcpConfig } from "../api/use-mcp";
@@ -10,12 +11,13 @@ interface McpEndpointPanelProps {
 }
 
 export function McpEndpointPanel({ reportCount }: McpEndpointPanelProps) {
+  const { t } = useTranslation();
   const { data: config } = useMcpConfig();
   const baseUrl = config?.apiUrl ?? window.location.origin;
   const url = `${baseUrl}${REPORT_PATH}`;
 
   return (
-    <Panel title="Endpoint">
+    <Panel title={t("mcp.endpointPanelTitle")}>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <div
           className="mono"
@@ -31,10 +33,10 @@ export function McpEndpointPanel({ reportCount }: McpEndpointPanelProps) {
         >
           POST {url}
         </div>
-        <CopyButton text={url} label="Copiar URL" />
+        <CopyButton text={url} label={t("mcp.copyUrl")} />
       </div>
       <div className="mono" style={{ fontSize: 11, color: colors.dim, marginTop: 12 }}>
-        ● activo · {reportCount} reportes recibidos
+        {t("mcp.activeStatus", { count: reportCount })}
       </div>
     </Panel>
   );

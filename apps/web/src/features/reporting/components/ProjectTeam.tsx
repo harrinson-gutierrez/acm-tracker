@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Panel } from "../../../components/Panel";
 import { DataTable } from "../../../components/DataTable";
 import { Avatar } from "../../../components/Avatar";
@@ -9,17 +10,18 @@ function initialsOf(name: string): string {
 }
 
 export function ProjectTeam({ projectId }: { projectId: string }) {
+  const { t } = useTranslation();
   const { data: team = [] } = useProjectTeam(projectId);
 
   return (
-    <Panel title="Equipo · tiempo registrado en el proyecto">
+    <Panel title={t("projects.teamPanelTitle")}>
       <DataTable
         columns={[
-          { key: "person", label: "Persona" },
-          { key: "hours", label: "Horas", width: 80, align: "right" },
-          { key: "human", label: "Costo humano", width: 130, align: "right" },
-          { key: "ai", label: "Costo IA", width: 100, align: "right" },
-          { key: "total", label: "Total", width: 100, align: "right" },
+          { key: "person", label: t("settings.colPerson") },
+          { key: "hours", label: t("projects.colHours"), width: 80, align: "right" },
+          { key: "human", label: t("projects.colHumanCost"), width: 130, align: "right" },
+          { key: "ai", label: t("projects.colAiCost"), width: 100, align: "right" },
+          { key: "total", label: t("projects.colTotal"), width: 100, align: "right" },
         ]}
         rows={team.map((p, i) => ({
           id: p.memberId,
@@ -36,7 +38,7 @@ export function ProjectTeam({ projectId }: { projectId: string }) {
             total: <span className="mono" style={{ fontWeight: 700, color: colors.green }}>${p.total}</span>,
           },
         }))}
-        emptyLabel="Nadie ha registrado tiempo en este proyecto aún."
+        emptyLabel={t("projects.teamEmpty")}
       />
     </Panel>
   );

@@ -5,6 +5,11 @@ import { VitePWA } from "vite-plugin-pwa";
 const apiTarget = process.env.API_PROXY_TARGET ?? `http://localhost:${process.env.API_PORT ?? 4000}`;
 
 export default defineConfig({
+  test: {
+    environment: "jsdom",
+    setupFiles: ["src/i18n/test-setup.ts"],
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+  },
   plugins: [
     react(),
     VitePWA({

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useTaskCost } from "../../time-entries/api/use-time-entries";
 import { useTimeEntryModal } from "../../time-entries/use-time-entry-modal";
 import { colors } from "../../../theme/tokens";
@@ -17,10 +18,11 @@ export function TaskCostCell({ taskId }: { taskId: string }) {
 }
 
 export function AddTimeButton({ taskId, projectId }: { taskId: string; projectId: string }) {
+  const { t } = useTranslation();
   const openModal = useTimeEntryModal((s) => s.openModal);
   return (
-    <button onClick={() => openModal({ taskId, projectId })} aria-label="Agregar tiempo" style={{ background: "transparent", color: colors.text, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "6px 12px" }}>
-      + tiempo
+    <button onClick={() => openModal({ taskId, projectId })} aria-label={t("tracker.addTimeAria")} style={{ background: "transparent", color: colors.text, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "6px 12px" }}>
+      {t("tracker.addTimeButton")}
     </button>
   );
 }

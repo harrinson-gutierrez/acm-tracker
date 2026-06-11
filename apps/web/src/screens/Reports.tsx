@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { TileRow } from "../components/TileRow";
@@ -7,6 +8,7 @@ import { useCostByPerson, useWeeklyCost } from "../features/reporting/api/use-re
 import { colors } from "../theme/tokens";
 
 export function Reports() {
+  const { t } = useTranslation();
   const { data: people = [] } = useCostByPerson();
   const { data: weekly = [] } = useWeeklyCost();
   const totalHuman = people.reduce((s, p) => s + p.human, 0);
@@ -28,38 +30,38 @@ export function Reports() {
   };
 
   return (
-    <Chrome breadcrumb="/ reportes · últimos 30 días">
-      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>Reportes · analítica</h1>
+    <Chrome breadcrumb={t("reports.breadcrumb")}>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>{t("reports.title")}</h1>
       <div className="mono" style={{ fontSize: 12, color: colors.muted, marginBottom: 20 }}>
-        TIEMPO + COSTO · humano vs IA · tendencia
+        {t("reports.subtitle")}
       </div>
       <div style={{ marginBottom: 16 }}>
         <TileRow
           columns={5}
           tiles={[
-            { label: "Horas", value: `${totalHours}h` },
-            { label: "Costo total", value: `$${Math.round(totalHuman)}` },
-            { label: "Costo IA", value: "$0", sub: "vía MCP", accent: colors.blue },
-            { label: "$/hora prom", value: `$${avgRate}`, accent: colors.green },
-            { label: "Personas", value: String(people.length), accent: colors.amber },
+            { label: t("reports.tileHorasLabel"), value: `${totalHours}h` },
+            { label: t("reports.tileCostoTotalLabel"), value: `$${Math.round(totalHuman)}` },
+            { label: t("reports.colIa"), value: "$0", sub: t("reports.tileViaMcp"), accent: colors.blue },
+            { label: t("reports.tileTasaLabel"), value: `$${avgRate}`, accent: colors.green },
+            { label: t("reports.tilePersonasLabel"), value: String(people.length), accent: colors.amber },
           ]}
         />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 440px", gap: 16 }}>
-        <Panel title="Tiempo+costo · por semana">
+        <Panel title={t("reports.weeklyPanelTitle")}>
           <div style={{ display: "flex", gap: 16, marginBottom: 12 }}>
-            <span className="mono" style={{ fontSize: 11, color: colors.coral }}>▇ humano</span>
-            <span className="mono" style={{ fontSize: 11, color: colors.blue }}>▇ ia</span>
+            <span className="mono" style={{ fontSize: 11, color: colors.coral }}>{t("reports.legendHumano")}</span>
+            <span className="mono" style={{ fontSize: 11, color: colors.blue }}>{t("reports.legendIa")}</span>
           </div>
           <StackedBars data={weekly.map((w) => ({ label: w.week, human: w.human, ai: w.ai }))} />
         </Panel>
-        <Panel title="Por persona · costo real">
+        <Panel title={t("reports.peoplePanelTitle")}>
           <DataTable
             columns={[
-              { key: "name", label: "Persona" },
-              { key: "hours", label: "Horas", width: 70, align: "right" },
-              { key: "ai", label: "IA", width: 60, align: "right" },
-              { key: "cost", label: "Costo", width: 90, align: "right" },
+              { key: "name", label: t("reports.colPersona") },
+              { key: "hours", label: t("reports.colHoras"), width: 70, align: "right" },
+              { key: "ai", label: t("reports.colIa"), width: 60, align: "right" },
+              { key: "cost", label: t("reports.colCosto"), width: 90, align: "right" },
             ]}
             rows={people.map((p) => ({
               id: p.memberId,
@@ -70,24 +72,24 @@ export function Reports() {
                 cost: <span className="mono" style={{ fontWeight: 700 }}>${p.total}</span>,
               },
             }))}
-            emptyLabel="Sin datos aún."
+            emptyLabel={t("reports.emptyPeople")}
           />
         </Panel>
       </div>
       <div style={{ marginTop: 16 }}>
-        <Panel title="Exportar / facturar">
+        <Panel title={t("reports.exportPanelTitle")}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div style={{ background: colors.surface2, border: `1px solid ${colors.border}`, borderRadius: 10, padding: 18 }}>
-              <div style={{ fontWeight: 600 }}>CSV · costo por persona</div>
-              <div style={{ fontSize: 12, color: colors.muted, marginTop: 6 }}>persona, horas, IA, costo total</div>
-              <button onClick={exportCsv} aria-label="Exportar CSV" style={{ marginTop: 14, background: colors.coral, color: colors.bg, border: "none", borderRadius: 8, padding: "8px 14px", fontWeight: 700 }}>
-                Descargar CSV →
+              <div style={{ fontWeight: 600 }}>{t("reports.csvCardTitle")}</div>
+              <div style={{ fontSize: 12, color: colors.muted, marginTop: 6 }}>{t("reports.csvCardDesc")}</div>
+              <button onClick={exportCsv} aria-label={t("reports.csvAriaLabel")} style={{ marginTop: 14, background: colors.coral, color: colors.bg, border: "none", borderRadius: 8, padding: "8px 14px", fontWeight: 700 }}>
+                {t("reports.csvDownloadButton")}
               </button>
             </div>
             <div style={{ background: colors.surface2, border: `1px solid ${colors.border}`, borderRadius: 10, padding: 18 }}>
-              <div style={{ fontWeight: 600 }}>Resumen total</div>
-              <div style={{ fontSize: 12, color: colors.muted, marginTop: 6 }}>{people.length} personas · {totalHours}h · ${Math.round(totalHuman)}</div>
-              <div className="mono" style={{ fontSize: 12, color: colors.dim, marginTop: 14 }}>PDF/factura · próximamente</div>
+              <div style={{ fontWeight: 600 }}>{t("reports.summaryCardTitle")}</div>
+              <div style={{ fontSize: 12, color: colors.muted, marginTop: 6 }}>{t("reports.summaryMeta", { count: people.length, hours: totalHours, cost: Math.round(totalHuman) })}</div>
+              <div className="mono" style={{ fontSize: 12, color: colors.dim, marginTop: 14 }}>{t("reports.comingSoon")}</div>
             </div>
           </div>
         </Panel>

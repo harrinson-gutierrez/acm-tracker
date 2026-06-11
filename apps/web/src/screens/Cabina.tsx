@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { RingGauge } from "../components/RingGauge";
@@ -15,67 +16,68 @@ function hm(min: number): string {
 }
 
 export function Cabina() {
+  const { t } = useTranslation();
   const openModal = useTimeEntryModal((s) => s.openModal);
   const { data: today } = useTodaySummary();
   const { data: team = [] } = useTeamToday();
   const isMobile = useIsMobile();
   const cost = today?.cost ?? 0;
   return (
-    <Chrome breadcrumb="FLIGHT DECK · cabina" status="SYSTEMS NOMINAL">
+    <Chrome breadcrumb={t("cabina.breadcrumb")} status={t("cabina.status")}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "560px 1fr", gap: 16, alignItems: "start" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <Panel title="Burn rate · hoy">
-            <div className="mono" style={{ fontSize: 11, color: colors.dim, marginTop: -6, marginBottom: 8 }}>vs objetivo diario $2,400</div>
+          <Panel title={t("cabina.burnRatePanel")}>
+            <div className="mono" style={{ fontSize: 11, color: colors.dim, marginTop: -6, marginBottom: 8 }}>{t("cabina.dailyTarget")}</div>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <RingGauge total={cost} target={2400} aiFraction={0} caption="del objetivo" size={isMobile ? 200 : 260} />
+              <RingGauge total={cost} target={2400} aiFraction={0} caption={t("cabina.ofTarget")} size={isMobile ? 200 : 260} />
             </div>
             <div style={{ display: "flex", gap: 24, marginTop: 12 }}>
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ width: 10, height: 10, background: colors.coral, borderRadius: 2 }} />
-                <span className="mono" style={{ fontSize: 12 }}>Humano ${cost}</span>
+                <span className="mono" style={{ fontSize: 12 }}>{t("cabina.human", { cost })}</span>
               </span>
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ width: 10, height: 10, background: colors.blue, borderRadius: 2 }} />
-                <span className="mono" style={{ fontSize: 12 }}>IA $0 · vía MCP</span>
+                <span className="mono" style={{ fontSize: 12 }}>{t("cabina.aiMcp")}</span>
               </span>
             </div>
           </Panel>
           <TileRow
             columns={isMobile ? 2 : 4}
             tiles={[
-              { label: "Hoy", value: today ? hm(today.trackedMinutes) : "—", sub: "trackeado" },
-              { label: "Semana", value: "—", sub: "de 40h" },
-              { label: "Facturable", value: today ? hm(today.billableMinutes) : "—", accent: colors.green },
-              { label: "Margen", value: "—", sub: "Helios", accent: colors.amber },
+              { label: t("cabina.today"), value: today ? hm(today.trackedMinutes) : "—", sub: t("cabina.tracked") },
+              { label: t("cabina.week"), value: "—", sub: t("cabina.ofForty") },
+              { label: t("cabina.billable"), value: today ? hm(today.billableMinutes) : "—", accent: colors.green },
+              { label: t("cabina.margin"), value: "—", sub: "Helios", accent: colors.amber },
             ]}
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <Panel title="Equipo · costo real hoy">
+          <Panel title={t("cabina.teamPanel")}>
             {team.map((p, i) => (
               <PersonCostRow
                 key={p.memberId}
                 initials={p.initials}
                 index={i}
                 name={p.name}
-                meta={`${hm(p.trackedMinutes)} · trackeado`}
+                meta={t("cabina.trackedMeta", { time: hm(p.trackedMinutes) })}
                 cost={`$${p.cost}`}
               />
             ))}
-            {team.length === 0 && <div style={{ color: colors.muted, fontSize: 13 }}>Sin actividad hoy.</div>}
+            {team.length === 0 && <div style={{ color: colors.muted, fontSize: 13 }}>{t("cabina.noActivityToday")}</div>}
           </Panel>
-          <Panel title="MCP · ingesta en vivo">
-            <McpStream rows={[]} emptyLabel="Sin reportes — conecta un agente al servidor MCP." />
+          <Panel title={t("cabina.mcpPanel")}>
+            <McpStream rows={[]} emptyLabel={t("cabina.noReports")} />
           </Panel>
         </div>
       </div>
       <TimerDock
         elapsed="00:00:00"
-        taskTitle="Sin tarea activa"
-        meta="elige un proyecto para registrar tiempo"
+        taskTitle={t("cabina.noActiveTask")}
+        meta={t("cabina.pickProject")}
         running={false}
         onManual={() => openModal()}
-        manualLabel="+ registrar tiempo"
+        manualLabel={t("cabina.manualEntry")}
       />
     </Chrome>
   );

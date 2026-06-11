@@ -15,6 +15,8 @@ export interface Project {
   name: string;
   client: string | null;
   contractAmount: number | null; // USD, nullable for internal projects
+  estimateHours: number | null; // manual estimate of total project hours
+  ratePerHour: number | null; // USD/hour sale rate charged to the client
   status: "active" | "paused" | "done";
   createdAt: string;
 }

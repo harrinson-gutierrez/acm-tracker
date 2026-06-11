@@ -27,3 +27,23 @@ export function useCreateProject() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["projects"] }),
   });
 }
+
+type UpdateProjectDto = Partial<{
+  name: string;
+  client: string;
+  contractAmount: number;
+  estimateHours: number;
+  ratePerHour: number;
+}>;
+
+export function useUpdateProject(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (dto: UpdateProjectDto) => apiClient.patch<Project>(`/projects/${id}`, dto),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["projects"] });
+      qc.invalidateQueries({ queryKey: ["projects", id] });
+      qc.invalidateQueries({ queryKey: ["project-cost", id] });
+    },
+  });
+}

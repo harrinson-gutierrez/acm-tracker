@@ -20,6 +20,8 @@ export function toDomainProject(row: PrismaProject): Project {
     name: row.name,
     client: row.client,
     contractAmount: row.contractAmount,
+    estimateHours: row.estimateHours,
+    ratePerHour: row.ratePerHour,
     status: row.status as Project["status"],
     createdAt: row.createdAt.toISOString(),
   };

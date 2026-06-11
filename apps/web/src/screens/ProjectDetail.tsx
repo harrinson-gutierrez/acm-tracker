@@ -3,7 +3,6 @@ import { useParams, Link } from "react-router-dom";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { Avatar } from "../components/Avatar";
-import { DonutGauge } from "../components/DonutGauge";
 import { DataTable } from "../components/DataTable";
 import { useProject } from "../features/projects/api/use-projects";
 import { useTasks, useCreateTask } from "../features/tasks/api/use-tasks";
@@ -12,6 +11,8 @@ import { TaskRealCell, TaskCostCell, AddTimeButton } from "../features/tasks/com
 import { ProjectTimeline } from "../features/time-entries/components/ProjectTimeline";
 import { ProjectDocuments } from "../features/documents/components/ProjectDocuments";
 import { ProjectTeam } from "../features/reporting/components/ProjectTeam";
+import { ProjectMarginPanel } from "../features/reporting/components/ProjectMarginPanel";
+import { ProjectEstimatePanel } from "../features/projects/components/ProjectEstimatePanel";
 import { colors } from "../theme/tokens";
 
 const TABS = ["Resumen", "Tareas", "Tiempo", "Costos", "Equipo", "Documentos"];
@@ -89,12 +90,26 @@ export function ProjectDetail() {
             </div>
           </div>
         </Panel>
-        <Panel title="Margen">
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <DonutGauge segments={[{ value: 1, color: colors.green, label: "margen" }]} centerLabel="—" />
-          </div>
-        </Panel>
+        <ProjectMarginPanel
+          human={cost?.human ?? 0}
+          minutes={cost?.minutes ?? 0}
+          estimateHours={cost?.estimateHours ?? null}
+          estimatedCost={cost?.estimatedCost ?? null}
+          revenue={cost?.revenue ?? null}
+          margin={cost?.margin ?? null}
+          marginPerHour={cost?.marginPerHour ?? null}
+        />
       </div>
+      )}
+
+      {showCost && (
+        <div style={{ marginBottom: 16 }}>
+          <ProjectEstimatePanel
+            projectId={id}
+            estimateHours={project?.estimateHours ?? null}
+            ratePerHour={project?.ratePerHour ?? null}
+          />
+        </div>
       )}
 
       {showTasks && (

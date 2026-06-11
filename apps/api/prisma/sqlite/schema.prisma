@@ -24,6 +24,8 @@ model Project {
   name           String
   client         String?
   contractAmount Float?
+  estimateHours  Float?
+  ratePerHour    Float?
   status         String   @default("active")
   createdAt      DateTime @default(now())
   tasks          Task[]

@@ -28,6 +28,7 @@ describe("GetProjectUseCase", () => {
   it("returns the project with its tasks", async () => {
     const project: ProjectWithTasks = {
       id: "p1", name: "Helios", client: "Helios", contractAmount: 30000,
+      estimateHours: null, ratePerHour: null,
       status: "active", createdAt: "now", tasks: [],
     };
     const useCase = new GetProjectUseCase(new FakeProjectRepo(project));

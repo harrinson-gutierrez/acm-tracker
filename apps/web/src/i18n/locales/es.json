@@ -139,6 +139,23 @@
       "Entrega": "Entrega"
     }
   },
+  "notifications": {
+    "breadcrumb": "/ settings / notificaciones",
+    "title": "Notificaciones",
+    "subtitle": "SOLO AVISOS SALIENTES · ACM-TRACKER es la única fuente de verdad",
+    "infoBanner": "ⓘ Estos canales NO sincronizan trabajo. Solo te avisan cuando algo pasa aquí (aprobaciones, topes, reportes). El registro vive en ACM-TRACKER.",
+    "channelStatus": "● disponible",
+    "rulesPanelTitle": "Reglas de aviso",
+    "eventPlaceholder": "Evento (ej. Tope de presupuesto)",
+    "eventLabel": "Evento",
+    "conditionLabel": "Condición",
+    "channelLabel": "Canal",
+    "addRuleButton": "+ Regla",
+    "colToggle": "Activa",
+    "toggleAriaLabel": "Activar regla {{event}}",
+    "deleteAriaLabel": "Borrar regla {{event}}",
+    "emptyRules": "Sin reglas. Crea la primera arriba."
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

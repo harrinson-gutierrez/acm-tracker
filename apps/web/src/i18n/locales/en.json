@@ -139,6 +139,23 @@
       "Entrega": "Delivery"
     }
   },
+  "notifications": {
+    "breadcrumb": "/ settings / notifications",
+    "title": "Notifications",
+    "subtitle": "OUTGOING NOTICES ONLY · ACM-TRACKER is the single source of truth",
+    "infoBanner": "ⓘ These channels do NOT sync work. They only alert you when something happens here (approvals, caps, reports). The record lives in ACM-TRACKER.",
+    "channelStatus": "● available",
+    "rulesPanelTitle": "Alert rules",
+    "eventPlaceholder": "Event (e.g. Budget cap)",
+    "eventLabel": "Event",
+    "conditionLabel": "Condition",
+    "channelLabel": "Channel",
+    "addRuleButton": "+ Rule",
+    "colToggle": "Active",
+    "toggleAriaLabel": "Toggle rule {{event}}",
+    "deleteAriaLabel": "Delete rule {{event}}",
+    "emptyRules": "No rules. Create the first one above."
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cockpit",
     "status": "SYSTEMS NOMINAL",

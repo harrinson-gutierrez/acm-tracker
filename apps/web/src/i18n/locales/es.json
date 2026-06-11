@@ -109,6 +109,36 @@
     "emptyEntries": "Sin entradas hoy. Registra tiempo en una tarea.",
     "goalPanel": "Objetivo del día"
   },
+  "documents": {
+    "breadcrumb": "/ documentos",
+    "spacesTitle": "Espacios",
+    "allDocs": "Todos los docs",
+    "panelTitle": "Documentos · {{count}}",
+    "panelTitleFiltered": "Documentos · {{count}} · {{phase}}",
+    "titlePlaceholder": "Título del documento…",
+    "titleAriaLabel": "Título",
+    "titleAriaLabelFull": "Título del documento",
+    "urlPlaceholder": "URL (opcional → enlace)",
+    "urlAriaLabel": "URL",
+    "urlAriaLabelFull": "URL del documento",
+    "newButton": "+ Nuevo",
+    "colDoc": "Documento",
+    "colPhase": "Fase",
+    "colBy": "Por",
+    "colCreated": "Creado",
+    "deleteAriaLabel": "Borrar {{title}}",
+    "emptyGlobal": "Sin documentos. Crea el primero arriba.",
+    "emptyProject": "Sin documentos para este proyecto.",
+    "phase": {
+      "Ventas": "Ventas",
+      "Kickoff": "Kickoff",
+      "Cotización": "Cotización",
+      "Prototipo": "Prototipo",
+      "Validación": "Validación",
+      "Ejecución": "Ejecución",
+      "Entrega": "Entrega"
+    }
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

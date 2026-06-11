@@ -19,6 +19,7 @@ export function ProjectEstimatePanel({ projectId, estimateHours, ratePerHour }: 
         <Field label="Horas estimadas">
           <EditableRate
             label="horas estimadas"
+            format="hours"
             value={estimateHours ?? 0}
             saving={update.isPending}
             onSave={(estimateHours) => update.mutate({ estimateHours })}

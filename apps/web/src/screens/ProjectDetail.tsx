@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { Avatar } from "../components/Avatar";
@@ -15,18 +16,20 @@ import { ProjectMarginPanel } from "../features/reporting/components/ProjectMarg
 import { ProjectEstimatePanel } from "../features/projects/components/ProjectEstimatePanel";
 import { colors } from "../theme/tokens";
 
-const TABS = ["Resumen", "Tareas", "Tiempo", "Costos", "Equipo", "Documentos"];
+const TABS = ["resumen", "tareas", "tiempo", "costos", "equipo", "documentos"] as const;
+type Tab = (typeof TABS)[number];
 
 export function ProjectDetail() {
+  const { t } = useTranslation();
   const { id = "" } = useParams();
   const { data: project } = useProject(id);
   const { data: tasks = [] } = useTasks(id);
   const { data: cost } = useProjectCost(id);
   const createTask = useCreateTask(id);
   const [title, setTitle] = useState("");
-  const [tab, setTab] = useState("Resumen");
-  const showCost = tab === "Resumen" || tab === "Costos";
-  const showTasks = tab === "Resumen" || tab === "Tareas";
+  const [tab, setTab] = useState<Tab>("resumen");
+  const showCost = tab === "resumen" || tab === "costos";
+  const showTasks = tab === "resumen" || tab === "tareas";
 
   const add = () => {
     if (!title.trim()) return;
@@ -39,27 +42,27 @@ export function ProjectDetail() {
   const pct = contract > 0 ? Math.min(consumed / contract, 1) : 0;
 
   return (
-    <Chrome breadcrumb={`/ proyectos / ${project?.name ?? id}`}>
+    <Chrome breadcrumb={t("projects.detail.breadcrumb", { name: project?.name ?? id })}>
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 12 }}>
         <Avatar initials="HE" index={0} size={56} />
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 700 }}>{project ? `${project.name} · Plataforma fintech` : "—"}</h1>
           <div className="mono" style={{ fontSize: 12, color: colors.muted, marginTop: 4 }}>
-            CLIENTE ACTIVO · contrato ${contract.toLocaleString("en-US")} · etiqueta: ejecución
+            {t("projects.detail.clientMeta", { contract: contract.toLocaleString("en-US") })}
           </div>
         </div>
       </div>
       <div style={{ display: "flex", gap: 28, marginBottom: 20 }}>
-        {TABS.map((t) => {
-          const active = t === tab;
+        {TABS.map((key) => {
+          const active = key === tab;
           return (
             <button
-              key={t}
-              onClick={() => setTab(t)}
+              key={key}
+              onClick={() => setTab(key)}
               className="mono"
               style={{ fontSize: 14, background: "transparent", border: "none", cursor: "pointer", color: active ? colors.coral : colors.muted, borderBottom: active ? `2px solid ${colors.coral}` : "2px solid transparent", paddingBottom: 4 }}
             >
-              {t}
+              {t(`projects.tabs.${key}`)}
             </button>
           );
         })}
@@ -67,25 +70,25 @@ export function ProjectDetail() {
 
       {showCost && (
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-        <Panel title="Costo real · acumulado">
+        <Panel title={t("projects.detail.costPanelTitle")}>
           <div className="mono" style={{ fontSize: 44, fontWeight: 700 }}>${consumed.toLocaleString("en-US")}</div>
           <div className="mono" style={{ fontSize: 12, color: colors.dim, marginBottom: 12 }}>
-            de ${contract.toLocaleString("en-US")} contratado · {Math.round(pct * 100)}% consumido
+            {t("projects.detail.contractCaption", { contract: contract.toLocaleString("en-US"), pct: Math.round(pct * 100) })}
           </div>
           <div style={{ height: 8, background: colors.surface2, borderRadius: 4 }}>
             <div style={{ height: 8, width: `${pct * 100}%`, background: colors.coral, borderRadius: 4 }} />
           </div>
           <div style={{ display: "flex", gap: 32, marginTop: 20 }}>
             <div>
-              <div className="mono" style={{ fontSize: 10, color: colors.muted, letterSpacing: 1 }}>HUMANO</div>
+              <div className="mono" style={{ fontSize: 10, color: colors.muted, letterSpacing: 1 }}>{t("projects.detail.humanLabel")}</div>
               <div className="mono" style={{ fontSize: 22, fontWeight: 700 }}>${cost?.human ?? 0}</div>
             </div>
             <div>
-              <div className="mono" style={{ fontSize: 10, color: colors.muted, letterSpacing: 1 }}>IA</div>
+              <div className="mono" style={{ fontSize: 10, color: colors.muted, letterSpacing: 1 }}>{t("projects.detail.aiLabel")}</div>
               <div className="mono" style={{ fontSize: 22, fontWeight: 700, color: colors.blue }}>${cost?.ai ?? 0}</div>
             </div>
             <div>
-              <div className="mono" style={{ fontSize: 10, color: colors.muted, letterSpacing: 1 }}>HORAS</div>
+              <div className="mono" style={{ fontSize: 10, color: colors.muted, letterSpacing: 1 }}>{t("projects.detail.hoursLabel")}</div>
               <div className="mono" style={{ fontSize: 22, fontWeight: 700 }}>{cost ? Math.floor(cost.minutes / 60) : 0}h</div>
             </div>
           </div>
@@ -113,51 +116,51 @@ export function ProjectDetail() {
       )}
 
       {showTasks && (
-      <Panel title={`Tareas · tiempo + costo — ${project?.name ?? ""}`}>
+      <Panel title={t("projects.detail.tasksPanelTitle", { name: project?.name ?? "" })}>
         <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && add()}
-            placeholder="Nueva tarea…"
-            aria-label="Título de la tarea"
+            placeholder={t("projects.detail.newTaskPlaceholder")}
+            aria-label={t("projects.detail.newTaskAriaLabel")}
             style={{ flex: 1, background: colors.surface2, border: `1px solid ${colors.border}`, color: colors.text, borderRadius: 8, padding: "10px 12px" }}
           />
           <button onClick={add} disabled={createTask.isPending} style={{ background: colors.coral, color: colors.bg, border: "none", borderRadius: 8, padding: "10px 16px", fontWeight: 700 }}>
-            + Tarea
+            {t("projects.detail.addTaskButton")}
           </button>
         </div>
         <DataTable
           columns={[
             { key: "code", label: "ID", width: 80 },
-            { key: "title", label: "Tarea" },
-            { key: "real", label: "Real", width: 100, align: "right" },
-            { key: "cost", label: "Costo", width: 90, align: "right" },
+            { key: "title", label: t("projects.detail.colTask") },
+            { key: "real", label: t("projects.detail.colReal"), width: 100, align: "right" },
+            { key: "cost", label: t("projects.detail.colCost"), width: 90, align: "right" },
             { key: "action", label: "", width: 110, align: "right" },
           ]}
-          rows={tasks.map((t) => ({
-            id: t.id,
+          rows={tasks.map((task) => ({
+            id: task.id,
             cells: {
-              code: <span className="mono" style={{ color: colors.coral }}>{t.code}</span>,
-              title: t.title,
-              real: <TaskRealCell taskId={t.id} />,
-              cost: <TaskCostCell taskId={t.id} />,
-              action: <AddTimeButton taskId={t.id} projectId={id} />,
+              code: <span className="mono" style={{ color: colors.coral }}>{task.code}</span>,
+              title: task.title,
+              real: <TaskRealCell taskId={task.id} />,
+              cost: <TaskCostCell taskId={task.id} />,
+              action: <AddTimeButton taskId={task.id} projectId={id} />,
             },
           }))}
-          emptyLabel="Sin tareas aún."
+          emptyLabel={t("projects.detail.emptyTasks")}
         />
       </Panel>
       )}
 
-      {tab === "Tiempo" && <ProjectTimeline projectId={id} />}
+      {tab === "tiempo" && <ProjectTimeline projectId={id} />}
 
-      {tab === "Equipo" && <ProjectTeam projectId={id} />}
+      {tab === "equipo" && <ProjectTeam projectId={id} />}
 
-      {tab === "Documentos" && <ProjectDocuments projectId={id} />}
+      {tab === "documentos" && <ProjectDocuments projectId={id} />}
 
       <div style={{ marginTop: 12 }}>
-        <Link to="/projects" className="mono" style={{ color: colors.muted, fontSize: 13 }}>← Proyectos</Link>
+        <Link to="/projects" className="mono" style={{ color: colors.muted, fontSize: 13 }}>{t("projects.detail.backLink")}</Link>
       </div>
     </Chrome>
   );

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { TileRow } from "../components/TileRow";
@@ -14,35 +15,36 @@ function hm(min: number): string {
 }
 
 export function Tracker() {
+  const { t } = useTranslation();
   const openModal = useTimeEntryModal((s) => s.openModal);
   const { data: entries = [] } = useTodayEntries();
   const { data: today } = useTodaySummary();
 
   return (
-    <Chrome breadcrumb="/ tiempo · hoy">
-      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>Tiempo · hoy</h1>
+    <Chrome breadcrumb={t("tracker.breadcrumb")}>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>{t("tracker.title")}</h1>
       <div className="mono" style={{ fontSize: 12, color: colors.muted, marginBottom: 20 }}>
-        ENTRADAS HUMANAS + REPORTES MCP · conciliadas por tarea
+        {t("tracker.subtitle")}
       </div>
       <div style={{ marginBottom: 16 }}>
         <TileRow
           tiles={[
-            { label: "Trackeado hoy", value: today ? hm(today.trackedMinutes) : "—" },
-            { label: "Facturable", value: today ? hm(today.billableMinutes) : "—", accent: colors.green },
-            { label: "Costo hoy", value: today ? `$${today.cost}` : "—" },
-            { label: "De IA", value: "$0", accent: colors.blue },
+            { label: t("tracker.tileTrackeadoLabel"), value: today ? hm(today.trackedMinutes) : "—" },
+            { label: t("cabina.billable"), value: today ? hm(today.billableMinutes) : "—", accent: colors.green },
+            { label: t("tracker.tileCostoLabel"), value: today ? `$${today.cost}` : "—" },
+            { label: t("tracker.tileIaLabel"), value: "$0", accent: colors.blue },
           ]}
         />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 16 }}>
-        <Panel title="Línea de tiempo">
+        <Panel title={t("tracker.timelinePanel")}>
           <DataTable
             columns={[
-              { key: "time", label: "Hora", width: 70 },
-              { key: "origin", label: "Origen", width: 90 },
-              { key: "task", label: "Tarea" },
-              { key: "dur", label: "Duración", width: 100, align: "right" },
-              { key: "cost", label: "Costo", width: 80, align: "right" },
+              { key: "time", label: t("tracker.colHora"), width: 70 },
+              { key: "origin", label: t("tracker.colOrigen"), width: 90 },
+              { key: "task", label: t("tracker.colTarea") },
+              { key: "dur", label: t("tracker.colDuracion"), width: 100, align: "right" },
+              { key: "cost", label: t("tracker.colCosto"), width: 80, align: "right" },
             ]}
             rows={entries.map((e) => ({
               id: e.id,
@@ -54,10 +56,10 @@ export function Tracker() {
                 cost: <span className="mono" style={{ fontWeight: 700 }}>${e.cost}</span>,
               },
             }))}
-            emptyLabel="Sin entradas hoy. Registra tiempo en una tarea."
+            emptyLabel={t("tracker.emptyEntries")}
           />
         </Panel>
-        <Panel title="Objetivo del día">
+        <Panel title={t("tracker.goalPanel")}>
           <div className="mono" style={{ fontSize: 28, fontWeight: 700 }}>{today ? hm(today.trackedMinutes) : "—"} / 8h</div>
           <div style={{ height: 8, background: colors.surface2, borderRadius: 4, marginTop: 12 }}>
             <div style={{ height: 8, width: `${today ? Math.min((today.trackedMinutes / 480) * 100, 100) : 0}%`, background: colors.coral, borderRadius: 4 }} />
@@ -66,11 +68,11 @@ export function Tracker() {
       </div>
       <TimerDock
         elapsed="00:00:00"
-        taskTitle="Sin tarea activa"
-        meta="elige un proyecto para registrar tiempo"
+        taskTitle={t("cabina.noActiveTask")}
+        meta={t("cabina.pickProject")}
         running={false}
         onManual={() => openModal()}
-        manualLabel="+ registrar tiempo"
+        manualLabel={t("cabina.manualEntry")}
       />
     </Chrome>
   );

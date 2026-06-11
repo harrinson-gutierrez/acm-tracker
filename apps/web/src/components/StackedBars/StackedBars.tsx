@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { colors } from "../../theme/tokens";
 
 export interface StackedBar {
@@ -7,6 +8,7 @@ export interface StackedBar {
 }
 
 export function StackedBars({ data }: { data: StackedBar[] }) {
+  const { t } = useTranslation();
   const max = Math.max(1, ...data.map((d) => d.human + d.ai));
   const maxH = 180;
   return (
@@ -24,7 +26,7 @@ export function StackedBars({ data }: { data: StackedBar[] }) {
           </div>
         );
       })}
-      {data.length === 0 && <span style={{ color: colors.muted }}>Sin datos aún.</span>}
+      {data.length === 0 && <span style={{ color: colors.muted }}>{t("reports.emptyPeople")}</span>}
     </div>
   );
 }

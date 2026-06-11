@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { colors } from "../../theme/tokens";
 
 export interface Command {
@@ -14,13 +15,14 @@ interface CommandPaletteProps {
 }
 
 export function CommandPalette({ open, onClose, commands }: CommandPaletteProps) {
+  const { t } = useTranslation();
   if (!open) return null;
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "flex-start", justifyContent: "center", paddingTop: 160, zIndex: 50 }}>
       <div onClick={(e) => e.stopPropagation()} style={{ width: 600, background: colors.surface, border: `1px solid ${colors.borderStrong}`, borderRadius: 16, overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "18px 20px", background: colors.surface2 }}>
           <span className="mono" style={{ color: colors.coral, fontSize: 18 }}>⌘</span>
-          <span style={{ color: colors.dim }}>Buscar acción, proyecto, persona, tarea…</span>
+          <span style={{ color: colors.dim }}>{t("palette.searchPlaceholder")}</span>
           <span className="mono" style={{ marginLeft: "auto", fontSize: 11, color: colors.dim }}>ESC</span>
         </div>
         <div style={{ padding: 12 }}>

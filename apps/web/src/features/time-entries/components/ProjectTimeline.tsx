@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Panel } from "../../../components/Panel";
 import { DataTable } from "../../../components/DataTable";
 import { useProjectEntries } from "../api/use-project-entries";
@@ -15,17 +16,18 @@ function formatDuration(minutes: number): string {
 }
 
 export function ProjectTimeline({ projectId }: { projectId: string }) {
+  const { t } = useTranslation();
   const { data: entries = [] } = useProjectEntries(projectId);
 
   return (
-    <Panel title="Tiempo · cronología de registros">
+    <Panel title={t("projects.timelinePanelTitle")}>
       <DataTable
         columns={[
-          { key: "when", label: "Fecha/hora", width: 140 },
-          { key: "task", label: "Tarea" },
-          { key: "person", label: "Persona", width: 160 },
-          { key: "minutes", label: "Tiempo", width: 90, align: "right" },
-          { key: "cost", label: "Costo", width: 90, align: "right" },
+          { key: "when", label: t("projects.colDateTime"), width: 140 },
+          { key: "task", label: t("projects.colTask") },
+          { key: "person", label: t("settings.colPerson"), width: 160 },
+          { key: "minutes", label: t("projects.colTime"), width: 90, align: "right" },
+          { key: "cost", label: t("projects.detail.colCost"), width: 90, align: "right" },
         ]}
         rows={entries.map((e) => ({
           id: e.id,
@@ -42,7 +44,7 @@ export function ProjectTimeline({ projectId }: { projectId: string }) {
             cost: <span className="mono" style={{ fontWeight: 700, color: colors.green }}>${e.cost}</span>,
           },
         }))}
-        emptyLabel="Sin registros de tiempo aún."
+        emptyLabel={t("projects.timelineEmpty")}
       />
     </Panel>
   );

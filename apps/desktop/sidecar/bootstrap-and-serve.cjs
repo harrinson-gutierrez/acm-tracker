@@ -13,6 +13,19 @@ const dbUrl = process.env.DATABASE_URL ?? "";
 if (dbUrl.startsWith("file:")) mkdirSync(dirname(dbUrl.slice("file:".length)), { recursive: true });
 if (process.env.UPLOADS_DIR) mkdirSync(process.env.UPLOADS_DIR, { recursive: true });
 
+function exitWhenParentDies(parentPid) {
+  setInterval(() => {
+    try {
+      process.kill(parentPid, 0);
+    } catch {
+      process.exit(0);
+    }
+  }, 2000).unref();
+}
+
+const parentPid = Number(process.env.ACM_PARENT_PID);
+if (Number.isInteger(parentPid) && parentPid > 0) exitWhenParentDies(parentPid);
+
 function resolvePrismaCli() {
   const pkg = require.resolve("prisma/package.json", { paths: [apiRoot] });
   return join(dirname(pkg), require(pkg).bin.prisma);

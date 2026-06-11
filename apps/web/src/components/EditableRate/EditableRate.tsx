@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { colors, radius } from "../../theme/tokens";
 
+type RateFormat = "money" | "hours";
+
 interface EditableRateProps {
   value: number;
   label: string;
+  format?: RateFormat;
   saving?: boolean;
   onSave: (next: number) => void;
 }
@@ -14,8 +17,17 @@ function parseRate(raw: string): number | null {
   return n;
 }
 
-export function EditableRate({ value, label, saving = false, onSave }: EditableRateProps) {
+function formatValue(value: number, format: RateFormat): string {
+  if (format === "hours") {
+    const hours = Number.isInteger(value) ? String(value) : value.toFixed(1);
+    return `${hours} h`;
+  }
+  return `$${value.toFixed(2)}`;
+}
+
+export function EditableRate({ value, label, format = "money", saving = false, onSave }: EditableRateProps) {
   const [editing, setEditing] = useState(false);
+  const [hover, setHover] = useState(false);
   const [draft, setDraft] = useState("");
 
   const open = () => {
@@ -34,18 +46,32 @@ export function EditableRate({ value, label, saving = false, onSave }: EditableR
       <button
         type="button"
         onClick={open}
-        aria-label={`Editar tarifa de ${label}`}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
+        aria-label={`Editar ${label}`}
+        title="Clic para editar"
         className="mono"
         style={{
-          background: "transparent",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          background: hover ? colors.surface2 : "transparent",
           border: "none",
+          borderRadius: radius.sm,
           color: saving ? colors.amber : colors.text,
           cursor: "pointer",
           font: "inherit",
-          padding: 0,
+          padding: "2px 6px",
+          textDecoration: hover ? "underline dotted" : "none",
+          textUnderlineOffset: 3,
         }}
       >
-        ${value.toFixed(2)}
+        <span>{formatValue(value, format)}</span>
+        <span aria-hidden style={{ color: hover ? colors.muted : colors.dim, fontSize: "0.85em" }}>
+          ✎
+        </span>
       </button>
     );
   }
@@ -55,9 +81,9 @@ export function EditableRate({ value, label, saving = false, onSave }: EditableR
       autoFocus
       type="number"
       min={0}
-      step={0.5}
+      step={format === "hours" ? 1 : 0.5}
       value={draft}
-      aria-label={`Tarifa de ${label}`}
+      aria-label={label}
       onChange={(e) => setDraft(e.target.value)}
       onBlur={commit}
       onKeyDown={(e) => {

@@ -79,6 +79,7 @@ pub fn spawn_api_sidecar(app: &AppHandle) -> Result<SidecarHandle, String> {
         .env("ACM_API_ROOT", &payload.api_root)
         .env("ACM_PRISMA_SCHEMA", &payload.prisma_schema)
         .env("ACM_MCP_ENTRY", &payload.mcp_entry)
+        .env("ACM_PARENT_PID", std::process::id().to_string())
         .spawn()
         .map_err(|e| format!("failed to spawn api sidecar: {e}"))?;
 

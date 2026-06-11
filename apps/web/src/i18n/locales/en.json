@@ -1,0 +1,10 @@
+{
+  "common": {
+    "save": "Save",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "add": "Add",
+    "empty": "No data"
+  }
+}

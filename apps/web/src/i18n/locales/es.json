@@ -175,6 +175,15 @@
     "copyUrl": "Copiar URL",
     "activeStatus": "● activo · {{count}} reportes recibidos"
   },
+  "auth": {
+    "title": "Tiempo + costo,\nen una sola cabina.",
+    "subtitle": "Self-hosted. Sin costo por puesto. Los agentes reportan vía MCP; tú lees el costo real de tu empresa.",
+    "signInHeading": "Entrar",
+    "signInSubtitle": "a tu workspace",
+    "errorNoMember": "No existe un miembro con ese correo",
+    "signInButton": "Entrar →",
+    "helperText": "modo sin auth · owner local"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

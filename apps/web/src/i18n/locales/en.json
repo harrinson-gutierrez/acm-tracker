@@ -175,6 +175,15 @@
     "copyUrl": "Copy URL",
     "activeStatus": "● active · {{count}} reports received"
   },
+  "auth": {
+    "title": "Time + cost,\nin a single cockpit.",
+    "subtitle": "Self-hosted. No per-seat cost. Agents report via MCP; you read your company's real cost.",
+    "signInHeading": "Sign in",
+    "signInSubtitle": "to your workspace",
+    "errorNoMember": "No member found with that email",
+    "signInButton": "Sign in →",
+    "helperText": "no-auth mode · local owner"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cockpit",
     "status": "SYSTEMS NOMINAL",

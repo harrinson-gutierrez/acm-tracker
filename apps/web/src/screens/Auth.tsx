@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { RingGauge } from "../components/RingGauge";
 import { useLogin } from "../features/auth/api/use-auth";
@@ -15,6 +16,7 @@ const inputStyle = {
 } as const;
 
 export function Auth() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const login = useLogin();
   const [email, setEmail] = useState("owner@acm.local");
@@ -24,7 +26,7 @@ export function Auth() {
     setError("");
     login.mutate(email.trim(), {
       onSuccess: () => navigate("/"),
-      onError: () => setError("No existe un miembro con ese correo"),
+      onError: () => setError(t("auth.errorNoMember")),
     });
   };
 
@@ -36,17 +38,17 @@ export function Auth() {
           <RingGauge total={1840} target={2400} aiFraction={0.18} caption="" />
         </div>
         <div style={{ position: "relative" }}>
-          <h1 style={{ fontSize: 38, fontWeight: 700, lineHeight: 1.2 }}>Tiempo + costo,<br />en una sola cabina.</h1>
+          <h1 style={{ fontSize: 38, fontWeight: 700, lineHeight: 1.2 }}>{t("auth.title")}</h1>
           <p style={{ color: colors.muted, marginTop: 16, maxWidth: 360 }}>
-            Self-hosted. Sin costo por puesto. Los agentes reportan vía MCP; tú lees el costo real de tu empresa.
+            {t("auth.subtitle")}
           </p>
         </div>
         <span className="mono" style={{ color: colors.dim, fontSize: 11, position: "absolute", bottom: 40, left: 56 }}>v0.4 · build local · MCP ready</span>
       </div>
 
       <div style={{ background: colors.bg, padding: 56, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-        <h2 style={{ fontSize: 30, fontWeight: 700 }}>Entrar</h2>
-        <p className="mono" style={{ color: colors.muted, fontSize: 13, marginTop: 6, marginBottom: 32 }}>a tu workspace</p>
+        <h2 style={{ fontSize: 30, fontWeight: 700 }}>{t("auth.signInHeading")}</h2>
+        <p className="mono" style={{ color: colors.muted, fontSize: 13, marginTop: 6, marginBottom: 32 }}>{t("auth.signInSubtitle")}</p>
 
         <label className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: colors.muted }}>EMAIL</label>
         <input value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} aria-label="Email" style={{ ...inputStyle, marginTop: 8, marginBottom: 20 }} />
@@ -54,10 +56,10 @@ export function Auth() {
         {error && <div style={{ color: colors.coral, fontSize: 13, marginBottom: 16 }}>{error}</div>}
 
         <button onClick={submit} disabled={login.isPending} style={{ background: colors.coral, color: colors.bg, border: "none", borderRadius: 8, padding: "14px", fontWeight: 700, fontSize: 15 }}>
-          Entrar →
+          {t("auth.signInButton")}
         </button>
         <div style={{ marginTop: 28, paddingTop: 20, borderTop: `1px solid ${colors.border}` }}>
-          <span className="mono" style={{ fontSize: 12, color: colors.dim }}>modo sin auth · owner local</span>
+          <span className="mono" style={{ fontSize: 12, color: colors.dim }}>{t("auth.helperText")}</span>
         </div>
       </div>
     </div>

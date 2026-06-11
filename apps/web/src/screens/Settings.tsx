@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Chrome } from "../components/Chrome";
 import { Panel } from "../components/Panel";
 import { SideNav } from "../components/SideNav";
@@ -10,6 +11,7 @@ import { EditableRate } from "../components/EditableRate";
 import { useMembers, useUpdateMember } from "../features/members/api/use-members";
 import { useModelPrices, useCreateModelPrice } from "../features/model-pricing/api/use-model-prices";
 import { ModelPriceList } from "../features/model-pricing/components/ModelPriceList";
+import { useLang } from "../i18n/use-lang";
 import { colors } from "../theme/tokens";
 
 const inputStyle = {
@@ -24,10 +26,12 @@ function initialsOf(name: string): string {
   return name.split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 }
 
-type Section = "members" | "pricing";
+type Section = "members" | "pricing" | "preferences";
 
 export function Settings() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { lang, setLang, langs } = useLang();
   const { data: members = [] } = useMembers();
   const updateMember = useUpdateMember();
   const { data: prices = [] } = useModelPrices();
@@ -53,6 +57,7 @@ export function Settings() {
           items={[
             { label: "Miembros & tarifas", active: section === "members", onClick: () => setSection("members") },
             { label: "Precios de modelos", active: section === "pricing", onClick: () => setSection("pricing") },
+            { label: t("settings.preferences"), active: section === "preferences", onClick: () => setSection("preferences") },
             { label: "MCP & tokens", onClick: () => navigate("/mcp") },
             { label: "Notificaciones", onClick: () => navigate("/notifications") },
           ]}
@@ -111,6 +116,28 @@ export function Settings() {
                 </button>
               </div>
               <ModelPriceList prices={prices} />
+            </Panel>
+          )}
+
+          {section === "preferences" && (
+            <Panel title={t("settings.language")}>
+              <div style={{ display: "flex", gap: 8 }} data-testid="lang-toggle">
+                {langs.map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => setLang(l)}
+                    data-testid={`lang-${l}`}
+                    style={{
+                      ...inputStyle,
+                      cursor: "pointer",
+                      borderColor: lang === l ? colors.coral : colors.border,
+                      color: lang === l ? colors.coral : colors.text,
+                    }}
+                  >
+                    {l.toUpperCase()}
+                  </button>
+                ))}
+              </div>
             </Panel>
           )}
         </div>

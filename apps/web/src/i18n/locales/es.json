@@ -6,5 +6,9 @@
     "edit": "Editar",
     "add": "Agregar",
     "empty": "Sin datos"
+  },
+  "settings": {
+    "preferences": "Preferencias",
+    "language": "Idioma"
   }
 }

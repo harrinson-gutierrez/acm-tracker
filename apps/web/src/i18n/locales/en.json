@@ -156,6 +156,25 @@
     "deleteAriaLabel": "Delete rule {{event}}",
     "emptyRules": "No rules. Create the first one above."
   },
+  "mcp": {
+    "title": "MCP Server",
+    "subtitle": "THE ENTRY POINT · agents report work, time and tokens here",
+    "contractPanelTitle": "Report contract · report_work()",
+    "receivedPanelTitle": "Received reports",
+    "emptyReports": "No reports — send a POST to /api/mcp/report-work from an agent.",
+    "connectPanelTitle": "Connect an agent (Claude Code)",
+    "step1": "Copy the configuration below.",
+    "step2": "Paste it into your Claude Code config file (~/.claude.json) or your Claude Desktop config (claude_desktop_config.json). You can also run `claude mcp add` and point it to the command.",
+    "step3": "Restart Claude Code; you will see the tools report_work / list_projects / list_tasks.",
+    "step4": "Tell the agent something like: \"log 45 min on task T-142, I used opus with 1240/980 tokens\" and it will report on its own.",
+    "loadingConfig": "Loading configuration…",
+    "pathWarning": "The MCP server is not bundled in this installation; use the repo:",
+    "configLabel": "CONFIGURATION",
+    "copyConfig": "Copy configuration",
+    "endpointPanelTitle": "Endpoint",
+    "copyUrl": "Copy URL",
+    "activeStatus": "● active · {{count}} reports received"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cockpit",
     "status": "SYSTEMS NOMINAL",

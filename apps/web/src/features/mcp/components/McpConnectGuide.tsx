@@ -1,17 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Panel } from "../../../components/Panel";
 import { CopyButton } from "../../../components/CopyButton";
 import { useMcpConfig } from "../api/use-mcp";
 import type { McpClaudeConfig } from "../api/use-mcp";
 import { colors, radius } from "../../../theme/tokens";
-
-const PANEL_TITLE = "Conectar un agente (Claude Code)";
-
-const STEPS = [
-  "Copia la configuración de abajo.",
-  "Pégala en tu archivo de configuración de Claude Code (~/.claude.json) o en el de Claude Desktop (claude_desktop_config.json). También puedes correr `claude mcp add` y apuntar al comando.",
-  "Reinicia Claude Code; verás las tools report_work / list_projects / list_tasks.",
-  'Dile al agente algo como: "registra 45 min en la tarea T-142, usé opus con 1240/980 tokens" y reportará solo.',
-];
 
 function buildFallbackConfig(): McpClaudeConfig {
   return {
@@ -25,10 +17,10 @@ function buildFallbackConfig(): McpClaudeConfig {
   };
 }
 
-function StepList() {
+function StepList({ steps }: { steps: string[] }) {
   return (
     <ol style={{ margin: 0, paddingLeft: 20, display: "grid", gap: 10 }}>
-      {STEPS.map((step) => (
+      {steps.map((step) => (
         <li key={step} style={{ fontSize: 13, color: colors.text, lineHeight: 1.5 }}>
           {step}
         </li>
@@ -38,13 +30,17 @@ function StepList() {
 }
 
 export function McpConnectGuide() {
+  const { t } = useTranslation();
   const { data: config, isLoading } = useMcpConfig();
+
+  const panelTitle = t("mcp.connectPanelTitle");
+  const steps = [t("mcp.step1"), t("mcp.step2"), t("mcp.step3"), t("mcp.step4")];
 
   if (isLoading) {
     return (
-      <Panel title={PANEL_TITLE} style={{ marginTop: 16 }}>
+      <Panel title={panelTitle} style={{ marginTop: 16 }}>
         <div className="mono" style={{ fontSize: 12, color: colors.dim }}>
-          Cargando configuración…
+          {t("mcp.loadingConfig")}
         </div>
       </Panel>
     );
@@ -55,9 +51,9 @@ export function McpConnectGuide() {
   const json = JSON.stringify(claudeConfig, null, 2);
 
   return (
-    <Panel title={PANEL_TITLE} style={{ marginTop: 16 }}>
+    <Panel title={panelTitle} style={{ marginTop: 16 }}>
       <div style={{ marginBottom: 16 }}>
-        <StepList />
+        <StepList steps={steps} />
       </div>
 
       {showPathWarning && (
@@ -74,16 +70,16 @@ export function McpConnectGuide() {
             lineHeight: 1.5,
           }}
         >
-          El servidor MCP no está empaquetado en esta instalación; usa el repo:
-          node packages/mcp/dist/index.js
+          {t("mcp.pathWarning")}
+          {"\n"}node packages/mcp/dist/index.js
         </div>
       )}
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
         <span className="mono" style={{ fontSize: 11, letterSpacing: 0.5, color: colors.muted }}>
-          CONFIGURACIÓN
+          {t("mcp.configLabel")}
         </span>
-        <CopyButton text={json} label="Copiar configuración" />
+        <CopyButton text={json} label={t("mcp.copyConfig")} />
       </div>
       <pre
         className="mono"

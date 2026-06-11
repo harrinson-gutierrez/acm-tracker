@@ -156,6 +156,25 @@
     "deleteAriaLabel": "Borrar regla {{event}}",
     "emptyRules": "Sin reglas. Crea la primera arriba."
   },
+  "mcp": {
+    "title": "Servidor MCP",
+    "subtitle": "LA PUERTA DE ENTRADA · agentes reportan trabajo, tiempo y tokens aquí",
+    "contractPanelTitle": "Contrato de reporte · report_work()",
+    "receivedPanelTitle": "Reportes recibidos",
+    "emptyReports": "Sin reportes — envía un POST a /api/mcp/report-work desde un agente.",
+    "connectPanelTitle": "Conectar un agente (Claude Code)",
+    "step1": "Copia la configuración de abajo.",
+    "step2": "Pégala en tu archivo de configuración de Claude Code (~/.claude.json) o en el de Claude Desktop (claude_desktop_config.json). También puedes correr `claude mcp add` y apuntar al comando.",
+    "step3": "Reinicia Claude Code; verás las tools report_work / list_projects / list_tasks.",
+    "step4": "Dile al agente algo como: \"registra 45 min en la tarea T-142, usé opus con 1240/980 tokens\" y reportará solo.",
+    "loadingConfig": "Cargando configuración…",
+    "pathWarning": "El servidor MCP no está empaquetado en esta instalación; usa el repo:",
+    "configLabel": "CONFIGURACIÓN",
+    "copyConfig": "Copiar configuración",
+    "endpointPanelTitle": "Endpoint",
+    "copyUrl": "Copiar URL",
+    "activeStatus": "● activo · {{count}} reportes recibidos"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

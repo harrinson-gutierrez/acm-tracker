@@ -252,7 +252,8 @@
     "signInSubtitle": "a tu workspace",
     "errorNoMember": "No existe un miembro con ese correo",
     "signInButton": "Entrar →",
-    "helperText": "modo sin auth · owner local"
+    "helperText": "modo sin auth · owner local",
+    "versionLine": "v0.4 · build local · MCP ready"
   },
   "nav": {
     "cabina": "Cabina",

@@ -43,7 +43,7 @@ export function Auth() {
             {t("auth.subtitle")}
           </p>
         </div>
-        <span className="mono" style={{ color: colors.dim, fontSize: 11, position: "absolute", bottom: 40, left: 56 }}>v0.4 · build local · MCP ready</span>
+        <span className="mono" style={{ color: colors.dim, fontSize: 11, position: "absolute", bottom: 40, left: 56 }}>{t("auth.versionLine")}</span>
       </div>
 
       <div style={{ background: colors.bg, padding: 56, display: "flex", flexDirection: "column", justifyContent: "center" }}>

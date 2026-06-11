@@ -252,7 +252,8 @@
     "signInSubtitle": "to your workspace",
     "errorNoMember": "No member found with that email",
     "signInButton": "Sign in →",
-    "helperText": "no-auth mode · local owner"
+    "helperText": "no-auth mode · local owner",
+    "versionLine": "v0.4 · local build · MCP ready"
   },
   "nav": {
     "cabina": "Cockpit",

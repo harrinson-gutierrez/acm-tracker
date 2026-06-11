@@ -1,4 +1,4 @@
-const BASE_URL = (process.env.ACM_API_URL ?? "http://localhost:5188").replace(/\/$/, "");
+const BASE_URL = ((process.env.ACM_API_URL && process.env.ACM_API_URL.trim()) || "http://localhost:5188").replace(/\/$/, "");
 
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const res = await fetch(`${BASE_URL}/api${path}`, {

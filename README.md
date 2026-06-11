@@ -331,6 +331,16 @@ curl -X POST http://localhost:4000/api/mcp/report-work -H "Content-Type: applica
 # → { "recorded": true, "aiCost": 0.09 }   (1240/1M×$15 + 980/1M×$75)
 ```
 
+### Conectar un agente con el plugin de Claude Code
+
+```
+/plugin marketplace add harrinson-gutierrez/acm-tracker
+/plugin install acm-tracker@acm-tracker
+```
+
+Empaqueta el MCP de ACM-TRACKER más un skill `report-work` para que tu agente
+auto-reporte tiempo y costo de IA. Ver `packages/claude-plugin/README.md`.
+
 ---
 
 ## Modelo de datos

@@ -93,6 +93,22 @@
     "summaryMeta": "{{count}} personas · {{hours}}h · ${{cost}}",
     "comingSoon": "PDF/factura · próximamente"
   },
+  "tracker": {
+    "breadcrumb": "/ tiempo · hoy",
+    "title": "Tiempo · hoy",
+    "subtitle": "ENTRADAS HUMANAS + REPORTES MCP · conciliadas por tarea",
+    "tileTrackeadoLabel": "Trackeado hoy",
+    "tileCostoLabel": "Costo hoy",
+    "tileIaLabel": "De IA",
+    "timelinePanel": "Línea de tiempo",
+    "colHora": "Hora",
+    "colOrigen": "Origen",
+    "colTarea": "Tarea",
+    "colDuracion": "Duración",
+    "colCosto": "Costo",
+    "emptyEntries": "Sin entradas hoy. Registra tiempo en una tarea.",
+    "goalPanel": "Objetivo del día"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

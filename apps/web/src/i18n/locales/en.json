@@ -93,6 +93,22 @@
     "summaryMeta": "{{count}} people · {{hours}}h · ${{cost}}",
     "comingSoon": "PDF/invoice · coming soon"
   },
+  "tracker": {
+    "breadcrumb": "/ time · today",
+    "title": "Time · today",
+    "subtitle": "HUMAN ENTRIES + MCP REPORTS · reconciled by task",
+    "tileTrackeadoLabel": "Tracked today",
+    "tileCostoLabel": "Cost today",
+    "tileIaLabel": "From AI",
+    "timelinePanel": "Timeline",
+    "colHora": "Time",
+    "colOrigen": "Source",
+    "colTarea": "Task",
+    "colDuracion": "Duration",
+    "colCosto": "Cost",
+    "emptyEntries": "No entries today. Log time on a task.",
+    "goalPanel": "Daily goal"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cockpit",
     "status": "SYSTEMS NOMINAL",

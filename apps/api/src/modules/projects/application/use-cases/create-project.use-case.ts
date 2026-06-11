@@ -12,6 +12,8 @@ export class CreateProjectUseCase {
       name: dto.name,
       client: dto.client ?? null,
       contractAmount: dto.contractAmount ?? null,
+      estimateHours: dto.estimateHours ?? null,
+      ratePerHour: dto.ratePerHour ?? null,
     });
   }
 }

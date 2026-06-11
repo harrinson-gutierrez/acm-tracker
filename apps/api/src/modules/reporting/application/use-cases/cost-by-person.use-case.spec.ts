@@ -3,6 +3,7 @@ import type { PersonCost, WeeklyCost } from "@acm/shared";
 import {
   CostAggregationPort,
   ProjectCostRow,
+  ProjectEstimateRow,
   TeamTodayRow,
   TodaySummary,
 } from "../../domain/ports/cost-aggregation.port";
@@ -11,6 +12,9 @@ class FakeAgg implements CostAggregationPort {
   public lastProjectId: string | undefined = undefined;
   async projectHumanCost(): Promise<ProjectCostRow> {
     return { human: 0, minutes: 0 };
+  }
+  async projectEstimate(): Promise<ProjectEstimateRow> {
+    return { estimateHours: null, ratePerHour: null };
   }
   async costByPerson(projectId?: string): Promise<PersonCost[]> {
     this.lastProjectId = projectId;

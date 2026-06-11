@@ -2,7 +2,13 @@ import { Injectable } from "@nestjs/common";
 import type { PersonCost, TimeEntry, WeeklyCost } from "@acm/shared";
 import { computeEntryCost } from "@acm/shared";
 import { PrismaService } from "../../../../prisma/prisma.service";
-import { CostAggregationPort, ProjectCostRow, TeamTodayRow, TodaySummary } from "../../domain/ports/cost-aggregation.port";
+import {
+  CostAggregationPort,
+  ProjectCostRow,
+  ProjectEstimateRow,
+  TeamTodayRow,
+  TodaySummary,
+} from "../../domain/ports/cost-aggregation.port";
 
 const round2 = (n: number): number => Math.round(n * 100) / 100;
 
@@ -26,6 +32,14 @@ export class PrismaCostAggregationRepository implements CostAggregationPort {
       minutes += r.minutes;
     }
     return { human: round2(human), minutes };
+  }
+
+  async projectEstimate(projectId: string): Promise<ProjectEstimateRow> {
+    const row = await this.prisma.project.findUnique({
+      where: { id: projectId },
+      select: { estimateHours: true, ratePerHour: true },
+    });
+    return { estimateHours: row?.estimateHours ?? null, ratePerHour: row?.ratePerHour ?? null };
   }
 
   async costByPerson(projectId?: string): Promise<PersonCost[]> {

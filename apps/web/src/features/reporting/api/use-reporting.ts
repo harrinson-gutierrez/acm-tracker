@@ -7,6 +7,12 @@ interface ProjectCost {
   ai: number;
   total: number;
   minutes: number;
+  estimateHours: number | null;
+  projectRate: number | null;
+  estimatedCost: number | null;
+  revenue: number | null;
+  margin: number | null;
+  marginPerHour: number | null;
 }
 
 export function useProjectCost(projectId: string) {

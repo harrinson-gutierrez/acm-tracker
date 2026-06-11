@@ -7,6 +7,11 @@ export interface ProjectCostRow {
   minutes: number;
 }
 
+export interface ProjectEstimateRow {
+  estimateHours: number | null;
+  ratePerHour: number | null;
+}
+
 export interface TodaySummary {
   trackedMinutes: number;
   billableMinutes: number;
@@ -23,6 +28,7 @@ export interface TeamTodayRow {
 
 export interface CostAggregationPort {
   projectHumanCost(projectId: string): Promise<ProjectCostRow>;
+  projectEstimate(projectId: string): Promise<ProjectEstimateRow>;
   costByPerson(projectId?: string): Promise<PersonCost[]>;
   weeklyHumanCost(weeks: number): Promise<WeeklyCost[]>;
   todaySummary(from: Date, to: Date): Promise<TodaySummary>;

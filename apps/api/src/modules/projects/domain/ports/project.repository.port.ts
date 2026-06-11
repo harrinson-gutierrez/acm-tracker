@@ -6,12 +6,16 @@ export interface CreateProjectData {
   name: string;
   client: string | null;
   contractAmount: number | null;
+  estimateHours: number | null;
+  ratePerHour: number | null;
 }
 
 export interface UpdateProjectData {
   name?: string;
   client?: string | null;
   contractAmount?: number | null;
+  estimateHours?: number | null;
+  ratePerHour?: number | null;
   status?: string;
 }
 

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { Panel } from "../../../components/Panel";
 import { EditableRate } from "../../../components/EditableRate";
 import { colors } from "../../../theme/tokens";
@@ -11,23 +12,24 @@ interface ProjectEstimatePanelProps {
 }
 
 export function ProjectEstimatePanel({ projectId, estimateHours, ratePerHour }: ProjectEstimatePanelProps) {
+  const { t } = useTranslation();
   const update = useUpdateProject(projectId);
 
   return (
-    <Panel title="Estimación · venta">
+    <Panel title={t("projects.estimatePanelTitle")}>
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <Field label="Horas estimadas">
+        <Field label={t("projects.estimateHoursLabel")}>
           <EditableRate
-            label="horas estimadas"
+            label={t("projects.estimateHoursAriaLabel")}
             format="hours"
             value={estimateHours ?? 0}
             saving={update.isPending}
             onSave={(estimateHours) => update.mutate({ estimateHours })}
           />
         </Field>
-        <Field label="Tarifa de proyecto · USD/h">
+        <Field label={t("projects.rateLabel")}>
           <EditableRate
-            label="tarifa de proyecto"
+            label={t("projects.rateAriaLabel")}
             value={ratePerHour ?? 0}
             saving={update.isPending}
             onSave={(ratePerHour) => update.mutate({ ratePerHour })}
@@ -35,7 +37,7 @@ export function ProjectEstimatePanel({ projectId, estimateHours, ratePerHour }: 
         </Field>
         {ratePerHour == null && (
           <div style={{ fontSize: 11, color: colors.dim }}>
-            Define la tarifa del proyecto para calcular el margen.
+            {t("projects.defineRateHint")}
           </div>
         )}
       </div>

@@ -15,7 +15,7 @@ export class PrismaTimeEntryRepository implements TimeEntryRepositoryPort {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateTimeEntryData): Promise<TimeEntry> {
-    const row = await this.prisma.timeEntry.create({ data: { ...data, origin: "manual" } });
+    const row = await this.prisma.timeEntry.create({ data: { ...data, origin: data.origin ?? "manual" } });
     return toDomainTimeEntry(row);
   }
 

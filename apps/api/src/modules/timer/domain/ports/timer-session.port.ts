@@ -12,6 +12,6 @@ export interface ActiveTimerView {
 export interface TimerSessionPort {
   findActive(memberId: string): Promise<ActiveTimerView | null>;
   create(memberId: string, taskId: string): Promise<void>;
-  clear(memberId: string): Promise<void>;
+  clear(memberId: string): Promise<number>;
   taskExists(taskId: string): Promise<boolean>;
 }

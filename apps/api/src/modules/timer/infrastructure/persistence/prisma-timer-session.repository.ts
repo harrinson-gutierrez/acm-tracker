@@ -26,8 +26,9 @@ export class PrismaTimerSessionRepository implements TimerSessionPort {
     await this.prisma.timerSession.create({ data: { memberId, taskId } });
   }
 
-  async clear(memberId: string): Promise<void> {
-    await this.prisma.timerSession.deleteMany({ where: { memberId } });
+  async clear(memberId: string): Promise<number> {
+    const result = await this.prisma.timerSession.deleteMany({ where: { memberId } });
+    return result.count;
   }
 
   async taskExists(taskId: string): Promise<boolean> {

@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { ActiveTimerView, TIMER_SESSION, TimerSessionPort } from "../../domain/ports/timer-session.port";
 import { StopTimerUseCase } from "./stop-timer.use-case";
 
@@ -15,7 +15,7 @@ export class StartTimerUseCase {
     if (active) await this.stopTimer.execute(memberId);
     await this.sessions.create(memberId, taskId);
     const created = await this.sessions.findActive(memberId);
-    if (!created) throw new NotFoundException("Timer session not created");
+    if (!created) throw new InternalServerErrorException("Timer session not created");
     return created;
   }
 }

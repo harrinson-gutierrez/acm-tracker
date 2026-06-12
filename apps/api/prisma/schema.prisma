@@ -126,4 +126,6 @@ model TimerSession {
   task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId    String
   startedAt DateTime @default(now())
+
+  @@index([taskId])
 }

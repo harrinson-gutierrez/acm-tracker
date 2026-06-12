@@ -10,3 +10,6 @@ CREATE TABLE "TimerSession" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "TimerSession_memberId_key" ON "TimerSession"("memberId");
+
+-- CreateIndex
+CREATE INDEX "TimerSession_taskId_idx" ON "TimerSession"("taskId");

@@ -18,7 +18,7 @@ export function GlobalTimerDock() {
   if (pathname === "/auth") return null;
 
   return (
-    <div style={{ position: "fixed", left: 106, right: 28, bottom: 12, zIndex: 50 }}>
+    <div style={{ position: "fixed", left: 106, right: 28, bottom: 12, zIndex: 40 }}>
       <TimerDock
         running={Boolean(active)}
         elapsed={elapsed}
@@ -32,6 +32,7 @@ export function GlobalTimerDock() {
           manual: t("cabina.manualEntry"),
         }}
         onStop={() => stopTimer.mutate()}
+        stopDisabled={stopTimer.isPending}
         onStart={openPicker}
         onManual={() => openManual()}
       />

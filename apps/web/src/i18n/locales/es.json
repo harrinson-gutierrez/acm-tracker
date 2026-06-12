@@ -277,6 +277,16 @@
     "settings": "Ir a Settings",
     "searchPlaceholder": "Buscar acción, proyecto, persona, tarea…"
   },
+  "timer": {
+    "running": "EN CURSO",
+    "idle": "SIN TIMER",
+    "stop": "STOP",
+    "start": "Iniciar timer",
+    "startForTask": "Iniciar timer para esta tarea",
+    "pickerTitle": "Iniciar timer",
+    "pickerSubtitle": "elige proyecto y tarea — el tiempo corre hasta que hagas stop",
+    "pickerAriaLabel": "Iniciar timer"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",

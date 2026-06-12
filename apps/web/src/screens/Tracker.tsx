@@ -4,10 +4,8 @@ import { Panel } from "../components/Panel";
 import { TileRow } from "../components/TileRow";
 import { DataTable } from "../components/DataTable";
 import { Tag } from "../components/Tag";
-import { TimerDock } from "../components/TimerDock";
 import { useTodayEntries } from "../features/time-entries/api/use-today-entries";
 import { useTodaySummary } from "../features/reporting/api/use-today";
-import { useTimeEntryModal } from "../features/time-entries/use-time-entry-modal";
 import { colors } from "../theme/tokens";
 
 function hm(min: number): string {
@@ -16,7 +14,6 @@ function hm(min: number): string {
 
 export function Tracker() {
   const { t } = useTranslation();
-  const openModal = useTimeEntryModal((s) => s.openModal);
   const { data: entries = [] } = useTodayEntries();
   const { data: today } = useTodaySummary();
 
@@ -66,14 +63,6 @@ export function Tracker() {
           </div>
         </Panel>
       </div>
-      <TimerDock
-        elapsed="00:00:00"
-        taskTitle={t("cabina.noActiveTask")}
-        meta={t("cabina.pickProject")}
-        running={false}
-        onManual={() => openModal()}
-        manualLabel={t("cabina.manualEntry")}
-      />
     </Chrome>
   );
 }

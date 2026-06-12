@@ -277,6 +277,16 @@
     "settings": "Go to Settings",
     "searchPlaceholder": "Search action, project, person, task…"
   },
+  "timer": {
+    "running": "RUNNING",
+    "idle": "NO TIMER",
+    "stop": "STOP",
+    "start": "Start timer",
+    "startForTask": "Start timer for this task",
+    "pickerTitle": "Start timer",
+    "pickerSubtitle": "pick a project and task — time runs until you stop",
+    "pickerAriaLabel": "Start timer"
+  },
   "cabina": {
     "breadcrumb": "FLIGHT DECK · cockpit",
     "status": "SYSTEMS NOMINAL",

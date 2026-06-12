@@ -15,6 +15,8 @@ import { Settings } from "./screens/Settings";
 import { CommandPalette } from "./components/CommandPalette";
 import { useCommandPalette } from "./features/command-palette/use-command-palette";
 import { TimeEntryModal } from "./features/time-entries/components/TimeEntryModal";
+import { TimerStartModal } from "./features/timer/components/TimerStartModal";
+import { GlobalTimerDock } from "./features/timer/components/GlobalTimerDock";
 
 function GlobalCommandPalette() {
   const navigate = useNavigate();
@@ -57,6 +59,7 @@ export default function App() {
     <>
       <GlobalCommandPalette />
       <TimeEntryModal />
+      <TimerStartModal />
       <Routes>
         <Route path="/" element={<Cabina />} />
         <Route path="/projects" element={<Projects />} />
@@ -71,6 +74,7 @@ export default function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <GlobalTimerDock />
     </>
   );
 }

@@ -11,6 +11,7 @@ import { EditableRate } from "../components/EditableRate";
 import { useMembers, useUpdateMember } from "../features/members/api/use-members";
 import { useModelPrices, useCreateModelPrice } from "../features/model-pricing/api/use-model-prices";
 import { ModelPriceList } from "../features/model-pricing/components/ModelPriceList";
+import { useWorkspaceSettings, useUpdateWorkspaceSettings } from "../features/workspace-settings/api/use-workspace-settings";
 import { useLang } from "../i18n/use-lang";
 import { colors } from "../theme/tokens";
 
@@ -36,6 +37,8 @@ export function Settings() {
   const updateMember = useUpdateMember();
   const { data: prices = [] } = useModelPrices();
   const createPrice = useCreateModelPrice();
+  const { data: settings } = useWorkspaceSettings();
+  const updateSettings = useUpdateWorkspaceSettings();
   const [section, setSection] = useState<Section>("members");
   const [model, setModel] = useState("");
   const [inputPer1M, setInputPer1M] = useState("");
@@ -120,25 +123,35 @@ export function Settings() {
           )}
 
           {section === "preferences" && (
-            <Panel title={t("settings.language")}>
-              <div style={{ display: "flex", gap: 8 }} data-testid="lang-toggle">
-                {langs.map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => setLang(l)}
-                    data-testid={`lang-${l}`}
-                    style={{
-                      ...inputStyle,
-                      cursor: "pointer",
-                      borderColor: lang === l ? colors.coral : colors.border,
-                      color: lang === l ? colors.coral : colors.text,
-                    }}
-                  >
-                    {l.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </Panel>
+            <>
+              <Panel title={t("settings.language")}>
+                <div style={{ display: "flex", gap: 8 }} data-testid="lang-toggle">
+                  {langs.map((l) => (
+                    <button
+                      key={l}
+                      onClick={() => setLang(l)}
+                      data-testid={`lang-${l}`}
+                      style={{
+                        ...inputStyle,
+                        cursor: "pointer",
+                        borderColor: lang === l ? colors.coral : colors.border,
+                        color: lang === l ? colors.coral : colors.text,
+                      }}
+                    >
+                      {l.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </Panel>
+              <Panel title={t("settings.budget")}>
+                <EditableRate
+                  label={t("settings.dailyTarget")}
+                  value={settings?.dailyCostTarget ?? 2400}
+                  saving={updateSettings.isPending}
+                  onSave={(next) => updateSettings.mutate({ dailyCostTarget: next })}
+                />
+              </Panel>
+            </>
           )}
         </div>
       </div>

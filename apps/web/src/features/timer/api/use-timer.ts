@@ -11,7 +11,7 @@ export interface ActiveTimer {
 }
 
 function invalidateTimerQueries(qc: QueryClient) {
-  for (const key of ["active-timer", "today-summary", "team-today", "today-entries", "cost-by-person", "weekly-cost", "project-cost", "project-entries", "project-team", "task-cost"]) {
+  for (const key of ["active-timer", "today-summary", "team-today", "today-entries", "cost-by-person", "weekly-cost", "project-cost", "project-entries", "project-team", "task-cost", "margin-summary"]) {
     qc.invalidateQueries({ queryKey: [key] });
   }
 }

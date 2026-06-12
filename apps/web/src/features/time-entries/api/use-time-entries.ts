@@ -25,6 +25,7 @@ export function useCreateTimeEntry() {
       qc.invalidateQueries({ queryKey: ["project-cost"] });
       qc.invalidateQueries({ queryKey: ["project-entries"] });
       qc.invalidateQueries({ queryKey: ["project-team"] });
+      qc.invalidateQueries({ queryKey: ["margin-summary"] });
     },
   });
 }

@@ -216,11 +216,11 @@ Navigation is via **icon sidebar** (persistent, left) + **⌘K / Ctrl+K** (comma
 
 ### 1. Dashboard (`/`)
 ![Dashboard](docs/screenshots/app-01-cabina.png)
-- **Today's burn rate**: ring gauge with the day's cost vs target ($2,400), Human/AI breakdown.
+- **Today's burn rate**: ring gauge with the day's cost vs the editable daily target (Settings → Preferences), Human/AI breakdown.
 - **Team · real cost today**: each person with their tracked time and cost (real data from `/reports/team-today`).
 - **MCP · live intake**: stream of reports received from agents (empty until an agent reports).
 - **Tiles**: Today (tracked), Week, Billable, Margin.
-- **Timer dock**: "+ log time" → opens the **log entry modal** (project→task→minutes→billable→save).
+- **Timer dock** (global, visible on every screen): tap ▶ on a task row or use the project→task picker to start a real timer; the dock shows live elapsed time; STOP logs the entry automatically. "+ log time" still opens the **manual log entry modal** (project→task→minutes→billable→save).
 - Responsive: collapses to a single column on mobile.
 
 ### 2. Projects (`/projects`)
@@ -258,9 +258,9 @@ Navigation is via **icon sidebar** (persistent, left) + **⌘K / Ctrl+K** (comma
 ### 6. Time tracker (`/tracker`)
 ![Tracker](docs/screenshots/app-04-tracker.png)
 - Day tiles: Tracked, Billable, Cost today, From AI.
-- **Timeline**: today's entries with time, origin (tag `manual`/`mcp`), task, duration, cost (from `/time-entries/today`).
+- **Timeline**: today's entries with time, origin (tag `manual`/`mcp`/`timer`), task, duration, cost (from `/time-entries/today`).
 - **Day target**: progress vs 8h.
-- Timer dock with "+ log time".
+- **Timer dock** (global, visible on every screen): tap ▶ on a task row or use the project→task picker to start a real timer; the dock shows live elapsed time; STOP logs the entry automatically. "+ log time" still opens the **manual log entry modal**.
 
 ### 7. MCP server (`/mcp`)
 ![MCP](docs/screenshots/app-05-mcp.png)

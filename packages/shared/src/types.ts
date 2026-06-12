@@ -1,4 +1,4 @@
-export type EntryOrigin = "manual" | "mcp"; // mcp reserved for phase 2
+export type EntryOrigin = "manual" | "timer" | "mcp";
 
 export interface Member {
   id: string;

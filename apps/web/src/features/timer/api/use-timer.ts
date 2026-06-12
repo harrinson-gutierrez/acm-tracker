@@ -28,7 +28,11 @@ export function useStartTimer() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (taskId: string) => apiClient.post<ActiveTimer>("/timer/start", { taskId }),
-    onSuccess: () => invalidateTimerQueries(qc),
+    onSuccess: (data) => {
+      // Optimistically set the active timer so the dock snaps to running immediately
+      qc.setQueryData(["active-timer"], data);
+      invalidateTimerQueries(qc);
+    },
   });
 }
 
@@ -36,6 +40,10 @@ export function useStopTimer() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => apiClient.post<unknown>("/timer/stop", {}),
-    onSuccess: () => invalidateTimerQueries(qc),
+    onSuccess: () => {
+      // Optimistically clear active-timer so the dock snaps to idle immediately
+      qc.setQueryData(["active-timer"], null);
+      invalidateTimerQueries(qc);
+    },
   });
 }

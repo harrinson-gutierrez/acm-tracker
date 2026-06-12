@@ -8,7 +8,7 @@ import { DataTable } from "../components/DataTable";
 import { useProject } from "../features/projects/api/use-projects";
 import { useTasks, useCreateTask } from "../features/tasks/api/use-tasks";
 import { useProjectCost } from "../features/reporting/api/use-reporting";
-import { TaskRealCell, TaskCostCell, AddTimeButton } from "../features/tasks/components/TaskCostCells";
+import { TaskRealCell, TaskCostCell, AddTimeButton, StartTimerButton } from "../features/tasks/components/TaskCostCells";
 import { ProjectTimeline } from "../features/time-entries/components/ProjectTimeline";
 import { ProjectDocuments } from "../features/documents/components/ProjectDocuments";
 import { ProjectTeam } from "../features/reporting/components/ProjectTeam";
@@ -145,7 +145,7 @@ export function ProjectDetail() {
               title: task.title,
               real: <TaskRealCell taskId={task.id} />,
               cost: <TaskCostCell taskId={task.id} />,
-              action: <AddTimeButton taskId={task.id} projectId={id} />,
+              action: <div style={{ display: "flex", justifyContent: "flex-end", gap: 4 }}><StartTimerButton taskId={task.id} taskCode={task.code} /><AddTimeButton taskId={task.id} projectId={id} /></div>,
             },
           }))}
           emptyLabel={t("projects.detail.emptyTasks")}

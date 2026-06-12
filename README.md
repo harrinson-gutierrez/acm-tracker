@@ -338,8 +338,22 @@ curl -X POST http://localhost:4000/api/mcp/report-work -H "Content-Type: applica
 /plugin install acm-tracker@acm-tracker
 ```
 
-Bundles the ACM-TRACKER MCP plus a `report-work` skill so your agent
-auto-reports time and AI cost. See `packages/claude-plugin/README.md`.
+Restart Claude Code afterwards so the `acm-tracker` MCP server and the `report-work`
+skill load. The MCP server ships pre-bundled inside the plugin, so it installs straight
+from GitHub with no build step. The plugin gives your agent 10 MCP tools (list/create
+projects & tasks, `report_work`, `project_cost`, `today_summary`, `recent_reports`,
+model pricing), the `report-work` skill that teaches it when/how to report, and an
+`/acm-status` command.
+
+The MCP talks to a running ACM-TRACKER over HTTP — keep the app open while using it. It
+targets `http://localhost:5188` (the desktop app) by default; point it elsewhere (e.g. a
+dev stack on `:4000`) by setting `ACM_API_URL` before launching your agent:
+
+```bash
+ACM_API_URL=http://localhost:4000 claude
+```
+
+See `packages/claude-plugin/README.md` for details and the `report_work` contract.
 
 ---
 
@@ -414,6 +428,8 @@ gh pr merge --squash
 - ✅ Documents (CRUD + phase filter), Notifications (CRUD + toggle), Auth login.
 - ✅ 13 screens faithful to the Flight Deck design + navigation + ⌘K + responsive.
 - ✅ E2E suite (21 tests).
+- ✅ Internationalization (English default + Spanish), toggle in Settings → Preferences, persisted.
+- ✅ Installable Claude Code plugin (`packages/claude-plugin`) — pre-bundled MCP (10 tools) + `report-work` skill + `/acm-status` command, installs straight from GitHub.
 
 **Next:**
 - ⏳ **Real live timer** (stopwatch that runs and logs when stopped), not just manual entry.

@@ -1,8 +1,8 @@
 Object.defineProperty(navigator, "language", {
-  value: "es",
+  value: "en",
   configurable: true,
 });
 Object.defineProperty(navigator, "languages", {
-  value: ["es"],
+  value: ["en"],
   configurable: true,
 });

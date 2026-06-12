@@ -6,8 +6,8 @@ describe("i18n core", () => {
     localStorage.clear();
   });
 
-  it("defaults to Spanish", () => {
-    expect(i18n.language).toMatch(/^es/);
+  it("defaults to English", () => {
+    expect(i18n.language).toMatch(/^en/);
   });
 
   it("translates a known key in both languages", async () => {
@@ -17,8 +17,8 @@ describe("i18n core", () => {
     expect(i18n.t("common.save")).toBe("Save");
   });
 
-  it("falls back to es for unsupported language", async () => {
+  it("falls back to en for unsupported language", async () => {
     await i18n.changeLanguage("fr");
-    expect(i18n.t("common.save")).toBe("Guardar");
+    expect(i18n.t("common.save")).toBe("Save");
   });
 });

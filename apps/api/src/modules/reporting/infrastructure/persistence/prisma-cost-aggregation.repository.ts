@@ -4,6 +4,7 @@ import { computeEntryCost } from "@acm/shared";
 import { PrismaService } from "../../../../prisma/prisma.service";
 import {
   CostAggregationPort,
+  MarginSummary,
   ProjectCostRow,
   ProjectEstimateRow,
   TeamTodayRow,
@@ -73,17 +74,48 @@ export class PrismaCostAggregationRepository implements CostAggregationPort {
       .map(([week, human]) => ({ week, human: round2(human), ai: 0 }));
   }
 
-  async todaySummary(from: Date, to: Date): Promise<TodaySummary> {
-    const rows = await this.prisma.timeEntry.findMany({ where: { startedAt: { gte: from, lt: to } } });
+  async todaySummary(from: Date, to: Date, weekFrom: Date): Promise<TodaySummary> {
+    const rows = await this.prisma.timeEntry.findMany({
+      where: { startedAt: { gte: from, lt: to } },
+      include: { aiRuns: true },
+    });
     let cost = 0;
     let tracked = 0;
     let billable = 0;
+    let aiCost = 0;
     for (const r of rows) {
       cost += computeEntryCost(r as unknown as TimeEntry);
       tracked += r.minutes;
       if (r.billable) billable += r.minutes;
+      aiCost += r.aiRuns.reduce((s, a) => s + a.costUsd, 0);
     }
-    return { trackedMinutes: tracked, billableMinutes: billable, cost: round2(cost) };
+    const week = await this.prisma.timeEntry.aggregate({
+      _sum: { minutes: true },
+      where: { startedAt: { gte: weekFrom, lt: to } },
+    });
+    return {
+      trackedMinutes: tracked,
+      billableMinutes: billable,
+      cost: round2(cost),
+      aiCost: round2(aiCost),
+      weekMinutes: week._sum.minutes ?? 0,
+    };
+  }
+
+  async marginSummary(): Promise<MarginSummary> {
+    const projects = await this.prisma.project.findMany({ where: { ratePerHour: { not: null } } });
+    let revenue = 0;
+    let cost = 0;
+    for (const p of projects) {
+      const rows = await this.prisma.timeEntry.findMany({ where: { task: { projectId: p.id } } });
+      let minutes = 0;
+      for (const r of rows) {
+        minutes += r.minutes;
+        cost += computeEntryCost(r as unknown as TimeEntry);
+      }
+      revenue += (minutes / 60) * (p.ratePerHour as number);
+    }
+    return { revenue: round2(revenue), cost: round2(cost), margin: round2(revenue - cost), projectCount: projects.length };
   }
 
   async teamToday(from: Date, to: Date): Promise<TeamTodayRow[]> {

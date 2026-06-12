@@ -1,5 +1,5 @@
-import { rmSync, mkdirSync, cpSync, existsSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { rmSync, mkdirSync, cpSync, existsSync, readFileSync, writeFileSync, readdirSync, statSync, unlinkSync } from "node:fs";
+import { dirname, resolve, join, extname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 
@@ -32,4 +32,22 @@ const standalone = {
 writeFileSync(resolve(outDir, "package.json"), JSON.stringify(standalone, null, 2));
 
 run("npm", ["install", "--omit=dev", "--no-audit", "--no-fund"], outDir);
+
+const PRUNE_EXT = new Set([".map", ".md", ".markdown"]);
+const PRUNE_DTS = /\.d\.[cm]?ts$/;
+const PRUNE_DIR = new Set(["__tests__", "test", "tests"]);
+function prune(dir) {
+  for (const name of readdirSync(dir)) {
+    const full = join(dir, name);
+    const st = statSync(full);
+    if (st.isDirectory()) {
+      if (PRUNE_DIR.has(name)) rmSync(full, { recursive: true, force: true });
+      else prune(full);
+    } else if (PRUNE_EXT.has(extname(name)) || PRUNE_DTS.test(basename(name))) {
+      unlinkSync(full);
+    }
+  }
+}
+prune(resolve(outDir, "node_modules"));
+
 console.log("Bundled MCP into", outDir);

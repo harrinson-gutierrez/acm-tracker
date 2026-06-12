@@ -15,11 +15,12 @@ Connect your agent to ACM-TRACKER so it auto-reports time and AI cost.
 /plugin install acm-tracker@acm-tracker
 ```
 
-If you installed from a clone (not via marketplace), first bundle the MCP server:
+The MCP server ships pre-bundled inside the plugin (`mcp/`), so it works straight from
+the marketplace with no extra build step. Restart Claude Code after installing so the
+`acm-tracker` MCP server and the `report-work` skill load.
 
-```
-pnpm --filter @acm/claude-plugin bundle
-```
+> Maintainers only: to regenerate the bundle after changing `@acm/mcp`, run
+> `pnpm --filter @acm/claude-plugin bundle` and commit the updated `mcp/`.
 
 ## Configure (optional)
 

@@ -29,3 +29,8 @@ apps/web/.playwright-mcp/
 
 # local build artifacts (installers)
 release-artifacts/
+
+# Claude Code plugin ships a self-contained MCP bundle (committed so /plugin install
+# works straight from GitHub without a build step). Force it past the node_modules rule.
+!packages/claude-plugin/mcp/
+!packages/claude-plugin/mcp/**

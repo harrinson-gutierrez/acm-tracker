@@ -2,6 +2,7 @@ import { ProjectCostBreakdownUseCase } from "./project-cost-breakdown.use-case";
 import type { PersonCost, WeeklyCost } from "@acm/shared";
 import {
   CostAggregationPort,
+  MarginSummary,
   ProjectCostRow,
   ProjectEstimateRow,
   TeamTodayRow,
@@ -26,10 +27,13 @@ class FakeAgg implements CostAggregationPort {
     return [];
   }
   async todaySummary(): Promise<TodaySummary> {
-    return { trackedMinutes: 0, billableMinutes: 0, cost: 0 };
+    return { trackedMinutes: 0, billableMinutes: 0, cost: 0, aiCost: 0, weekMinutes: 0 };
   }
   async teamToday(): Promise<TeamTodayRow[]> {
     return [];
+  }
+  async marginSummary(): Promise<MarginSummary> {
+    return { revenue: 0, cost: 0, margin: 0, projectCount: 0 };
   }
 }
 

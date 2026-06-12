@@ -12,6 +12,7 @@ import { DocumentsModule } from "./modules/documents/documents.module";
 import { NotificationsModule } from "./modules/notifications/notifications.module";
 import { McpModule } from "./modules/mcp/mcp.module";
 import { TimerModule } from "./modules/timer/timer.module";
+import { WorkspaceSettingsModule } from "./modules/workspace-settings/workspace-settings.module";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TimerModule } from "./modules/timer/timer.module";
     NotificationsModule,
     McpModule,
     TimerModule,
+    WorkspaceSettingsModule,
   ],
 })
 export class AppModule {}

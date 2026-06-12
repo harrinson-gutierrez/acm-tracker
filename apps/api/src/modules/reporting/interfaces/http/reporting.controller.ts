@@ -5,12 +5,19 @@ import { CostByPersonUseCase } from "../../application/use-cases/cost-by-person.
 import { WeeklyCostSeriesUseCase } from "../../application/use-cases/weekly-cost-series.use-case";
 import { TodaySummaryUseCase } from "../../application/use-cases/today-summary.use-case";
 import { TeamTodayUseCase } from "../../application/use-cases/team-today.use-case";
+import { MarginSummaryUseCase } from "../../application/use-cases/margin-summary.use-case";
 
 function dayBounds(): { from: Date; to: Date } {
   const now = new Date();
   const from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const to = new Date(from.getTime() + 86_400_000);
   return { from, to };
+}
+
+function weekStart(): Date {
+  const now = new Date();
+  const day = (now.getDay() + 6) % 7;
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate() - day);
 }
 
 @UseGuards(AuthGuard)
@@ -22,6 +29,7 @@ export class ReportingController {
     private readonly weekly: WeeklyCostSeriesUseCase,
     private readonly todaySummary: TodaySummaryUseCase,
     private readonly teamToday: TeamTodayUseCase,
+    private readonly marginSummary: MarginSummaryUseCase,
   ) {}
 
   @Get("projects/:id/cost") projectCost(@Param("id") id: string) {
@@ -38,11 +46,15 @@ export class ReportingController {
 
   @Get("reports/today") today() {
     const { from, to } = dayBounds();
-    return this.todaySummary.execute(from, to);
+    return this.todaySummary.execute(from, to, weekStart());
   }
 
   @Get("reports/team-today") teamTodayRoute() {
     const { from, to } = dayBounds();
     return this.teamToday.execute(from, to);
+  }
+
+  @Get("reports/margin-summary") marginSummaryRoute() {
+    return this.marginSummary.execute();
   }
 }

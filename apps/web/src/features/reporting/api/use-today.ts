@@ -5,6 +5,22 @@ export interface TodaySummary {
   trackedMinutes: number;
   billableMinutes: number;
   cost: number;
+  aiCost: number;
+  weekMinutes: number;
+}
+
+export interface MarginSummary {
+  revenue: number;
+  cost: number;
+  margin: number;
+  projectCount: number;
+}
+
+export function useMarginSummary() {
+  return useQuery({
+    queryKey: ["margin-summary"],
+    queryFn: () => apiClient.get<MarginSummary>("/reports/margin-summary"),
+  });
 }
 
 export interface TeamTodayRow {

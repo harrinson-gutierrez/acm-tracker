@@ -436,7 +436,7 @@ gh pr merge --squash
 - ✅ **Real MCP server** (`packages/mcp`, stdio) — Claude Code and other agents discover the `report_work`/`list_projects`/`list_tasks` tools and report work+tokens; the server calculates real AI cost. See [packages/mcp/README.md](packages/mcp/README.md). *(Remote HTTP/SSE transport = future, for team mode.)*
 - ⏳ **Real Cognito auth** (plug in the `AuthProvider`) + workspace invitations.
 - ⏳ **Documents**: real file upload (storage), pages with editor, production cost per doc.
-- ⏳ **Margin and budget** per project (real data in the gauges that currently show "—").
+- ✅ **Margin and budget** — editable daily cost target, real AI fraction in the burn gauge, week tile, global margin tile, live MCP stream on the cockpit.
 - ⏳ **Notifications**: real delivery to channels (Slack/email/webhook).
 - ⏳ **Export**: client report PDF and invoice.
 - ⏳ CI (GitHub Actions): build + unit + E2E on every PR.

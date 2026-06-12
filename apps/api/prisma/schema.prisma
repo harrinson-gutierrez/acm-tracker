@@ -81,9 +81,10 @@ model AiRun {
 }
 
 model WorkspaceSettings {
-  id           Int     @id @default(1)
-  authProvider String  @default("none")
-  authConfig   Json?
+  id              Int     @id @default(1)
+  authProvider    String  @default("none")
+  authConfig      Json?
+  dailyCostTarget Float   @default(2400)
 }
 
 model ModelPrice {

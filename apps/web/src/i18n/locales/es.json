@@ -36,7 +36,9 @@
     "saveModel": "Guardar {{model}}",
     "cancelModel": "Cancelar {{model}}",
     "editModel": "Editar {{model}}",
-    "deleteModel": "Borrar {{model}}"
+    "deleteModel": "Borrar {{model}}",
+    "budget": "Presupuesto",
+    "dailyTarget": "Objetivo diario de costo"
   },
   "projects": {
     "breadcrumb": "/ proyectos",
@@ -291,10 +293,10 @@
     "breadcrumb": "FLIGHT DECK · cabina",
     "status": "SYSTEMS NOMINAL",
     "burnRatePanel": "Burn rate · hoy",
-    "dailyTarget": "vs objetivo diario $2,400",
+    "dailyTarget": "vs objetivo diario ${{target}}",
     "ofTarget": "del objetivo",
     "human": "Humano ${{cost}}",
-    "aiMcp": "IA $0 · vía MCP",
+    "aiMcp": "IA ${{aiCost}} · vía MCP",
     "today": "Hoy",
     "tracked": "trackeado",
     "week": "Semana",
@@ -306,6 +308,7 @@
     "noActivityToday": "Sin actividad hoy.",
     "mcpPanel": "MCP · ingesta en vivo",
     "noReports": "Sin reportes — conecta un agente al servidor MCP.",
+    "marginProjects": "{{count}} proyectos",
     "noActiveTask": "Sin tarea activa",
     "pickProject": "elige un proyecto para registrar tiempo",
     "manualEntry": "+ registrar tiempo"

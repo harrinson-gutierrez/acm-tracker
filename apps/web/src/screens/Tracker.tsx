@@ -29,7 +29,7 @@ export function Tracker() {
             { label: t("tracker.tileTrackeadoLabel"), value: today ? hm(today.trackedMinutes) : "—" },
             { label: t("cabina.billable"), value: today ? hm(today.billableMinutes) : "—", accent: colors.green },
             { label: t("tracker.tileCostoLabel"), value: today ? `$${today.cost}` : "—" },
-            { label: t("tracker.tileIaLabel"), value: "$0", accent: colors.blue },
+            { label: t("tracker.tileIaLabel"), value: today ? `$${today.aiCost}` : "—", accent: colors.blue },
           ]}
         />
       </div>

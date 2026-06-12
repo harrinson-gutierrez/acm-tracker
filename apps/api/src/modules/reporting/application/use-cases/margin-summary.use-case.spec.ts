@@ -1,4 +1,4 @@
-import { TodaySummaryUseCase } from "./today-summary.use-case";
+import { MarginSummaryUseCase } from "./margin-summary.use-case";
 import type { PersonCost, WeeklyCost } from "@acm/shared";
 import {
   CostAggregationPort,
@@ -23,24 +23,20 @@ class FakeAgg implements CostAggregationPort {
     return [];
   }
   async todaySummary(): Promise<TodaySummary> {
-    return { trackedMinutes: 252, billableMinutes: 240, cost: 334, aiCost: 1.5, weekMinutes: 1200 };
+    return { trackedMinutes: 0, billableMinutes: 0, cost: 0, aiCost: 0, weekMinutes: 0 };
   }
   async teamToday(): Promise<TeamTodayRow[]> {
     return [];
   }
   async marginSummary(): Promise<MarginSummary> {
-    return { revenue: 0, cost: 0, margin: 0, projectCount: 0 };
+    return { revenue: 800, cost: 450, margin: 350, projectCount: 1 };
   }
 }
 
-describe("TodaySummaryUseCase", () => {
-  it("returns the summary from the aggregation port", async () => {
-    const useCase = new TodaySummaryUseCase(new FakeAgg());
-    const r = await useCase.execute(
-      new Date("2026-06-06T00:00:00Z"),
-      new Date("2026-06-07T00:00:00Z"),
-      new Date("2026-06-02T00:00:00Z"),
-    );
-    expect(r).toEqual({ trackedMinutes: 252, billableMinutes: 240, cost: 334, aiCost: 1.5, weekMinutes: 1200 });
+describe("MarginSummaryUseCase", () => {
+  it("returns the margin summary verbatim from the aggregation port", async () => {
+    const useCase = new MarginSummaryUseCase(new FakeAgg());
+    const r = await useCase.execute();
+    expect(r).toEqual({ revenue: 800, cost: 450, margin: 350, projectCount: 1 });
   });
 });

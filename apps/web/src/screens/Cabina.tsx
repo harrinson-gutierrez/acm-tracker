@@ -5,9 +5,7 @@ import { RingGauge } from "../components/RingGauge";
 import { TileRow } from "../components/TileRow";
 import { PersonCostRow } from "../components/PersonCostRow";
 import { McpStream } from "../components/McpStream";
-import { TimerDock } from "../components/TimerDock";
 import { useTodaySummary, useTeamToday } from "../features/reporting/api/use-today";
-import { useTimeEntryModal } from "../features/time-entries/use-time-entry-modal";
 import { useIsMobile } from "../lib/use-is-mobile";
 import { colors } from "../theme/tokens";
 
@@ -17,7 +15,6 @@ function hm(min: number): string {
 
 export function Cabina() {
   const { t } = useTranslation();
-  const openModal = useTimeEntryModal((s) => s.openModal);
   const { data: today } = useTodaySummary();
   const { data: team = [] } = useTeamToday();
   const isMobile = useIsMobile();
@@ -71,14 +68,6 @@ export function Cabina() {
           </Panel>
         </div>
       </div>
-      <TimerDock
-        elapsed="00:00:00"
-        taskTitle={t("cabina.noActiveTask")}
-        meta={t("cabina.pickProject")}
-        running={false}
-        onManual={() => openModal()}
-        manualLabel={t("cabina.manualEntry")}
-      />
     </Chrome>
   );
 }

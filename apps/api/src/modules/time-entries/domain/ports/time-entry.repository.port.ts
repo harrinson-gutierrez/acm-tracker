@@ -5,6 +5,7 @@ export const TIME_ENTRY_REPOSITORY = Symbol("TIME_ENTRY_REPOSITORY");
 export interface CreateTimeEntryData {
   taskId: string;
   memberId: string;
+  origin?: "manual" | "timer";
   minutes: number;
   billable: boolean;
   ratePerHourSnapshot: number;

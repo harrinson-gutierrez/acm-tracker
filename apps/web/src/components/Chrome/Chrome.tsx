@@ -43,7 +43,7 @@ function Sidebar() {
   const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
   return (
     <nav
-      style={{ position: "fixed", top: 0, left: 0, bottom: 0, width: 64, background: colors.surface, borderRight: `1px solid ${colors.border}`, display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0", gap: 6, zIndex: 20 }}
+      style={{ position: "fixed", top: 0, left: 0, bottom: 0, width: 78, background: colors.surface, borderRight: `1px solid ${colors.border}`, display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0", gap: 6, zIndex: 20 }}
     >
       <Link to="/" title="ACM-TRACKER" style={{ color: colors.coral, fontWeight: 700, fontSize: 18, marginBottom: 14, textDecoration: "none" }}>◆</Link>
       {NAV.map((n) => {
@@ -55,9 +55,10 @@ function Sidebar() {
             to={n.to}
             title={label}
             aria-label={label}
-            style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 10, textDecoration: "none", fontSize: 18, color: active ? colors.coral : colors.muted, background: active ? colors.surface2 : "transparent", borderLeft: active ? `2px solid ${colors.coral}` : "2px solid transparent" }}
+            style={{ width: 64, minHeight: 48, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, borderRadius: 10, textDecoration: "none", fontSize: 16, color: active ? colors.coral : colors.muted, background: active ? colors.surface2 : "transparent", borderLeft: active ? `2px solid ${colors.coral}` : "2px solid transparent", padding: "4px 0" }}
           >
-            {n.icon}
+            <span>{n.icon}</span>
+            <span className="mono" style={{ fontSize: 8, letterSpacing: 0.5 }}>{label.toUpperCase()}</span>
           </Link>
         );
       })}
@@ -67,11 +68,11 @@ function Sidebar() {
 
 export function Chrome({ breadcrumb, status = "LIVE", statusColor = colors.green, children }: ChromeProps) {
   return (
-    <div className="grid-bg" style={{ minHeight: "100vh", position: "relative", padding: 28, paddingLeft: 92 }}>
+    <div className="grid-bg" style={{ minHeight: "100vh", position: "relative", padding: 28, paddingLeft: 106, paddingBottom: 110 }}>
       <Sidebar />
-      <Mark pos={{ top: 14, left: 78 }} />
+      <Mark pos={{ top: 14, left: 92 }} />
       <Mark pos={{ top: 14, right: 14 }} />
-      <Mark pos={{ bottom: 14, left: 78 }} />
+      <Mark pos={{ bottom: 14, left: 92 }} />
       <Mark pos={{ bottom: 14, right: 14 }} />
       <header style={{ display: "flex", alignItems: "center", height: 52, padding: "0 20px", background: colors.surface, border: `1px solid ${colors.border}`, borderRadius: 8, marginBottom: 24 }}>
         <span className="mono" style={{ color: colors.coral, fontWeight: 700, letterSpacing: 1 }}>◆ ACM-TRACKER</span>

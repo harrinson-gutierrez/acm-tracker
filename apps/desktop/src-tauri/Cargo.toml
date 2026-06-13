@@ -1,6 +1,6 @@
 [package]
 name = "acm-tracker-desktop"
-version = "0.2.0"
+version = "0.3.0"
 description = "ACM-TRACKER desktop app"
 authors = ["Harrinson Gutierrez Coronado <hgutieco@gmail.com>"]
 license = "AGPL-3.0-only"

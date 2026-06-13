@@ -1,7 +1,7 @@
 {
   "name": "acm-tracker",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "AGPL-3.0-only",
   "author": "Harrinson Gutierrez Coronado <hgutieco@gmail.com>",
   "scripts": {
